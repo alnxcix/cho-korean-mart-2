@@ -15,7 +15,7 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1000,
     height: 700,
-    // frame: false,
+    frame: false,
     webPreferences: { nodeIntegration: true, enableRemoteModule: true },
   });
 
