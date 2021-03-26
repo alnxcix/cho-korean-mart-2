@@ -74,7 +74,8 @@ const Sidebar = (props) => {
             <MenuItem
               icon={<FontAwesomeIcon icon={faChevronLeft} />}
               // data-target="#modalLogout"
-              // data-toggle="modal"
+              // data-toggle="modal tool-tip"
+              title="Logout"
             >
               Logout
               <Link

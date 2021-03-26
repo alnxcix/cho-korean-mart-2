@@ -8,7 +8,7 @@ import DeleteUser from "./components/DeleteUser";
 import EditUser from "./components/EditUser";
 
 const Accounts = (props) => {
-  let { activeUser } = props;
+  let { activeUser, setActiveUser } = props;
   const [users, setUsers] = useState([]);
   const [role, setRole] = useState("All");
   const [searchString, setSearchString] = useState("");
@@ -174,6 +174,7 @@ const Accounts = (props) => {
                   setUsers={setUsers}
                   user={user}
                   activeUser={activeUser}
+                  setActiveUser={setActiveUser}
                 />
                 &nbsp;
                 <DeleteUser
