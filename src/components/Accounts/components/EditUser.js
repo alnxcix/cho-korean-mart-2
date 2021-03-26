@@ -91,7 +91,7 @@ const EditUser = (props) => {
                   </div>
                 </div>
                 <div className="form-group row">
-                  <label className="col-3 col-form-label">ID</label>
+                  <label className="col-3 col-form-label">Username/ID</label>
                   <div className="col">
                     <input className="form-control" disabled value={user._id} />
                   </div>
@@ -124,18 +124,6 @@ const EditUser = (props) => {
                         type="password"
                         value={user.password}
                       />
-                      <div className="input-group-append">
-                        <button
-                          class="input-group-text"
-                          onClick={() => setPassState("text")}
-                          onMouseOut={() => {
-                            setPassState("password");
-                          }}
-                          type="button"
-                        >
-                          View
-                        </button>
-                      </div>
                       <small id="passwordHelpInline" class="text-muted">
                         <br/>Password must be 8-20 characters long, must contain letters and numbers, and is a mixture of both uppercase and lowercase letters.
                       </small>

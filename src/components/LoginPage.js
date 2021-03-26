@@ -66,7 +66,7 @@ const LoginPage = (props) => {
               set_id(e.target.value);
               $("#loginPageAlert2").slideUp();
             }}
-            placeholder="Username"
+            placeholder="Username / ID"
             required
             value={_id}
           />
