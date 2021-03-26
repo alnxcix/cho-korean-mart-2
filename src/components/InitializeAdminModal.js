@@ -106,8 +106,9 @@ const InitializeAdminModal = () => {
                         const pass = e.target.value;
                         if (
                           pass.match(/[a-z]+/) &&
-                          pass.match(/[0-9A-Z]+/) &&
-                          pass.match(/[~<>?!@#$%^&*()]+/) &&
+                          pass.match(/[0-9]+/) &&
+                          pass.match(/[A-Z]+/) &&
+                          //pass.match(/[~<>?!@#$%^&*()]+/) &&
                           pass.length >= 8 &&
                           pass.length <= 20
                         )
@@ -129,6 +130,9 @@ const InitializeAdminModal = () => {
                         View
                       </button>
                     </div>
+                    <small id="passwordHelpInline" class="text-muted">
+                        <br/>Password must be 8-20 characters long, must contain letters and numbers, and is a mixture of both uppercase and lowercase letters.
+                    </small>
                   </div>
                 </div>
               </div>
