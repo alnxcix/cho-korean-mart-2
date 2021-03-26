@@ -1,10 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import $ from "jquery";
 
 const PaymentModalComponents = (props) => {
   let { activeUser, cartItems, setCartItems } = props;
   const [applySpecialDiscount, toggleSpecialDiscount] = useState(false);
+  const [transactions, setTransactions] = useState([]);
   const [cash, setCash] = useState("");
+  useEffect(
+    () =>
+      window
+        .require("electron")
+        .remote.getGlobal("transactions")
+        .readAll()
+        .then((transactions) => setTransactions(transactions)),
+    []
+  );
+  const formatter = (c, places) => {
+    let z = places - (c + "").length;
+    let string = "";
+    for (let i = 0; i < z; i++) string += "0";
+    return string + c;
+  };
   // old formulas
   // const getSubTotal = () =>
   //   cartItems
@@ -78,6 +94,17 @@ const PaymentModalComponents = (props) => {
       .require("electron")
       .remote.getGlobal("transactions")
       .create({
+        _id: `${new Date().getFullYear()}${formatter(
+          new Date().getMonth() + 1,
+          2
+        )}${formatter(new Date().getDate(), 2)}${activeUser._id}${formatter(
+          transactions.filter(
+            (transaction) =>
+              new Date(transaction.date).toLocaleDateString() ==
+              new Date().toLocaleDateString()
+          ).length,
+          5
+        )}`,
         applySpecialDiscount: applySpecialDiscount,
         date: Date.now(),
         cart: cartItems.map((cartItem) => {
