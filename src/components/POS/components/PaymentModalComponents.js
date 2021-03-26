@@ -97,11 +97,13 @@ const PaymentModalComponents = (props) => {
         _id: `${new Date().getFullYear()}${formatter(
           new Date().getMonth() + 1,
           2
-        )}${formatter(new Date().getDate(), 2)}${activeUser._id}${formatter(
-          transactions.filter(
-            (transaction) =>
-              new Date(transaction.date).toLocaleDateString() ==
-              new Date().toLocaleDateString()
+        )}${formatter(new Date().getDate(), 2)}${formatter(
+          (
+            transactions.filter(
+              (transaction) =>
+                new Date(transaction.date).toLocaleDateString() ==
+                new Date().toLocaleDateString()
+            ) + 1
           ).length,
           5
         )}`,
