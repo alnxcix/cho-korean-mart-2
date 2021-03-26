@@ -86,7 +86,7 @@ const InitializeAdminModal = () => {
                   <input
                     className="form-control"
                     onChange={(e) => set_id(e.target.value)}
-                    placeholder="ID"
+                    placeholder="Username / ID"
                     required
                     value={_id}
                   />
