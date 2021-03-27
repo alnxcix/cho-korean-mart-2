@@ -5,6 +5,7 @@ import sortArray from "sort-array";
 import _ from "lodash";
 import $ from "jquery";
 import logo from "../../../assets/ChoKoreanMart.jpg";
+import Pagination from "../../Pagination"; //https://www.youtube.com/watch?v=IYCa1F-OWmk
 
 const InventoryComponent = (props) => {
   let { cartItems, setCartItems, updateItemQuantity } = props;
@@ -50,6 +51,17 @@ const InventoryComponent = (props) => {
         .then((products) => setProducts(products)),
     []
   );
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(20);
+  //test
+  const [rowsPerPage, setRowsPerPage] = useState(1);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = getFilteredProducts().slice(
+    indexOfFirstRow,
+    indexOfLastRow
+  );
+  const chgPage = (pageNum) => setCurrentPage(pageNum);
   return (
     <div
       className="overflow-auto p-3"
@@ -134,7 +146,7 @@ const InventoryComponent = (props) => {
           </tr>
         </thead>
         <tbody>
-          {getFilteredProducts().map((product) => (
+          {currentRows.map((product) => (
             <tr>
               <td className="text-truncate">{product._id}</td>
               <td>
@@ -173,12 +185,16 @@ const InventoryComponent = (props) => {
             </tr>
           ))}
         </tbody>
-        <caption>
-          {`Showing ${getFilteredProducts().length} of ${
-            getFilteredProducts().length
-          } ${products.length > 1 ? "entries" : "entry"}.`}
-        </caption>
       </table>
+      <Pagination
+        currentRows={currentRows}
+        rowsPerPage={rowsPerPage}
+        totalRows={getFilteredProducts().length}
+        chgPage={chgPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        setRowsPerPage={setRowsPerPage}
+      />
     </div>
   );
 };

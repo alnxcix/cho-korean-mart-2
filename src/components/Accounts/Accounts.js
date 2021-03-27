@@ -6,6 +6,7 @@ import sortArray from "sort-array";
 import AddUser from "./components/AddUser";
 import DeleteUser from "./components/DeleteUser";
 import EditUser from "./components/EditUser";
+import Pagination from "../Pagination";
 
 const Accounts = (props) => {
   let { activeUser, setActiveUser } = props;
@@ -34,6 +35,14 @@ const Accounts = (props) => {
         .then((users) => setUsers(users)),
     []
   );
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(20);
+  //test
+  const [rowsPerPage, setRowsPerPage] = useState(1);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = getFilteredUsers().slice(indexOfFirstRow, indexOfLastRow);
+  const chgPage = (pageNum) => setCurrentPage(pageNum);
   return (
     <div class="p-3">
       <div
@@ -163,7 +172,7 @@ const Accounts = (props) => {
           </tr>
         </thead>
         <tbody>
-          {getFilteredUsers().map((user, index) => (
+          {currentRows.map((user, index) => (
             <tr>
               <td className="text-truncate">{index + 1}</td>
               <td className="text-truncate">{`${user.firstName} ${user.lastName}`}</td>
@@ -186,10 +195,16 @@ const Accounts = (props) => {
             </tr>
           ))}
         </tbody>
-        <caption>{`Showing ${getFilteredUsers().length} of ${
-          getFilteredUsers().length
-        } ${getFilteredUsers().length > 1 ? "entries" : "entry"}.`}</caption>
       </table>
+      <Pagination
+        currentRows={currentRows}
+        rowsPerPage={rowsPerPage}
+        totalRows={getFilteredUsers().length}
+        chgPage={chgPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        setRowsPerPage={setRowsPerPage}
+      />
     </div>
   );
 };

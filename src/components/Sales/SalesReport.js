@@ -11,6 +11,7 @@ import ChartComponent from "../ChartComponent";
 import DateRangePickerComponent from "../DateRangePickerComponent";
 import DeleteTransactionModalComponents from "./DeleteTransactionModalComponents";
 import TransactionModalComponents from "./components/TransactionModalComponents";
+import Pagination from "../Pagination";
 
 const SalesReport = () => {
   const [endDate, setEndDate] = useState(moment().endOf("d").toDate());
@@ -38,6 +39,17 @@ const SalesReport = () => {
         .then((transactions) => setTransactions(transactions)),
     []
   );
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(20);
+  //test
+  const [rowsPerPage, setRowsPerPage] = useState(1);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = getFilteredTransactions().slice(
+    indexOfFirstRow,
+    indexOfLastRow
+  );
+  const chgPage = (pageNum) => setCurrentPage(pageNum);
   return (
     <div className="p-3 mb-5">
       <h1 className="mb-4">Sales</h1>
@@ -120,7 +132,7 @@ const SalesReport = () => {
           </tr>
         </thead>
         <tbody>
-          {getFilteredTransactions().map((transaction, index) => (
+          {currentRows.map((transaction, index) => (
             <tr>
               <td className="text-truncate">{index + 1}</td>
               <td className="text-truncate">{transaction._id}</td>
@@ -165,11 +177,15 @@ const SalesReport = () => {
           ))}
         </tbody>
       </table>
-      <div className="text-secondary mb-5">
-        {`Showing ${getFilteredTransactions().length} of ${
-          getFilteredTransactions().length
-        } ${getFilteredTransactions().length > 1 ? "entries" : "entry"}.`}
-      </div>
+      <Pagination
+        currentRows={currentRows}
+        rowsPerPage={rowsPerPage}
+        totalRows={getFilteredTransactions().length}
+        chgPage={chgPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        setRowsPerPage={setRowsPerPage}
+      />
     </div>
   );
 };

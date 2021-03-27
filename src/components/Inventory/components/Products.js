@@ -6,6 +6,7 @@ import sortArray from "sort-array";
 import DeleteProduct from "./DeleteProduct";
 import EditProduct from "./EditProduct";
 import logo from "../../../assets/ChoKoreanMart.jpg";
+import Pagination from "../../Pagination"; //https://www.youtube.com/watch?v=IYCa1F-OWmk
 
 const Products = (props) => {
   let { activeUser, products, setProducts, setStockHistoryEntries } = props;
@@ -24,6 +25,17 @@ const Products = (props) => {
       ),
       { by: propertyToBeSorted, order: sortOrder }
     );
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(20);
+  //test
+  const [rowsPerPage, setRowsPerPage] = useState(1);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = getFilteredProducts().slice(
+    indexOfFirstRow,
+    indexOfLastRow
+  );
+  const chgPage = (pageNum) => setCurrentPage(pageNum);
   return (
     <>
       <div className="form-row">
@@ -103,7 +115,7 @@ const Products = (props) => {
           </tr>
         </thead>
         <tbody>
-          {getFilteredProducts().map((product, index) => (
+          {currentRows.map((product, index) => (
             <tr>
               <td className="text-truncate">{index + 1}</td>
               <td className="text-truncate">{product._id}</td>
@@ -148,10 +160,16 @@ const Products = (props) => {
             </tr>
           ))}
         </tbody>
-        <caption>{`Showing ${getFilteredProducts().length} of ${
-          getFilteredProducts().length
-        } ${getFilteredProducts().length > 1 ? "entries" : "entry"}.`}</caption>
       </table>
+      <Pagination
+        currentRows={currentRows}
+        rowsPerPage={rowsPerPage}
+        totalRows={getFilteredProducts().length}
+        chgPage={chgPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        setRowsPerPage={setRowsPerPage}
+      />
     </>
   );
 };

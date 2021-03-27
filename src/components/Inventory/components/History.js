@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import sortArray from "sort-array";
 import DateRangePickerComponent from "../../DateRangePickerComponent";
+import Pagination from "../../Pagination"; //https://www.youtube.com/watch?v=IYCa1F-OWmk
 
 const History = (props) => {
   let { stockHistoryEntries } = props;
@@ -14,6 +15,12 @@ const History = (props) => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [startDate, setStartDate] = useState(moment().startOf("d").toDate());
   const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(20);
+  //test
+  const [rowsPerPage, setRowsPerPage] = useState(1);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const getFilteredStockHistoryEntries = () =>
     sortArray(
       stockHistoryEntries
@@ -60,6 +67,11 @@ const History = (props) => {
       .readAll()
       .then((users) => setUsers(users));
   }, []);
+  const currentRows = getFilteredStockHistoryEntries().slice(
+    indexOfFirstRow,
+    indexOfLastRow
+  );
+  const chgPage = (pageNum) => setCurrentPage(pageNum);
   return (
     <>
       <div className="form-row">
@@ -118,7 +130,7 @@ const History = (props) => {
           </tr>
         </thead>
         <tbody>
-          {getFilteredStockHistoryEntries().map((stockHistoryEntry, index) => (
+          {currentRows.map((stockHistoryEntry, index) => (
             <tr>
               <td className="text-truncate">{index + 1}</td>
               <td className="text-truncate">
@@ -142,12 +154,16 @@ const History = (props) => {
             </tr>
           ))}
         </tbody>
-        <caption>{`Showing ${getFilteredStockHistoryEntries().length} of ${
-          getFilteredStockHistoryEntries().length
-        } ${
-          getFilteredStockHistoryEntries().length > 1 ? "entries" : "entry"
-        }.`}</caption>
       </table>
+      <Pagination
+        rowsPerPage={rowsPerPage}
+        totalRows={getFilteredStockHistoryEntries().length}
+        chgPage={chgPage}
+        currentPage={currentPage}
+        currentRows={currentRows}
+        setCurrentPage={setCurrentPage}
+        setRowsPerPage={setRowsPerPage}
+      />
     </>
   );
 };
