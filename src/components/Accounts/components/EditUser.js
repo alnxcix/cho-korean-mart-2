@@ -5,14 +5,17 @@ import $ from "jquery";
 import logo from "../../../assets/ChoKoreanMart.jpg";
 
 const EditUser = (props) => {
-  let { setUsers, activeUser } = props;
+  let { setUsers, activeUser, setActiveUser } = props;
   const [user, setUser] = useState(props.user);
   const [verifyUser, setVerification] = useState("");
+  const [pass, setPassword] = useState("");
+  const [logout, setLogout] = useState(false);
   const [passState, setPassState] = useState("password");
   const [validPassword, setValidPassword] = useState(true);
   const reset = () => {
     setUser(props.user);
     setPassState("password");
+    setPassword("");
     setVerification("");
     setValidPassword(true);
   };
@@ -31,6 +34,7 @@ const EditUser = (props) => {
       .then((users) => setUsers(users));
     $(`#modalEdit${user._id}`).modal("hide");
     reset();
+    logout ? setActiveUser(() => undefined) : console.log("all is well");
   };
   useEffect(() => setUser(props.user), [props.user]);
   return (
@@ -91,7 +95,7 @@ const EditUser = (props) => {
                   </div>
                 </div>
                 <div className="form-group row">
-                  <label className="col-3 col-form-label">ID</label>
+                  <label className="col-3 col-form-label">Username/ID</label>
                   <div className="col">
                     <input className="form-control" disabled value={user._id} />
                   </div>
@@ -106,7 +110,7 @@ const EditUser = (props) => {
                           !validPassword ? { backgroundColor: "#ffb3b3" } : {}
                         }
                         onChange={(e) => {
-                          setUser({ ...user, password: e.target.value });
+                          setPassword(e.target.value);
                           const pass = e.target.value;
                           if (
                             pass.match(/[a-z]+/) &&
@@ -115,14 +119,13 @@ const EditUser = (props) => {
                             //pass.match(/[~<>?!@#$%^&*()]+/) &&
                             pass.length >= 8 &&
                             pass.length <= 20
-                          )
+                          ) {
                             setValidPassword(true);
-                          else setValidPassword(false);
+                          } else setValidPassword(false);
                         }}
                         placeholder="Password"
-                        required
-                        type="password"
-                        value={user.password}
+                        type={passState}
+                        value={pass}
                       />
                       <div className="input-group-append">
                         <button
@@ -137,22 +140,14 @@ const EditUser = (props) => {
                         </button>
                       </div>
                       <small id="passwordHelpInline" class="text-muted">
-                        <br/>Password must be 8-20 characters long, must contain letters and numbers, and is a mixture of both uppercase and lowercase letters.
+                        <br />
+                        Password must be 8-20 characters long, must contain
+                        letters and numbers, and is a mixture of both uppercase
+                        and lowercase letters.
                       </small>
                     </div>
                   </div>
                 </div>
-                {/* <div className="form-group row">
-                  <div className="col">
-                    Password should be: <br />
-                    At least 8 characters, maximum of 20
-                    <br />
-                    characters Having both uppercase and lowercase letters
-                    <br />
-                    Having at least 1 number Inclusion of at least one character
-                    <br />
-                  </div>
-                </div> */}
                 {user.role === "Administrator" &&
                 user._id === activeUser._id ? (
                   <></>
@@ -196,12 +191,13 @@ const EditUser = (props) => {
                 </picture>
                 <div className="form-group mt-2">
                   <label className="form-label">
-                    Input Your Password to Implement the Changes
+                    <h5>
+                      <b>Input Your Password to Implement the Changes</b>
+                    </h5>
                   </label>
                   <input
                     className="form-control"
-                    required
-                    type={passState}
+                    type="password"
                     onChange={(e) => setVerification(e.target.value)}
                     value={verifyUser}
                   />
@@ -230,8 +226,16 @@ const EditUser = (props) => {
                       : "btn btn-success disabled"
                   }
                   disabled={
-                    activeUser.password !== verifyUser || !validPassword
+                    activeUser.password !== verifyUser ||
+                    (pass !== "" ? !validPassword : false)
                   }
+                  onClick={() => {
+                    setUser({
+                      ...user,
+                      password: pass !== "" ? pass : user.password,
+                    });
+                    setLogout(pass !== "" && activeUser._id === user._id);
+                  }}
                   type="submit"
                 >
                   Save

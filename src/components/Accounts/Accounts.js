@@ -8,7 +8,7 @@ import DeleteUser from "./components/DeleteUser";
 import EditUser from "./components/EditUser";
 
 const Accounts = (props) => {
-  let { activeUser } = props;
+  let { activeUser, setActiveUser } = props;
   const [users, setUsers] = useState([]);
   const [role, setRole] = useState("All");
   const [searchString, setSearchString] = useState("");
@@ -111,7 +111,7 @@ const Accounts = (props) => {
             onChange={(e) => setPropertyToBeSorted(e.target.value)}
             value={propertyToBeSorted}
           >
-            <option value="_id">ID</option>
+            <option value="_id">Username / ID</option>
             <option value="firstName">First Name</option>
             <option value="lastName">Last Name</option>
             <option value="role">Role</option>
@@ -157,7 +157,7 @@ const Accounts = (props) => {
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
         <thead>
           <tr>
-            {["#", "Name", "ID", "Role", "Actions"].map((el) => (
+            {["#", "Name", "Username / ID", "Role", "Actions"].map((el) => (
               <th>{el}</th>
             ))}
           </tr>
@@ -174,6 +174,7 @@ const Accounts = (props) => {
                   setUsers={setUsers}
                   user={user}
                   activeUser={activeUser}
+                  setActiveUser={setActiveUser}
                 />
                 &nbsp;
                 <DeleteUser

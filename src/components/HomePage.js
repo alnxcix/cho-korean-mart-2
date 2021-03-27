@@ -35,7 +35,12 @@ const HomePage = (props) => {
               />
               <Route
                 path="/accounts"
-                render={() => <Accounts activeUser={activeUser} />}
+                render={() => (
+                  <Accounts
+                    activeUser={activeUser}
+                    setActiveUser={setActiveUser}
+                  />
+                )}
               />
               <Route
                 path="/inventory"

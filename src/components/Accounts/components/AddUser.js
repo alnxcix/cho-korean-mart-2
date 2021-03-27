@@ -99,12 +99,12 @@ const AddUser = (props) => {
                   </div>
                 </div>
                 <div className="form-group row">
-                  <label className="col-3 col-form-label">ID</label>
+                  <label className="col-3 col-form-label">Username/ID</label>
                   <div className="col">
                     <input
                       className="form-control"
                       onChange={(e) => set_id(e.target.value)}
-                      placeholder="ID"
+                      placeholder="Username / ID"
                       required
                       value={_id}
                     />
@@ -154,22 +154,14 @@ const AddUser = (props) => {
                         </button>
                       </div>
                       <small id="passwordHelpInline" class="text-muted">
-                        <br/>Password must be 8-20 characters long, must contain letters and numbers, and is a mixture of both uppercase and lowercase letters.
+                        <br />
+                        Password must be 8-20 characters long, must contain
+                        letters and numbers, and is a mixture of both uppercase
+                        and lowercase letters.
                       </small>
                     </div>
                   </div>
                 </div>
-                {/* <div className="form-group row">
-                  <div className="col">
-                    Password should be: <br />
-                    At least 8 characters, maximum of 20
-                    <br />
-                    characters Having both uppercase and lowercase letters
-                    <br />
-                    Having at least 1 number Inclusion of at least one character
-                    <br />
-                  </div>
-                </div> */}
                 <div className="form-group row">
                   <label className="col-3 col-form-label">Role</label>
                   <div className="col">

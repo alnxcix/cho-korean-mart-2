@@ -39,7 +39,7 @@ const SalesReport = () => {
     []
   );
   return (
-    <div className="p-3">
+    <div className="p-3 mb-5">
       <h1 className="mb-4">Sales</h1>
       <hr />
       <div className="bg-light card">
@@ -165,7 +165,7 @@ const SalesReport = () => {
           ))}
         </tbody>
       </table>
-      <div className="text-secondary">
+      <div className="text-secondary mb-5">
         {`Showing ${getFilteredTransactions().length} of ${
           getFilteredTransactions().length
         } ${getFilteredTransactions().length > 1 ? "entries" : "entry"}.`}

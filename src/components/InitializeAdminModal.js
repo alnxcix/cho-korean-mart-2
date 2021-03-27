@@ -81,12 +81,12 @@ const InitializeAdminModal = () => {
                 </div>
               </div>
               <div className="form-group row">
-                <label className="col-3 col-form-label">ID</label>
+                <label className="col-3 col-form-label">Username/ID</label>
                 <div className="col">
                   <input
                     className="form-control"
                     onChange={(e) => set_id(e.target.value)}
-                    placeholder="ID"
+                    placeholder="Username / ID"
                     required
                     value={_id}
                   />
