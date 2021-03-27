@@ -8,11 +8,14 @@ const App = () => {
     () =>
       window
         .require("electron")
-        .remote.getGlobal("conf")
+        .remote.getGlobal("settings")
         .get("vat")
         .then((vat) =>
           vat === undefined
-            ? window.require("electron").remote.getGlobal("conf").set("vat", 12)
+            ? window
+                .require("electron")
+                .remote.getGlobal("settings")
+                .set("vat", 12)
             : null
         ),
     []

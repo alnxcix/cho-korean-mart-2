@@ -7,8 +7,7 @@ global.users = require("../src/db/stores/userStore");
 global.products = require("../src/db/stores/productStore");
 global.stockHistoryEntries = require("../src/db/stores/stockHistoryEntryStore");
 global.transactions = require("../src/db/stores/transactionStore");
-global.settings = require("../src/db/stores/settingsStore");
-global.conf = require("electron-settings");
+global.settings = require("electron-settings");
 
 function createWindow() {
   // Create the browser window.

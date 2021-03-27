@@ -3,7 +3,10 @@ import $ from "jquery";
 const EditVatModalComponents = (props) => {
   let { vat, setVat } = props;
   const updateVat = () => {
-    window.require("electron").remote.getGlobal("conf").set("vat", Number(vat));
+    window
+      .require("electron")
+      .remote.getGlobal("settings")
+      .set("vat", Number(vat));
     $("#modalEditVAT").modal("hide");
   };
   return (

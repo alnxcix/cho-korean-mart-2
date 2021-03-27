@@ -26,7 +26,7 @@ const CartComponent = (props) => {
     () =>
       window
         .require("electron")
-        .remote.getGlobal("conf")
+        .remote.getGlobal("settings")
         .get("vat")
         .then((vat) => setVat(vat)),
     []
