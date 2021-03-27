@@ -4,8 +4,18 @@ import LoginPage from "./components/LoginPage";
 
 const App = () => {
   const [activeUser, setActiveUser] = useState();
-  useEffect(() =>
-    console.log(window.require("electron").remote.getGlobal("conf").get())
+  useEffect(
+    () =>
+      window
+        .require("electron")
+        .remote.getGlobal("conf")
+        .get("vat")
+        .then((vat) =>
+          vat === undefined
+            ? window.require("electron").remote.getGlobal("conf").set("vat", 12)
+            : null
+        ),
+    []
   );
   return activeUser === undefined ? (
     <LoginPage setActiveUser={setActiveUser} />
