@@ -5,7 +5,7 @@ import logo from "../assets/ChoKoreanMart.jpg";
 const InitializeAdminModal = () => {
   const [_id, set_id] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [imgSrc, setImgSrc] = useState("");
+  const [imgSrc, setImgSrc] = useState(logo);
   const [lastName, setLastName] = useState("");
   const [passState, setPassState] = useState("password");
   const [password, setPassword] = useState("");
@@ -13,7 +13,7 @@ const InitializeAdminModal = () => {
   const clear = () => {
     set_id("");
     setFirstName("");
-    setImgSrc("");
+    setImgSrc(logo);
     setLastName("");
     setPassword("");
     setPassState("password");
@@ -36,6 +36,15 @@ const InitializeAdminModal = () => {
         $("#modalInitAdmin").modal("hide");
         $("#loginPageAlert1").slideDown();
       });
+  };
+  const uploadImage = (e) => {
+    const reader = new FileReader();
+    reader.onload = function () {
+      if (reader.readyState === 2) {
+        setImgSrc(reader.result);
+      }
+    };
+    reader.readAsDataURL(e[0]);
   };
   return (
     <div
@@ -139,14 +148,21 @@ const InitializeAdminModal = () => {
                   Upload Image
                 </label>
                 <div className="col-sm-12">
-                  <input type="file" />
+                  <input
+                    type="file"
+                    id="formFile"
+                    accept="image/*"
+                    onChange={(e) => {
+                      uploadImage(e.target.files);
+                    }}
+                  />
                 </div>
               </div>
               <picture>
-                <source srcset={imgSrc} type="image/jpeg+png" />
+                {/* <source srcset={imgSrc} type="image/jpeg+png" /> */}
                 <img
                   alt=""
-                  src={logo}
+                  src={imgSrc}
                   className="img-fluid img-thumbnail w-50"
                 />
               </picture>
