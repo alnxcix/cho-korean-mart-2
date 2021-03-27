@@ -62,6 +62,14 @@ const InventoryComponent = (props) => {
     indexOfLastRow
   );
   const chgPage = (pageNum) => setCurrentPage(pageNum);
+
+  //test
+  // const formatter = (c, places) => {
+  //   let z = places - (c + "").length;
+  //   let string = "";
+  //   for (let i = 0; i < z; i++) string += "0";
+  //   return string + c;
+  // };
   return (
     <div
       className="overflow-auto p-3"
@@ -97,6 +105,14 @@ const InventoryComponent = (props) => {
           <span>&times;</span>
         </button>
       </div>
+      {/* <h1 className="mb-4">
+        {Number(
+          `${new Date().getFullYear()}${formatter(
+            new Date().getMonth() + 1,
+            2
+          )}${formatter(new Date().getDate(), 2)}00000`
+        ) + 10}
+      </h1> */}
       <h1 className="mb-4">P.O.S.</h1>
       <hr />
       <form onSubmit={(e) => handleSubmit(e)}>
@@ -176,7 +192,9 @@ const InventoryComponent = (props) => {
               <td>
                 <button
                   className="btn btn-danger btn-sm"
-                  disabled={productExistsInCart(product)}
+                  disabled={
+                    productExistsInCart(product) || product.stockQuantity == 0
+                  }
                   onClick={() => addToCart(product)}
                 >
                   <FontAwesomeIcon icon={faPlus} />

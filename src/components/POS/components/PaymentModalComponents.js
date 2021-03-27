@@ -21,6 +21,36 @@ const PaymentModalComponents = (props) => {
     for (let i = 0; i < z; i++) string += "0";
     return string + c;
   };
+  const getTransactionId = () => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = formatter(d.getMonth() + 1, 2);
+    const date = formatter(d.getDate(), 2);
+    return `${year}${month}${date}${formatter(
+      transactions.filter(
+        (transaction) =>
+          new Date(transaction.date).toLocaleDateString() ==
+          d.toLocaleDateString()
+      ).length > 0
+        ? // there are transactions present today
+          Number(
+            Math.max(
+              ...transactions
+                .filter(
+                  (transaction) =>
+                    new Date(transaction.date).toLocaleDateString() ==
+                    d.toLocaleDateString()
+                )
+                .map((trans) => trans._id)
+            )
+          ) -
+            Number(`${year}${month}${date}00000`) +
+            1
+        : // no transactions present today
+          1,
+      5
+    )}`;
+  };
   // old formulas
   // const getSubTotal = () =>
   //   cartItems
@@ -94,19 +124,7 @@ const PaymentModalComponents = (props) => {
       .require("electron")
       .remote.getGlobal("transactions")
       .create({
-        _id: `${new Date().getFullYear()}${formatter(
-          new Date().getMonth() + 1,
-          2
-        )}${formatter(new Date().getDate(), 2)}${formatter(
-          (
-            transactions.filter(
-              (transaction) =>
-                new Date(transaction.date).toLocaleDateString() ==
-                new Date().toLocaleDateString()
-            ) + 1
-          ).length,
-          5
-        )}`,
+        _id: getTransactionId(),
         applySpecialDiscount: applySpecialDiscount,
         date: Date.now(),
         cart: cartItems.map((cartItem) => {
