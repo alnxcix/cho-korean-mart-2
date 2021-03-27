@@ -51,13 +51,18 @@ const EditVatModalComponents = (props) => {
                 </div>
               </div>
               <div className="modal-footer">
-                <button className="btn btn-dark" data-dismiss="modal">
+                <button
+                  className="btn btn-dark"
+                  data-dismiss="modal"
+                  type="button"
+                >
                   Cancel
                 </button>
                 <button
                   className="btn btn-success"
                   disabled={vat === ""}
                   onClick={() => updateVat()}
+                  type="button"
                 >
                   Save
                 </button>
