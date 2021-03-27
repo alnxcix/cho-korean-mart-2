@@ -130,10 +130,10 @@ const EditProduct = (props) => {
                 </div>
                 <div className="form-group row">
                   <label className="col-3 col-form-label">Price</label>
-                  <div class="col">
+                  <div className="col">
                     <div className="input-group">
                       <div className="input-group-prepend">
-                        <span class="input-group-text">Php</span>
+                        <span className="input-group-text">Php</span>
                       </div>
                       <input
                         className="form-control"
@@ -153,7 +153,7 @@ const EditProduct = (props) => {
                 </div>
                 <div className="form-group row">
                   <label className="col-3 col-form-label">Discount</label>
-                  <div class="col">
+                  <div className="col">
                     <div className="input-group">
                       <input
                         className="form-control"
@@ -171,14 +171,14 @@ const EditProduct = (props) => {
                         value={product.discount}
                       />
                       <div className="input-group-append">
-                        <span class="input-group-text">%</span>
+                        <span className="input-group-text">%</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="form-group row">
                   <label className="col-3 col-form-label">Stock Quantity</label>
-                  <div class="col">
+                  <div className="col">
                     <input
                       className="form-control"
                       onChange={(e) =>
@@ -196,7 +196,7 @@ const EditProduct = (props) => {
                 </div>
                 <div className="form-group row">
                   <label className="col-3 col-form-label">Critical Level</label>
-                  <div class="col">
+                  <div className="col">
                     <input
                       className="form-control"
                       onChange={(e) =>

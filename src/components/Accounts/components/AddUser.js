@@ -130,7 +130,7 @@ const AddUser = (props) => {
                 </div>
                 <div className="form-group row">
                   <label className="col-3 col-form-label">Password</label>
-                  <div class="col">
+                  <div className="col">
                     <div className="input-group">
                       <input
                         className="form-control"
@@ -147,7 +147,7 @@ const AddUser = (props) => {
                       />
                       <div className="input-group-append">
                         <button
-                          class="input-group-text"
+                          className="input-group-text"
                           onClick={() => setPassState("text")}
                           onMouseOut={() => {
                             setPassState("password");
@@ -157,7 +157,7 @@ const AddUser = (props) => {
                           View
                         </button>
                       </div>
-                      <small id="passwordHelpInline" class="text-muted">
+                      <small id="passwordHelpInline" className="text-muted">
                         <br />
                         Password must be 8-20 characters long, must contain
                         letters and numbers, and is a mixture of both uppercase

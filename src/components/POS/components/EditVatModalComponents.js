@@ -44,7 +44,7 @@ const EditVatModalComponents = (props) => {
                     value={vatRate}
                   />
                   <div className="input-group-append">
-                    <span class="input-group-text">%</span>
+                    <span className="input-group-text">%</span>
                   </div>
                 </div>
               </div>
