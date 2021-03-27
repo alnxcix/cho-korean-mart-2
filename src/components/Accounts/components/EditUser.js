@@ -2,29 +2,35 @@ import { useEffect, useState } from "react";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import $ from "jquery";
-import logo from "../../../assets/ChoKoreanMart.jpg";
 
 const EditUser = (props) => {
   let { setUsers, activeUser, setActiveUser } = props;
   const [user, setUser] = useState(props.user);
   const [verifyUser, setVerification] = useState("");
-  const [pass, setPassword] = useState("");
-  const [logout, setLogout] = useState(false);
+  const [password, setPassword] = useState("");
+  // const [logout, setLogout] = useState(false);
   const [passState, setPassState] = useState("password");
-  const [validPassword, setValidPassword] = useState(true);
+  // const [validPassword, setValidPassword] = useState(true);
+  const getPasswordValidity = () =>
+    password.match(/[a-z]+/) &&
+    password.match(/[0-9]+/) &&
+    password.match(/[A-Z]+/) &&
+    //password.match(/[~<>?!@#$%^&*()]+/) &&
+    password.length >= 8 &&
+    password.length <= 20;
   const reset = () => {
     setUser(props.user);
     setPassState("password");
     setPassword("");
     setVerification("");
-    setValidPassword(true);
+    // setValidPassword(true);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     window
       .require("electron")
       .remote.getGlobal("users")
-      .update(user)
+      .update({ ...user, password: password === "" ? user.password : password })
       .then(() => $("#userAlert3").slideDown())
       .catch(() => $("#userAlert4").slideDown());
     window
@@ -32,9 +38,16 @@ const EditUser = (props) => {
       .remote.getGlobal("users")
       .readAll()
       .then((users) => setUsers(users));
+    if (user._id === activeUser._id) {
+      window
+        .require("electron")
+        .remote.getGlobal("users")
+        .read(activeUser._id)
+        .then((user) => setActiveUser(user));
+    }
     $(`#modalEdit${user._id}`).modal("hide");
     reset();
-    logout ? setActiveUser(() => undefined) : console.log("all is well");
+    // logout ? setActiveUser(() => undefined) : console.log("all is well");
   };
   useEffect(() => setUser(props.user), [props.user]);
   const uploadImage = (e) => {
@@ -115,26 +128,29 @@ const EditUser = (props) => {
                     <div className="input-group">
                       <input
                         className="form-control"
-                        style={
-                          !validPassword ? { backgroundColor: "#ffb3b3" } : {}
-                        }
+                        style={{
+                          backgroundColor:
+                            password.length === 0 || getPasswordValidity()
+                              ? null
+                              : "#ffb3b3",
+                        }}
                         onChange={(e) => {
                           setPassword(e.target.value);
-                          const pass = e.target.value;
-                          if (
-                            pass.match(/[a-z]+/) &&
-                            pass.match(/[0-9]+/) &&
-                            pass.match(/[A-Z]+/) &&
-                            //pass.match(/[~<>?!@#$%^&*()]+/) &&
-                            pass.length >= 8 &&
-                            pass.length <= 20
-                          ) {
-                            setValidPassword(true);
-                          } else setValidPassword(false);
+                          // const pass = e.target.value;
+                          // if (
+                          //   pass.match(/[a-z]+/) &&
+                          //   pass.match(/[0-9]+/) &&
+                          //   pass.match(/[A-Z]+/) &&
+                          //   //pass.match(/[~<>?!@#$%^&*()]+/) &&
+                          //   pass.length >= 8 &&
+                          //   pass.length <= 20
+                          // ) {
+                          //   setValidPassword(true);
+                          // } else setValidPassword(false);
                         }}
                         placeholder="Password"
                         type={passState}
-                        value={pass}
+                        value={password}
                       />
                       <div className="input-group-append">
                         <button
@@ -148,7 +164,7 @@ const EditUser = (props) => {
                           View
                         </button>
                       </div>
-                      <small id="passwordHelpInline" class="text-muted">
+                      <small className="text-muted">
                         <br />
                         Password must be 8-20 characters long, must contain
                         letters and numbers, and is a mixture of both uppercase
@@ -159,7 +175,7 @@ const EditUser = (props) => {
                 </div>
                 {user.role === "Administrator" &&
                 user._id === activeUser._id ? (
-                  <></>
+                  () => null
                 ) : (
                   <div className="form-group row">
                     <label className="col-3 col-form-label">Role</label>
@@ -191,9 +207,7 @@ const EditUser = (props) => {
                       type="file"
                       id="formFile"
                       accept="image/*"
-                      onChange={(e) => {
-                        uploadImage(e.target.files);
-                      }}
+                      onChange={(e) => uploadImage(e.target.files)}
                     />
                   </div>
                 </div>
@@ -236,22 +250,11 @@ const EditUser = (props) => {
                   Cancel
                 </button>
                 <button
-                  className={
-                    activeUser.password === verifyUser
-                      ? "btn btn-success"
-                      : "btn btn-success disabled"
-                  }
+                  className="btn btn-success"
                   disabled={
                     activeUser.password !== verifyUser ||
-                    (pass !== "" ? !validPassword : false)
+                    (password.length > 0 && !getPasswordValidity())
                   }
-                  onClick={() => {
-                    setUser({
-                      ...user,
-                      password: pass !== "" ? pass : user.password,
-                    });
-                    setLogout(pass !== "" && activeUser._id === user._id);
-                  }}
                   type="submit"
                 >
                   Save

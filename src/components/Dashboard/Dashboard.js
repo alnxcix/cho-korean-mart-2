@@ -32,7 +32,6 @@ const Dashboard = (props) => {
       .readAll()
       .then((users) => setUsers(users));
   }, []);
-
   return (
     <div className="p-3">
       <h1 className="mb-4">Dashboard</h1>
