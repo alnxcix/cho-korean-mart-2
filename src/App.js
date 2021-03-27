@@ -9,13 +9,13 @@ const App = () => {
       window
         .require("electron")
         .remote.getGlobal("settings")
-        .get("vat")
-        .then((vat) =>
-          vat === undefined
+        .get("vatRate")
+        .then((vatRate) =>
+          vatRate === undefined
             ? window
                 .require("electron")
                 .remote.getGlobal("settings")
-                .set("vat", 12)
+                .set("vatRate", 12)
             : null
         ),
     []

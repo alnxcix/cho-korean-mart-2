@@ -5,6 +5,7 @@ const transactionSchema = {
     cash: { type: "number" },
     date: { type: "integer" },
     userId: { type: "string" },
+    vatRate: { type: "number" },
   },
   type: "object",
 };

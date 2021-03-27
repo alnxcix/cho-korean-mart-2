@@ -1,12 +1,12 @@
 import $ from "jquery";
 
 const EditVatModalComponents = (props) => {
-  let { vat, setVat } = props;
-  const updateVat = () => {
+  let { vatRate, setVatRate } = props;
+  const updateVatRate = () => {
     window
       .require("electron")
       .remote.getGlobal("settings")
-      .set("vat", Number(vat));
+      .set("vatRate", Number(vatRate));
     $("#modalEditVAT").modal("hide");
   };
   return (
@@ -33,41 +33,39 @@ const EditVatModalComponents = (props) => {
                 <span>&times;</span>
               </button>
             </div>
-            <form onSubmit={updateVat}>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label>New VAT Rate:</label>
-                  <div className="input-group">
-                    <input
-                      className="form-control"
-                      onChange={(e) => setVat(e.target.value)}
-                      type="number"
-                      value={vat}
-                    />
-                    <div className="input-group-append">
-                      <span class="input-group-text">%</span>
-                    </div>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>New VAT Rate:</label>
+                <div className="input-group">
+                  <input
+                    className="form-control"
+                    onChange={(e) => setVatRate(e.target.value)}
+                    type="number"
+                    value={vatRate}
+                  />
+                  <div className="input-group-append">
+                    <span class="input-group-text">%</span>
                   </div>
                 </div>
               </div>
-              <div className="modal-footer">
-                <button
-                  className="btn btn-dark"
-                  data-dismiss="modal"
-                  type="button"
-                >
-                  Cancel
-                </button>
-                <button
-                  className="btn btn-success"
-                  disabled={vat === ""}
-                  onClick={() => updateVat()}
-                  type="button"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="btn btn-dark"
+                data-dismiss="modal"
+                type="button"
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-success"
+                disabled={vatRate === ""}
+                onClick={() => updateVatRate()}
+                type="button"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       </div>

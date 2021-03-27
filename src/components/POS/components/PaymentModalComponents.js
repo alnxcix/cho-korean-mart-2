@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import $ from "jquery";
 
 const PaymentModalComponents = (props) => {
-  let { activeUser, cartItems, setCartItems } = props;
+  let { activeUser, cartItems, setCartItems, vatRate } = props;
   const [applySpecialDiscount, toggleSpecialDiscount] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [cash, setCash] = useState("");
@@ -119,6 +119,7 @@ const PaymentModalComponents = (props) => {
         }),
         cash: Number(cash),
         userId: activeUser._id,
+        vatRate: vatRate,
       })
       .then(() => $("#posAlert1").slideDown())
       .catch(() => $("#posAlert2").slideDown());

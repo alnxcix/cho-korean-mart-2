@@ -6,7 +6,7 @@ import PaymentModalComponents from "./PaymentModalComponents";
 
 const CartComponent = (props) => {
   let { activeUser, cartItems, setCartItems, updateItemQuantity } = props;
-  const [vat, setVat] = useState();
+  const [vatRate, setVatRate] = useState();
   const getGrandTotal = () =>
     cartItems.length === 0
       ? 0
@@ -27,8 +27,8 @@ const CartComponent = (props) => {
       window
         .require("electron")
         .remote.getGlobal("settings")
-        .get("vat")
-        .then((vat) => setVat(vat)),
+        .get("vatRate")
+        .then((vatRate) => setVatRate(vatRate)),
     []
   );
   return (
@@ -86,13 +86,16 @@ const CartComponent = (props) => {
               </span>
             </h6>
             <h6>
-              <EditVatModalComponents vat={vat} setVat={setVat} />
-              {`VAT (${vat})%:`}
+              <EditVatModalComponents
+                vatRate={vatRate}
+                setVatRate={setVatRate}
+              />
+              {`VAT (${vatRate})%:`}
               <span className="text-muted">
                 ₱{" "}
                 {(
                   getGrandTotal() -
-                  (getGrandTotal() / (100 + vat)) * 100
+                  (getGrandTotal() / (100 + vatRate)) * 100
                 ).toFixed(2)}
               </span>
             </h6>
@@ -117,6 +120,7 @@ const CartComponent = (props) => {
         cartItems={cartItems}
         getGrandTotal={getGrandTotal}
         setCartItems={setCartItems}
+        vatRate={vatRate}
       />
     </>
   );
