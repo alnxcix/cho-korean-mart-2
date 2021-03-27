@@ -23,9 +23,6 @@ const InitializeAdminModal = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    window.require("electron").remote.getGlobal("settings").create({
-      vat: vat,
-    });
     window
       .require("electron")
       .remote.getGlobal("users")
