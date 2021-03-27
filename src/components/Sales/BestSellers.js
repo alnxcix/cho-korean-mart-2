@@ -50,7 +50,7 @@ const SalesReport = () => {
               )
           )
             .filter((cartItem) => cartItem._id === productId)
-            .map((cartItem) => cartItem.quantity)
+            .map((cartItem) => Number(cartItem.quantity))
             .reduce((acc, cur) => acc + cur, 0),
         };
       }),

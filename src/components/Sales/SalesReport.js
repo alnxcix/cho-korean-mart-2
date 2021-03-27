@@ -139,7 +139,7 @@ const SalesReport = () => {
               </td>
               <td className="text-truncate">
                 {transaction.cart
-                  .map((cartItem) => cartItem.quantity)
+                  .map((cartItem) => Number(cartItem.quantity))
                   .reduce((acc, cur) => acc + cur, 0)}
               </td>
               <td className="text-truncate">
