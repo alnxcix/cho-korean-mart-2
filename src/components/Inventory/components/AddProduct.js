@@ -37,7 +37,10 @@ const AddProduct = (props) => {
         price: Number(price),
         stockQuantity: Number(stockQuantity),
       })
-      .then(() => $("#productAlert1").slideDown())
+      .then(() => {
+        $("#productAlert1").slideDown();
+        clear();
+      })
       .catch(() => $("#productAlert2").slideDown());
     if (stockQuantity > 0) {
       window
@@ -63,7 +66,6 @@ const AddProduct = (props) => {
       .readAll()
       .then((products) => setProducts(products));
     $("#modalAddProduct").modal("hide");
-    clear();
   };
   const uploadImage = (e) => {
     const reader = new FileReader();

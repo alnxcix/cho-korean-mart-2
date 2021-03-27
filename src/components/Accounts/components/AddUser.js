@@ -35,7 +35,11 @@ const AddUser = (props) => {
         password: password,
         role: role,
       })
-      .then(() => $("#userAlert1").slideDown())
+      .then(() => {
+        $("#userAlert1").slideDown();
+
+        clear();
+      })
       .catch(() => $("#userAlert2").slideDown());
     window
       .require("electron")
@@ -43,7 +47,6 @@ const AddUser = (props) => {
       .readAll()
       .then((users) => setUsers(users));
     $("#modalAddUser").modal("hide");
-    clear();
   };
   const uploadImage = (e) => {
     const reader = new FileReader();
