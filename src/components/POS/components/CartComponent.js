@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
 import $ from "jquery";
 import CartItem from "./CartItem";
+import EditVatModalComponents from "./EditVatModalComponents";
 import PaymentModalComponents from "./PaymentModalComponents";
 
 const CartComponent = (props) => {
   let { activeUser, cartItems, setCartItems, updateItemQuantity } = props;
+  const [vatRate, setVatRate] = useState();
   const getGrandTotal = () =>
     cartItems.length === 0
       ? 0
@@ -15,11 +18,19 @@ const CartComponent = (props) => {
               Number(cartItem.quantity)
           )
           .reduce((acc, cur) => acc + cur);
-
   const removeFromCart = (product) =>
     setCartItems(
       cartItems.filter((cartItem) => cartItem.product._id !== product._id)
     );
+  useEffect(
+    () =>
+      window
+        .require("electron")
+        .remote.getGlobal("settings")
+        .get("vatRate")
+        .then((vatRate) => setVatRate(vatRate)),
+    []
+  );
   return (
     <>
       <form
@@ -75,80 +86,19 @@ const CartComponent = (props) => {
               </span>
             </h6>
             <h6>
-              VAT (12%): {/* VAT ({vat}%):{" "} */}
+              <EditVatModalComponents
+                vatRate={vatRate}
+                setVatRate={setVatRate}
+              />
+              {`VAT (${vatRate})%:`}
               <span className="text-muted">
-                ₱ {(getGrandTotal() - getGrandTotal() / 1.12).toFixed(2)}
-                {/* ₱ {(getGrandTotal() - getGrandTotal() / (1+vat/100)).toFixed(2)} */}
+                ₱{" "}
+                {(
+                  getGrandTotal() -
+                  (getGrandTotal() / (100 + vatRate)) * 100
+                ).toFixed(2)}
               </span>
             </h6>
-            <button
-              className="btn btn-sm btn-outline-dark"
-              data-target="#modalEditVAT"
-              data-toggle="modal"
-              type="button"
-            >
-              Edit VAT
-            </button>
-            <div
-              className="fade modal"
-              data-backdrop="static"
-              data-keyboard="false"
-              id="modalEditVAT"
-            >
-              <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content">
-                  <div
-                    className="modal-header"
-                    style={{ backgroundColor: "#900" }}
-                  >
-                    <h5 className="modal-title text-light">
-                      Edit Value Added Tax %
-                    </h5>
-                    <button
-                      className="close text-light"
-                      data-dismiss="modal"
-                      // onClick={() => clear()}
-                    >
-                      <span>&times;</span>
-                    </button>
-                  </div>
-                  <form
-                  // onSubmit={handleSubmit}
-                  >
-                    <div className="modal-body">
-                      <div className="form-group row">
-                        <label className="col-3 col-form-label">New VAT:</label>
-                        <div className="col">
-                          <div className="input-group">
-                            <input
-                              className="form-control"
-                              required
-                              type="number"
-                            />
-                            <div className="input-group-append">
-                              <span class="input-group-text">%</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="modal-footer">
-                      <button
-                        className="btn btn-dark"
-                        data-dismiss="modal"
-                        // onClick={() => clear()}
-                        type="button"
-                      >
-                        Cancel
-                      </button>
-                      <button className="btn btn-success" type="submit">
-                        Save
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
             <hr />
             <h5>
               Grand Total:{" "}
@@ -170,6 +120,7 @@ const CartComponent = (props) => {
         cartItems={cartItems}
         getGrandTotal={getGrandTotal}
         setCartItems={setCartItems}
+        vatRate={vatRate}
       />
     </>
   );

@@ -131,7 +131,10 @@ const InitializeAdminModal = () => {
                       </button>
                     </div>
                     <small id="passwordHelpInline" class="text-muted">
-                        <br/>Password must be 8-20 characters long, must contain letters and numbers, and is a mixture of both uppercase and lowercase letters.
+                      <br />
+                      Password must be 8-20 characters long, must contain
+                      letters and numbers, and is a mixture of both uppercase
+                      and lowercase letters.
                     </small>
                   </div>
                 </div>
@@ -152,28 +155,6 @@ const InitializeAdminModal = () => {
                   className="img-fluid img-thumbnail w-50"
                 />
               </picture>
-              <hr />
-              <div className="form-group row">
-                <label className="col-form-label col-sm-6 mb-2">
-                  Enter current VAT:
-                </label>
-                <div className="col-sm-6">
-                  <div className="input-group">
-                    <input
-                      className="form-control"
-                      onChange={(e) => setVat(e.target.value)}
-                      type="number"
-                      min="0"
-                      max="100"
-                      required
-                      value={vat}
-                    />
-                    <div className="input-group-append">
-                      <div class="input-group-text">%</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
             <div className="modal-footer">
               <button

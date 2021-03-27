@@ -49,22 +49,6 @@ const CartItem = (props) => {
                 type="number"
                 value={cartItem.quantity}
               />
-              &nbsp;
-              <div className="input-group-prepend">
-                <span className="input-group-text">Discount:</span>
-              </div>
-              <input
-                className=" form-control"
-                max={99.99}
-                min={0}
-                onChange={() => console.log("")}
-                required
-                type="number"
-                value={cartItem.product.discount}
-              />
-              <div className="input-group-append">
-                <span className="input-group-text">%</span>
-              </div>
             </div>
             <small className="form-text text-muted">{`₱ ${(
               (cartItem.product.price -
