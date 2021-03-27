@@ -10,7 +10,6 @@ const InitializeAdminModal = () => {
   const [passState, setPassState] = useState("password");
   const [password, setPassword] = useState("");
   const [validPassword, setValidPassword] = useState(true);
-  const [vat, setVat] = useState("");
   const clear = () => {
     set_id("");
     setFirstName("");
@@ -18,7 +17,6 @@ const InitializeAdminModal = () => {
     setLastName("");
     setPassword("");
     setPassState("password");
-    setVat("");
     setValidPassword(true);
   };
   const handleSubmit = (e) => {
