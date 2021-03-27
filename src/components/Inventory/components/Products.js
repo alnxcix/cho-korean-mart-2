@@ -40,6 +40,7 @@ const Products = (props) => {
             <option value="name">Name</option>
             <option value="category">Category</option>
             <option value="price">Price</option>
+            <option value="discount">Discount</option>
             <option value="stockQuantity">Stock Quantity</option>
           </select>
           <select
@@ -93,6 +94,7 @@ const Products = (props) => {
               "Product",
               "Category",
               "Price",
+              "Discount",
               "Stock Quantity",
               "Actions",
             ].map((el) => (
@@ -121,6 +123,7 @@ const Products = (props) => {
               <td className="text-truncate">{`₱ ${product.price.toFixed(
                 2
               )}`}</td>
+              <td className="text-truncate">{product.discount} %</td>
               <td
                 className="text-truncate"
                 style={{
