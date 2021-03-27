@@ -8,7 +8,7 @@ const AddProduct = (props) => {
   const [category, setCategory] = useState("");
   const [criticalLevel, setCriticalLevel] = useState(20);
   const [discount, setDiscount] = useState("");
-  const [imgSrc, setImgSrc] = useState("");
+  const [imgSrc, setImgSrc] = useState(logo);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [stockQuantity, setStockQuantity] = useState("");
@@ -16,7 +16,7 @@ const AddProduct = (props) => {
     set_id("");
     setCategory("");
     setDiscount("");
-    setImgSrc("");
+    setImgSrc(logo);
     setCriticalLevel(20);
     setName("");
     setPrice("");
@@ -64,6 +64,15 @@ const AddProduct = (props) => {
       .then((products) => setProducts(products));
     $("#modalAddProduct").modal("hide");
     clear();
+  };
+  const uploadImage = (e) => {
+    const reader = new FileReader();
+    reader.onload = function () {
+      if (reader.readyState === 2) {
+        setImgSrc(reader.result);
+      }
+    };
+    reader.readAsDataURL(e[0]);
   };
   return (
     <>
@@ -200,14 +209,21 @@ const AddProduct = (props) => {
                     Upload Image
                   </label>
                   <div className="col-sm-12">
-                    <input type="file" />
+                    <input
+                      type="file"
+                      id="formFile"
+                      accept="image/*"
+                      onChange={(e) => {
+                        uploadImage(e.target.files);
+                      }}
+                    />
                   </div>
                 </div>
                 <picture>
-                  <source srcset={imgSrc} type="image/jpeg+png" />
+                  {/* <source srcset={imgSrc} type="image/jpeg+png" /> */}
                   <img
                     alt=""
-                    src={logo}
+                    src={imgSrc}
                     className="img-fluid img-thumbnail w-50"
                   />
                 </picture>

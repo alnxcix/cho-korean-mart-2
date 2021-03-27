@@ -3,6 +3,7 @@ import logo from "../assets/ChoKoreanMart.jpg";
 
 const Header = (props) => {
   let { activeUser, collapsed, setCollapsed } = props;
+
   return (
     <nav
       className="navbar navbar-dark py-0 sticky-top"
@@ -12,11 +13,11 @@ const Header = (props) => {
       <span className="navbar-text">
         {activeUser.firstName} {activeUser.lastName}
         <picture>
-          <source srcset={activeUser.imgSrc} />
+          {/* <source srcset={activeUser.imgSrc} /> */}
           <img
             alt=""
             className="img-thumbnail ml-3"
-            src={logo}
+            src={activeUser.imgSrc}
             style={{ maxHeight: 50 }}
           />
         </picture>
