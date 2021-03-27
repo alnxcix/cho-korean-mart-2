@@ -70,7 +70,10 @@ const Products = (props) => {
           </div>
           <select
             className="custom-select"
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => {
+              setCategory(e.target.value);
+              setCurrentPage(1);
+            }}
             value={category}
           >
             {[
@@ -89,7 +92,10 @@ const Products = (props) => {
           </div>
           <input
             className="form-control"
-            onChange={(e) => setSearchString(e.target.value)}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setSearchString(e.target.value);
+            }}
             placeholder="Search"
             value={searchString}
           />

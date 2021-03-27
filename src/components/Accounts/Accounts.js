@@ -156,7 +156,10 @@ const Accounts = (props) => {
           </div>
           <input
             className="form-control"
-            onChange={(e) => setSearchString(e.target.value)}
+            onChange={(e) => {
+              setSearchString(e.target.value);
+              setCurrentPage(1);
+            }}
             placeholder="Search"
             value={searchString}
           />

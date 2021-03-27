@@ -21,6 +21,7 @@ const SalesReport = () => {
   const setDates = (start, end) => {
     setStartDate(start);
     setEndDate(end);
+    setCurrentPage(1);
   };
   const getFilteredTransactions = () =>
     transactions.filter(
@@ -97,7 +98,10 @@ const SalesReport = () => {
           </div>
           <input
             className="form-control"
-            onChange={(e) => setSearchString(e.target.value)}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setSearchString(e.target.value);
+            }}
             placeholder="Search"
             value={searchString}
           />

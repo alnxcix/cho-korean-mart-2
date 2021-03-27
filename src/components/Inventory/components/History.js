@@ -54,6 +54,7 @@ const History = (props) => {
   const setDates = (start, end) => {
     setStartDate(start);
     setEndDate(end);
+    setCurrentPage(1);
   };
   useEffect(() => {
     window
@@ -114,7 +115,10 @@ const History = (props) => {
           </div>
           <input
             className="form-control"
-            onChange={(e) => setSearchString(e.target.value)}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setSearchString(e.target.value);
+            }}
             placeholder="Search"
             value={searchString}
           />
