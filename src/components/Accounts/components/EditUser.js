@@ -37,6 +37,15 @@ const EditUser = (props) => {
     logout ? setActiveUser(() => undefined) : console.log("all is well");
   };
   useEffect(() => setUser(props.user), [props.user]);
+  const uploadImage = (e) => {
+    const reader = new FileReader();
+    reader.onload = function () {
+      if (reader.readyState === 2) {
+        setUser({ ...user, imgSrc: reader.result });
+      }
+    };
+    reader.readAsDataURL(e[0]);
+  };
   return (
     <>
       <button
@@ -178,14 +187,21 @@ const EditUser = (props) => {
                     Upload Image
                   </label>
                   <div className="col-sm-12">
-                    <input type="file" />
+                    <input
+                      type="file"
+                      id="formFile"
+                      accept="image/*"
+                      onChange={(e) => {
+                        uploadImage(e.target.files);
+                      }}
+                    />
                   </div>
                 </div>
                 <picture>
-                  <source srcset={user.imgSrc} type="image/jpeg+png" />
+                  {/* <source srcset={user.imgSrc} type="image/jpeg+png" /> */}
                   <img
                     alt=""
-                    src={logo}
+                    src={user.imgSrc}
                     className="img-fluid img-thumbnail w-50"
                   />
                 </picture>

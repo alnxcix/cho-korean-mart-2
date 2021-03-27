@@ -49,6 +49,18 @@ const EditProduct = (props) => {
     reset();
   };
   useEffect(() => setProduct(props.product), [props.product]);
+  const uploadImage = (e) => {
+    const reader = new FileReader();
+    reader.onload = function () {
+      if (reader.readyState === 2) {
+        setProduct({
+          ...product,
+          imgSrc: reader.result,
+        });
+      }
+    };
+    reader.readAsDataURL(e[0]);
+  };
   return (
     <>
       <button
@@ -204,14 +216,21 @@ const EditProduct = (props) => {
                     Upload Image
                   </label>
                   <div className="col-sm-12">
-                    <input type="file" />
+                    <input
+                      type="file"
+                      id="formFile"
+                      accept="image/*"
+                      onChange={(e) => {
+                        uploadImage(e.target.files);
+                      }}
+                    />
                   </div>
                 </div>
                 <picture>
-                  <source srcset={product.imgSrc} type="image/jpeg+png" />
+                  {/* <source srcset={product.imgSrc} type="image/jpeg+png" /> */}
                   <img
                     alt=""
-                    src={logo}
+                    src={product.imgSrc}
                     className="img-fluid img-thumbnail w-50"
                   />
                 </picture>

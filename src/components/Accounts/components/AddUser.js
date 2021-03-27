@@ -6,7 +6,7 @@ const AddUser = (props) => {
   let { setUsers } = props;
   const [_id, set_id] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [imgSrc, setImgSrc] = useState("");
+  const [imgSrc, setImgSrc] = useState(logo);
   const [lastName, setLastName] = useState("");
   const [passState, setPassState] = useState("password");
   const [validPassword, setValidPassword] = useState(true);
@@ -15,7 +15,7 @@ const AddUser = (props) => {
   const clear = () => {
     set_id("");
     setFirstName("");
-    setImgSrc("");
+    setImgSrc(logo);
     setLastName("");
     setPassword("");
     setRole("");
@@ -44,6 +44,15 @@ const AddUser = (props) => {
       .then((users) => setUsers(users));
     $("#modalAddUser").modal("hide");
     clear();
+  };
+  const uploadImage = (e) => {
+    const reader = new FileReader();
+    reader.onload = function () {
+      if (reader.readyState === 2) {
+        setImgSrc(reader.result);
+      }
+    };
+    reader.readAsDataURL(e[0]);
   };
   return (
     <>
@@ -133,9 +142,6 @@ const AddUser = (props) => {
                             setValidPassword(true);
                           else setValidPassword(false);
                         }}
-                        // onFocus={(e) => {
-
-                        // }}
                         placeholder="Password"
                         required
                         type={passState}
@@ -185,14 +191,21 @@ const AddUser = (props) => {
                     Upload Image
                   </label>
                   <div className="col-sm-12">
-                    <input type="file" />
+                    <input
+                      type="file"
+                      id="formFile"
+                      accept="image/*"
+                      onChange={(e) => {
+                        uploadImage(e.target.files);
+                      }}
+                    />
                   </div>
                 </div>
                 <picture>
-                  <source srcset={imgSrc} type="image/jpeg+png" />
+                  {/* <source srcset={imgSrc} type="image/jpeg+png" /> */}
                   <img
                     alt=""
-                    src={logo}
+                    src={imgSrc}
                     className="img-fluid img-thumbnail w-50"
                   />
                 </picture>
