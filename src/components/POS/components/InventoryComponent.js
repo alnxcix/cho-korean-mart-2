@@ -153,7 +153,7 @@ const InventoryComponent = (props) => {
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
         <thead>
           <tr>
-            {["ID", "Image", "Product", "Category", "Stock Quantity"].map(
+            {["ID", "Image", "Product", "Category", "Price", "Stock Quantity"].map(
               (el) => (
                 <th>{el}</th>
               )
@@ -178,6 +178,9 @@ const InventoryComponent = (props) => {
               </td>
               <td className="text-truncate">{product.name}</td>
               <td className="text-truncate">{product.category}</td>
+              <td className="text-truncate">{`₱ ${product.price.toFixed(
+                2
+              )}`}</td>
               <td
                 className="text-truncate"
                 style={{
