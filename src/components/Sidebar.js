@@ -97,13 +97,13 @@ const Sidebar = (props) => {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header" style={{ backgroundColor: "#333" }}>
-              <h5 className="modal-title text-light">Logout</h5>
+              <h5 className="modal-title text-light">Logout Confirmation</h5>
               <button className="close text-light" data-dismiss="modal">
                 <span>&times;</span>
               </button>
             </div>
             <div className="modal-body">
-              <div>Do you want to logout?</div>
+              <div>Are you sure you want to log out?</div>
             </div>
             <div className="modal-footer">
               <button className="btn btn-dark" data-dismiss="modal">
