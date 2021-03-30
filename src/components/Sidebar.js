@@ -35,59 +35,60 @@ const Sidebar = (props) => {
             <MenuItem icon={<FontAwesomeIcon icon={faHome} />}>
               Dashboard <Link to="/" exact />
             </MenuItem>
-            {activeUser.role === "Administrator" ? (
-              <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
-                Accounts <Link to="/accounts" />
+            {!["Cashier"].includes(activeUser.role) ? (
+              <>
+                <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
+                  Accounts <Link to="/accounts" />
+                </MenuItem>
+                {!["Owner"].includes(activeUser.role) ? (
+                  <></>
+                ) : (
+                  <MenuItem icon={<FontAwesomeIcon icon={faBox} />}>
+                    Inventory <Link to="/inventory" />
+                  </MenuItem>
+                )}
+              </>
+            ) : (
+              () => null
+            )}
+            {!["Administrator"].includes(activeUser.role) ? (
+              <MenuItem icon={<FontAwesomeIcon icon={faCashRegister} />}>
+                P.O.S. <Link to="/pos" />
               </MenuItem>
             ) : (
               () => null
             )}
-            {["Administrator", "Owner"].includes(activeUser.role) ? (
-              <MenuItem icon={<FontAwesomeIcon icon={faBox} />}>
-                Inventory <Link to="/inventory" />
-              </MenuItem>
+            {!["Administrator"].includes(activeUser.role) ? (
+              <SubMenu
+                title="Sales"
+                icon={<FontAwesomeIcon icon={faCommentDollar} />}
+              >
+                <MenuItem>
+                  Sales Report <Link to="/sales_report" />
+                </MenuItem>
+                <MenuItem>
+                  Best Sellers <Link to="/best_sellers" />
+                </MenuItem>
+              </SubMenu>
             ) : (
               () => null
             )}
-            {/* {["Cashier", "Owner"].includes(activeUser.role) ? ( */}
-            <MenuItem icon={<FontAwesomeIcon icon={faCashRegister} />}>
-              P.O.S. <Link to="/pos" />
-            </MenuItem>
-            {/* ) : null} */}
-            {/* {activeUser.role === "Owner" ? ( */}
-            <SubMenu
-              title="Sales"
-              icon={<FontAwesomeIcon icon={faCommentDollar} />}
-            >
-              <MenuItem>
-                Sales Report <Link to="/sales_report" />
-              </MenuItem>
-              <MenuItem>
-                Best Sellers <Link to="/best_sellers" />
-              </MenuItem>
-            </SubMenu>
-            {/* ) : () => null} */}
           </Menu>
         </SidebarContent>
         <SidebarFooter>
           <Menu iconShape="circle">
             <MenuItem
               icon={<FontAwesomeIcon icon={faChevronLeft} />}
-              // data-target="#modalLogout"
-              // data-toggle="modal tool-tip"
-              title="Logout"
+              data-target="#modalLogout"
+              data-toggle="modal"
             >
+              <a data-toggle="tooltip" title="Logout"></a>
               Logout
-              <Link
-                to="/"
-                exact
-                onClick={() => setActiveUser(() => undefined)}
-              />
             </MenuItem>
           </Menu>
         </SidebarFooter>
       </ProSidebar>
-      {/* <div
+      <div
         className="fade modal"
         data-backdrop="static"
         data-keyboard="false"
@@ -116,7 +117,7 @@ const Sidebar = (props) => {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
     </>
   );
 };
