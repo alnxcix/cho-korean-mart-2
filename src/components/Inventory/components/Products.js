@@ -150,7 +150,7 @@ const Products = (props) => {
                   setStockHistoryEntries={setStockHistoryEntries}
                 />
                 &nbsp;
-                <DeleteProduct product={product} setProducts={setProducts} />
+                <DeleteProduct activeUser={activeUser}  product={product} setProducts={setProducts} />
               </td>
             </tr>
           ))}

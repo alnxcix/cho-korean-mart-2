@@ -168,10 +168,10 @@ const SalesReport = () => {
                   <FontAwesomeIcon icon={faShare} />
                 </button>
                 &nbsp;
-                <DeleteTransactionModalComponents
+                {/* <DeleteTransactionModalComponents
                   setTransactions={setTransactions}
                   transaction={transaction}
-                />
+                /> */}
               </td>
             </tr>
           ))}
