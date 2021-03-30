@@ -123,7 +123,7 @@ const Products = (props) => {
             {criticalItemsOnly ? (
               <>Show All Items</>
             ) : (
-              <>Only Show Items at Critical Level</>
+              <>Show Items at Critical Level</>
             )}
           </button>
         </div>
