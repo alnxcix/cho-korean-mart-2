@@ -9,7 +9,7 @@ import moment from "moment";
 import $ from "jquery";
 import ChartComponent from "../ChartComponent";
 import DateRangePickerComponent from "../DateRangePickerComponent";
-import DeleteTransactionModalComponents from "./components/DeleteTransactionModalComponents";
+// import DeleteTransactionModalComponents from "./components/DeleteTransactionModalComponents";
 import TransactionModalComponents from "./components/TransactionModalComponents";
 import Pagination from "../Pagination";
 
@@ -168,14 +168,15 @@ const SalesReport = () => {
                   className="btn btn-warning"
                   data-target={`#modal`}
                   data-toggle="modal"
+                  title="Export Transaction"
                 >
                   <FontAwesomeIcon icon={faShare} />
                 </button>
-                &nbsp;
+                {/* &nbsp;
                 <DeleteTransactionModalComponents
                   setTransactions={setTransactions}
                   transaction={transaction}
-                />
+                /> */}
               </td>
             </tr>
           ))}

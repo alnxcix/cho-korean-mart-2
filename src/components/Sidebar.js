@@ -32,18 +32,27 @@ const Sidebar = (props) => {
         </SidebarHeader>
         <SidebarContent>
           <Menu iconShape="circle">
-            <MenuItem icon={<FontAwesomeIcon icon={faHome} />}>
+            <MenuItem
+              icon={<FontAwesomeIcon icon={faHome} />}
+              title="Dashboard"
+            >
               Dashboard <Link to="/" exact />
             </MenuItem>
             {!["Cashier"].includes(activeUser.role) ? (
               <>
-                <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
+                <MenuItem
+                  icon={<FontAwesomeIcon icon={faUser} />}
+                  title="Accounts"
+                >
                   Accounts <Link to="/accounts" />
                 </MenuItem>
                 {!["Owner"].includes(activeUser.role) ? (
                   <></>
                 ) : (
-                  <MenuItem icon={<FontAwesomeIcon icon={faBox} />}>
+                  <MenuItem
+                    icon={<FontAwesomeIcon icon={faBox} />}
+                    title="Inventory"
+                  >
                     Inventory <Link to="/inventory" />
                   </MenuItem>
                 )}
@@ -52,7 +61,10 @@ const Sidebar = (props) => {
               () => null
             )}
             {!["Administrator"].includes(activeUser.role) ? (
-              <MenuItem icon={<FontAwesomeIcon icon={faCashRegister} />}>
+              <MenuItem
+                icon={<FontAwesomeIcon icon={faCashRegister} />}
+                title="P.O.S."
+              >
                 P.O.S. <Link to="/pos" />
               </MenuItem>
             ) : (
@@ -81,8 +93,8 @@ const Sidebar = (props) => {
               icon={<FontAwesomeIcon icon={faChevronLeft} />}
               data-target="#modalLogout"
               data-toggle="modal"
+              title="Logout"
             >
-              <a data-toggle="tooltip" title="Logout"></a>
               Logout
             </MenuItem>
           </Menu>

@@ -58,6 +58,7 @@ const TransactionModalComponents = (props) => {
         className="btn btn-primary"
         data-target={`#modalEdit${transaction._id}`}
         data-toggle="modal"
+        title="View Transaction"
       >
         <FontAwesomeIcon icon={faEye} />
       </button>
