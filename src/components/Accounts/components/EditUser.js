@@ -227,9 +227,9 @@ const EditUser = (props) => {
                 </picture>
                 <div className="form-group mt-2">
                   <label className="form-label">
-                    <h5>
-                      <b>Input Your Password to Implement the Changes</b>
-                    </h5>
+                    <h6>
+                      <br></br>Enter your password to implement the changes:
+                    </h6>
                   </label>
                   <input
                     className="form-control"
