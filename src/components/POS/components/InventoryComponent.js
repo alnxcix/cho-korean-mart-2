@@ -80,7 +80,7 @@ const InventoryComponent = (props) => {
         id="posAlert1"
         role="alert"
       >
-        <strong>Success:</strong> Transaction complete.
+        <strong>Success:</strong> Transaction completed.
         <button className="close" onClick={() => $("#posAlert1").slideUp()}>
           <span>&times;</span>
         </button>
@@ -153,11 +153,16 @@ const InventoryComponent = (props) => {
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
         <thead>
           <tr>
-            {["ID", "Image", "Product", "Category", "Price", "Stock Quantity"].map(
-              (el) => (
-                <th>{el}</th>
-              )
-            )}
+            {[
+              "ID",
+              "Image",
+              "Product",
+              "Category",
+              "Price",
+              "Stock Quantity",
+            ].map((el) => (
+              <th>{el}</th>
+            ))}
             <th>Actions</th>
           </tr>
         </thead>
