@@ -41,9 +41,9 @@ const SalesReport = () => {
     []
   );
   const [currentPage, setCurrentPage] = useState(1);
-  // const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
   //test
-  const [rowsPerPage, setRowsPerPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(1);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = getFilteredTransactions().slice(
