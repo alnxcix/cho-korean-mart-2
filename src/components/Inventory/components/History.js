@@ -122,29 +122,32 @@ const History = (props) => {
       </div>
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
+        <col span="1" style={{ width: "60px" }} />
         <thead>
           <tr>
-            {["#", "Date", "Product", "Quantity", "User"].map((el) => (
-              <th>{el}</th>
-            ))}
+            <th className="text-center">#</th>
+            <th>Date</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>User</th>
           </tr>
         </thead>
         <tbody>
           {currentRows.map((stockHistoryEntry, index) => (
             <tr>
-              <td className="text-truncate">{index + 1}</td>
-              <td className="text-truncate">
+              <td className="text-center text-wrap">{index + 1}</td>
+              <td className="text-wrap">
                 {moment(stockHistoryEntry.date).format("LL")}
               </td>
-              <td className="text-truncate">
+              <td className="text-wrap">
                 {stockHistoryEntry.product === undefined ? (
                   <em>Deleted Product</em>
                 ) : (
                   stockHistoryEntry.product.name
                 )}
               </td>
-              <td className="text-truncate">+{stockHistoryEntry.quantity}</td>
-              <td className="text-truncate">
+              <td className="text-wrap">+{stockHistoryEntry.quantity}</td>
+              <td className="text-wrap">
                 {stockHistoryEntry.user === undefined ? (
                   <em>Deleted User</em>
                 ) : (

@@ -134,10 +134,10 @@ const SalesReport = () => {
         <tbody>
           {currentRows.map((transaction, index) => (
             <tr>
-              <td className="text-truncate">{index + 1}</td>
-              <td className="text-truncate">{transaction._id}</td>
-              <td className="text-truncate">{transaction.userId}</td>
-              <td className="text-truncate">
+              <td className="text-wrap">{index + 1}</td>
+              <td className="text-wrap">{transaction._id}</td>
+              <td className="text-wrap">{transaction.userId}</td>
+              <td className="text-wrap">
                 ₱{" "}
                 {transaction.cart
                   .map(
@@ -149,12 +149,12 @@ const SalesReport = () => {
                   .reduce((acc, cur) => acc + cur, 0)
                   .toFixed(2)}
               </td>
-              <td className="text-truncate">
+              <td className="text-wrap">
                 {transaction.cart
                   .map((cartItem) => Number(cartItem.quantity))
                   .reduce((acc, cur) => acc + cur, 0)}
               </td>
-              <td className="text-truncate">
+              <td className="text-wrap">
                 {moment(transaction.date).format("LL")}
               </td>
               <td>
