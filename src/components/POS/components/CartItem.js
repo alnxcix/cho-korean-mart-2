@@ -8,12 +8,15 @@ const CartItem = (props) => {
     <div className="bg-light card mb-3 rounded-lg">
       <div className="card-body">
         <div className="media">
-          <img
-            alt=""
-            className="border border-secondary rounded-lg mr-3"
-            src={logo}
-            style={{ height: 64 }}
-          />
+          <picture>
+            <source srcset={cartItem.product.imgSrc} />
+            <img
+              alt=""
+              className="border border-secondary rounded-lg mr-3"
+              src={logo}
+              style={{ height: 64 }}
+            />
+          </picture>
           <div className="media-body" style={{ minWidth: 0 }}>
             <div className="align-items-center d-flex">
               {cartItem.product.discount > 0 ? (
