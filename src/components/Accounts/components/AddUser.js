@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import bsCustomFileInput from "bs-custom-file-input";
 import $ from "jquery";
 import logo from "../../../assets/ChoKoreanMart.jpg";
 
@@ -19,7 +20,8 @@ const AddUser = (props) => {
     setLastName("");
     setPassword("");
     setRole("");
-    setPassState("password");
+    $("#imageInput2").next("label").html("Choose image");
+    $("#imageInput2").val(null);
   };
   const getPasswordValidity = () =>
     password.match(/[a-z]+/) &&
@@ -43,7 +45,6 @@ const AddUser = (props) => {
       })
       .then(() => {
         $("#userAlert1").slideDown();
-
         clear();
       })
       .catch(() => $("#userAlert2").slideDown());
@@ -61,8 +62,9 @@ const AddUser = (props) => {
         setImgSrc(reader.result);
       }
     };
-    reader.readAsDataURL(e[0]);
+    if (e[0]) reader.readAsDataURL(e[0]);
   };
+  useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
   return (
     <>
       <button
@@ -184,23 +186,26 @@ const AddUser = (props) => {
                     </select>
                   </div>
                 </div>
+                {/* <div className="custom-file">
+                  <input type="file" className="custom-file-input" />
+                  <label className="custom-file-label">Choose file</label>
+                </div> */}
                 <div className="form-group row">
-                  <label className="col-form-label col-sm-12 mb-2">
-                    Upload Image
-                  </label>
-                  <div className="col-sm-12">
+                  <label className="col-form-label col-3">Image</label>
+                  <div className="col custom-file mx-3">
                     <input
-                      type="file"
-                      id="formFile"
                       accept="image/*"
+                      className="custom-file-input"
+                      id="imageInput2"
                       onChange={(e) => {
                         uploadImage(e.target.files);
                       }}
+                      type="file"
                     />
+                    <label className="custom-file-label">Choose image</label>
                   </div>
                 </div>
                 <picture>
-                  {/* <source srcset={imgSrc} type="image/jpeg+png" /> */}
                   <img
                     alt=""
                     src={imgSrc}

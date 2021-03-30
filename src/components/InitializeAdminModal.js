@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import bsCustomFileInput from "bs-custom-file-input";
 import $ from "jquery";
 import logo from "../assets/ChoKoreanMart.jpg";
 
@@ -17,6 +18,8 @@ const InitializeAdminModal = () => {
     setLastName("");
     setPassword("");
     setPassState("password");
+    $("#imageInput1").next("label").html("Choose image");
+    $("#imageInput1").val(null);
   };
   const getPasswordValidity = () =>
     password.match(/[a-z]+/) &&
@@ -52,6 +55,7 @@ const InitializeAdminModal = () => {
     };
     reader.readAsDataURL(e[0]);
   };
+  useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
   return (
     <div
       className="fade modal"
@@ -140,18 +144,18 @@ const InitializeAdminModal = () => {
                 </div>
               </div>
               <div className="form-group row">
-                <label className="col-form-label col-sm-12 mb-2">
-                  Upload Image
-                </label>
-                <div className="col-sm-12">
+                <label className="col-form-label col-3">Image</label>
+                <div className="col custom-file mx-3">
                   <input
-                    type="file"
-                    id="formFile"
                     accept="image/*"
+                    className="custom-file-input"
+                    id="imageInput1"
                     onChange={(e) => {
                       uploadImage(e.target.files);
                     }}
+                    type="file"
                   />
+                  <label className="custom-file-label">Choose image</label>
                 </div>
               </div>
               <picture>
