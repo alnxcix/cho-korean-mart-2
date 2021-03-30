@@ -4,16 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import $ from "jquery";
 
 const DeleteProduct = (props) => {
-  let { product, setProducts, setUsers, user, activeUser  } = props;
+  let { product, setProducts, activeUser } = props;
   const [verifyUser, setVerification] = useState("");
-  const [password] = useState("");
-  const getPasswordValidity = () =>
-  password.match(/[a-z]+/) &&
-  password.match(/[0-9]+/) &&
-  password.match(/[A-Z]+/) &&
-  //password.match(/[~<>?!@#$%^&*()]+/) &&
-  password.length >= 8 &&
-  password.length <= 20;
   return (
     <>
       <button
@@ -33,26 +25,43 @@ const DeleteProduct = (props) => {
           <div className="modal-content">
             <div className="modal-header" style={{ backgroundColor: "#900" }}>
               <h5 className="modal-title text-light">Delete Product</h5>
-              <button className="close text-light" data-dismiss="modal">
+              <button
+                className="close text-light"
+                data-dismiss="modal"
+                onClick={() => setVerification("")}
+              >
                 <span>&times;</span>
               </button>
             </div>
-            <div className="modal-body">Delete <b>{product.name}</b>?</div>
-            <div className="modal-body form-group mt-2">
+            <div className="modal-body">
+              Delete <b>{product.name}</b>?
+            </div>
+            <div className="modal-body form-group">
               <label className="form-label">
-                <h6>
-                  Enter your password to delete the product:
+                <h6
+                  className={
+                    product.stockQuantity > 0 ? "text-danger" : "text-muted"
+                  }
+                >
+                  Note: You can not delete a product having value in Stock
+                  Quantity.
                 </h6>
+                <h6>Enter your password to delete the product:</h6>
               </label>
               <input
                 className="form-control"
                 type="password"
+                placeholder="Password"
                 onChange={(e) => setVerification(e.target.value)}
                 value={verifyUser}
               />
             </div>
             <div className="modal-footer">
-              <button className="btn btn-dark" data-dismiss="modal">
+              <button
+                className="btn btn-dark"
+                data-dismiss="modal"
+                onClick={() => setVerification("")}
+              >
                 Cancel
               </button>
               <button
@@ -60,7 +69,7 @@ const DeleteProduct = (props) => {
                 data-dismiss="modal"
                 disabled={
                   activeUser.password !== verifyUser ||
-                  (password.length > 0 && !getPasswordValidity())
+                  product.stockQuantity > 0
                 }
                 onClick={() => {
                   window
@@ -74,6 +83,7 @@ const DeleteProduct = (props) => {
                     .remote.getGlobal("products")
                     .readAll()
                     .then((products) => setProducts(products));
+                  setVerification("");
                 }}
               >
                 Delete

@@ -6,14 +6,6 @@ import $ from "jquery";
 const DeleteUser = (props) => {
   let { setUsers, user, activeUser } = props;
   const [verifyUser, setVerification] = useState("");
-  const [password] = useState("");
-  const getPasswordValidity = () =>
-  password.match(/[a-z]+/) &&
-  password.match(/[0-9]+/) &&
-  password.match(/[A-Z]+/) &&
-  //password.match(/[~<>?!@#$%^&*()]+/) &&
-  password.length >= 8 &&
-  password.length <= 20;
   return (
     <>
       <button
@@ -34,35 +26,41 @@ const DeleteUser = (props) => {
           <div className="modal-content">
             <div className="modal-header" style={{ backgroundColor: "#900" }}>
               <h5 className="modal-title text-light">Delete User</h5>
-              <button className="close text-light" data-dismiss="modal">
+              <button
+                className="close text-light"
+                data-dismiss="modal"
+                onClick={() => setVerification("")}
+              >
                 <span>&times;</span>
               </button>
             </div>
-            <div className="modal-body">Delete <b>{user.firstName}'s</b> account?</div>
+            <div className="modal-body">
+              Delete <b>{user.firstName}'s</b> account?
+            </div>
             <div className="modal-body form-group mt-2">
               <label className="form-label">
-                <h6>
-                  Enter your password to delete the account:
-                </h6>
+                <h6>Enter your password to delete the account:</h6>
               </label>
               <input
                 className="form-control"
                 type="password"
                 onChange={(e) => setVerification(e.target.value)}
                 value={verifyUser}
+                placeholder="Password"
               />
             </div>
             <div className="modal-footer">
-              <button className="btn btn-dark" data-dismiss="modal">
+              <button
+                className="btn btn-dark"
+                data-dismiss="modal"
+                onClick={() => setVerification("")}
+              >
                 Cancel
               </button>
               <button
                 className="btn btn-danger"
                 data-dismiss="modal"
-                disabled={
-                  activeUser.password !== verifyUser ||
-                  (password.length > 0 && !getPasswordValidity())
-                }
+                disabled={activeUser.password !== verifyUser}
                 type="submit"
                 onClick={() => {
                   window
@@ -76,6 +74,7 @@ const DeleteUser = (props) => {
                     .remote.getGlobal("users")
                     .readAll()
                     .then((users) => setUsers(users));
+                  setVerification("");
                 }}
               >
                 Delete
