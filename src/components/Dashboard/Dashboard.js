@@ -42,12 +42,10 @@ const Dashboard = (props) => {
             <h4 className="card-title">
               <div className="d-flex">
                 <span className="flex-fill">Users</span>
-                <Link
-                  to={activeUser.role === "Administrator" ? "/accounts" : null}
-                >
+                <Link to={activeUser.role === "Cashier" ? null : "/accounts"}>
                   <button
                     className="btn btn-lg btn-light px-3 text-primary"
-                    disabled={!(activeUser.role === "Administrator")}
+                    disabled={activeUser.role === "Cashier"}
                   >
                     <FontAwesomeIcon icon={faUser} />
                   </button>
@@ -82,10 +80,10 @@ const Dashboard = (props) => {
             </div>
           </div>
           <div className="card-footer">
-            <Link to={activeUser.role === "Administrator" ? "/accounts" : null}>
+            <Link to={activeUser.role === "Cashier" ? null : "/accounts"}>
               <button
                 className="btn btn-light btn-sm px-3 rounded-pill"
-                disabled={!(activeUser.role === "Administrator")}
+                disabled={activeUser.role === "Cashier"}
               >
                 View Accounts
               </button>
@@ -97,18 +95,10 @@ const Dashboard = (props) => {
             <h4 className="card-title">
               <div className="d-flex">
                 <span className="flex-fill">Inventory</span>
-                <Link
-                  to={
-                    ["Administrator", "Owner"].includes(activeUser.role)
-                      ? "/inventory"
-                      : null
-                  }
-                >
+                <Link to={activeUser.role === "Owner" ? "/inventory" : null}>
                   <button
                     className="btn btn-lg btn-light px-3 text-warning"
-                    disabled={
-                      !["Administrator", "Owner"].includes(activeUser.role)
-                    }
+                    disabled={activeUser.role !== "Owner"}
                   >
                     <FontAwesomeIcon icon={faBox} />
                   </button>
@@ -116,8 +106,7 @@ const Dashboard = (props) => {
               </div>
             </h4>
             <p className="lead">
-              <FontAwesomeIcon icon={faHashtag} /> Products below critical
-              level:
+              <FontAwesomeIcon icon={faHashtag} /> Products at critical level:
             </p>
             <h1 className="display-4">
               {
@@ -128,16 +117,10 @@ const Dashboard = (props) => {
             </h1>
           </div>
           <div className="card-footer">
-            <Link
-              to={
-                ["Administrator", "Owner"].includes(activeUser.role)
-                  ? "/inventory"
-                  : null
-              }
-            >
+            <Link to={activeUser.role === "Owner" ? "/inventory" : null}>
               <button
                 className="btn btn-light btn-sm px-3 rounded-pill"
-                disabled={!["Administrator", "Owner"].includes(activeUser.role)}
+                disabled={!["Owner"].includes(activeUser.role)}
               >
                 View Inventory
               </button>
@@ -149,10 +132,16 @@ const Dashboard = (props) => {
             <h4 className="card-title">
               <div className="d-flex">
                 <span className="flex-fill">Sales</span>
-                <Link to={activeUser.role === "Owner" ? "/sales_report" : null}>
+                <Link
+                  to={
+                    ["Cashier", "Owner"].includes(activeUser.role)
+                      ? "/sales_report"
+                      : null
+                  }
+                >
                   <button
                     className="btn btn-lg btn-light px-3 text-success"
-                    disabled={!(activeUser.role === "Owner")}
+                    disabled={!["Cashier", "Owner"].includes(activeUser.role)}
                   >
                     <FontAwesomeIcon icon={faCommentDollar} />
                   </button>
@@ -191,10 +180,16 @@ const Dashboard = (props) => {
             </h1>
           </div>
           <div className="card-footer">
-            <Link to={activeUser.role === "Owner" ? "/sales_report" : null}>
+            <Link
+              to={
+                ["Cashier", "Owner"].includes(activeUser.role)
+                  ? "/sales_report"
+                  : null
+              }
+            >
               <button
                 className="btn btn-light btn-sm px-3 rounded-pill"
-                disabled={!(activeUser.role === "Owner")}
+                disabled={!["Cashier", "Owner"].includes(activeUser.role)}
               >
                 View Sales Reports
               </button>

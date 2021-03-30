@@ -110,7 +110,7 @@ const LoginPage = (props) => {
                   style={{ backgroundColor: "#900" }}
                 >
                   <h5 className="modal-title text-light">
-                    Contact an Administrator
+                    Contact an Administrator/Owner
                   </h5>
                   <button className="close text-light" data-dismiss="modal">
                     <span>&times;</span>
@@ -119,8 +119,8 @@ const LoginPage = (props) => {
                 <div className="modal-body">
                   <div className="m-2">
                     Your password can not be retrieved, and a new password can
-                    only be provided by a user with access to an Administrator
-                    account.
+                    only be provided by a user with access to an
+                    Administrator/Owner account.
                   </div>
                 </div>
               </div>

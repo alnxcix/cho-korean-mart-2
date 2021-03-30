@@ -16,9 +16,9 @@ const History = (props) => {
   const [startDate, setStartDate] = useState(moment().startOf("d").toDate());
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  // const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
   //test
-  const [rowsPerPage, setRowsPerPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(1);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const getFilteredStockHistoryEntries = () =>
@@ -54,6 +54,7 @@ const History = (props) => {
   const setDates = (start, end) => {
     setStartDate(start);
     setEndDate(end);
+    setCurrentPage(1);
   };
   useEffect(() => {
     window
@@ -114,7 +115,10 @@ const History = (props) => {
           </div>
           <input
             className="form-control"
-            onChange={(e) => setSearchString(e.target.value)}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setSearchString(e.target.value);
+            }}
             placeholder="Search"
             value={searchString}
           />
@@ -122,29 +126,32 @@ const History = (props) => {
       </div>
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
+        <col span="1" style={{ width: "60px" }} />
         <thead>
           <tr>
-            {["#", "Date", "Product", "Quantity", "User"].map((el) => (
-              <th>{el}</th>
-            ))}
+            <th className="text-center">#</th>
+            <th>Date</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>User</th>
           </tr>
         </thead>
         <tbody>
           {currentRows.map((stockHistoryEntry, index) => (
             <tr>
-              <td className="text-truncate">{index + 1}</td>
-              <td className="text-truncate">
+              <td className="text-center text-wrap">{index + 1}</td>
+              <td className="text-wrap">
                 {moment(stockHistoryEntry.date).format("LL")}
               </td>
-              <td className="text-truncate">
+              <td className="text-wrap">
                 {stockHistoryEntry.product === undefined ? (
                   <em>Deleted Product</em>
                 ) : (
                   stockHistoryEntry.product.name
                 )}
               </td>
-              <td className="text-truncate">+{stockHistoryEntry.quantity}</td>
-              <td className="text-truncate">
+              <td className="text-wrap">+{stockHistoryEntry.quantity}</td>
+              <td className="text-wrap">
                 {stockHistoryEntry.user === undefined ? (
                   <em>Deleted User</em>
                 ) : (

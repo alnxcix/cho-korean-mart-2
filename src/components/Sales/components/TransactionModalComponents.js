@@ -58,6 +58,7 @@ const TransactionModalComponents = (props) => {
         className="btn btn-primary"
         data-target={`#modalEdit${transaction._id}`}
         data-toggle="modal"
+        title="View Transaction"
       >
         <FontAwesomeIcon icon={faEye} />
       </button>
@@ -118,20 +119,16 @@ const TransactionModalComponents = (props) => {
                 </thead>
                 {getModifiedCart().map((cartItem) => (
                   <tr>
-                    <td className="text-truncate">{cartItem.name}</td>
-                    <td className="text-truncate">{cartItem.quantity}</td>
-                    <td className="text-truncate">
+                    <td className="text-wrap">{cartItem.name}</td>
+                    <td className="text-wrap">{cartItem.quantity}</td>
+                    <td className="text-wrap">
                       ₱ {cartItem.unitPrice.toFixed(2)}
                     </td>
-                    <td className="text-truncate">
-                      ₱ {cartItem.vat.toFixed(2)}
-                    </td>
-                    <td className="text-truncate">
+                    <td className="text-wrap">₱ {cartItem.vat.toFixed(2)}</td>
+                    <td className="text-wrap">
                       ₱ {cartItem.discount.toFixed(2)}
                     </td>
-                    <td className="text-truncate">
-                      ₱ {cartItem.total.toFixed(2)}
-                    </td>
+                    <td className="text-wrap">₱ {cartItem.total.toFixed(2)}</td>
                   </tr>
                 ))}
                 {transaction.applySpecialDiscount ? (

@@ -36,9 +36,9 @@ const Accounts = (props) => {
     []
   );
   const [currentPage, setCurrentPage] = useState(1);
-  // const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
   //test
-  const [rowsPerPage, setRowsPerPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(1);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = getFilteredUsers().slice(indexOfFirstRow, indexOfLastRow);
@@ -156,7 +156,10 @@ const Accounts = (props) => {
           </div>
           <input
             className="form-control"
-            onChange={(e) => setSearchString(e.target.value)}
+            onChange={(e) => {
+              setSearchString(e.target.value);
+              setCurrentPage(1);
+            }}
             placeholder="Search"
             value={searchString}
           />
@@ -164,20 +167,23 @@ const Accounts = (props) => {
       </div>
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
+        <col span="1" style={{ width: "60px" }} />
         <thead>
           <tr>
-            {["#", "Name", "Username / ID", "Role", "Actions"].map((el) => (
-              <th>{el}</th>
-            ))}
+            <th className="text-center">#</th>
+            <th>Name</th>
+            <th>Username / ID</th>
+            <th>Role</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {currentRows.map((user, index) => (
             <tr>
-              <td className="text-truncate">{index + 1}</td>
-              <td className="text-truncate">{`${user.firstName} ${user.lastName}`}</td>
-              <td className="text-truncate">{user._id}</td>
-              <td className="text-truncate">{user.role}</td>
+              <td className="text-center text-wrap">{index + 1}</td>
+              <td className="text-wrap">{`${user.firstName} ${user.lastName}`}</td>
+              <td className="text-wrap">{user._id}</td>
+              <td className="text-wrap">{user.role}</td>
               <td>
                 <EditUser
                   setUsers={setUsers}

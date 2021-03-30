@@ -9,7 +9,7 @@ import moment from "moment";
 import $ from "jquery";
 import ChartComponent from "../ChartComponent";
 import DateRangePickerComponent from "../DateRangePickerComponent";
-import DeleteTransactionModalComponents from "./DeleteTransactionModalComponents";
+// import DeleteTransactionModalComponents from "./components/DeleteTransactionModalComponents";
 import TransactionModalComponents from "./components/TransactionModalComponents";
 import Pagination from "../Pagination";
 
@@ -21,6 +21,7 @@ const SalesReport = () => {
   const setDates = (start, end) => {
     setStartDate(start);
     setEndDate(end);
+    setCurrentPage(1);
   };
   const getFilteredTransactions = () =>
     transactions.filter(
@@ -40,9 +41,9 @@ const SalesReport = () => {
     []
   );
   const [currentPage, setCurrentPage] = useState(1);
-  // const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
   //test
-  const [rowsPerPage, setRowsPerPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(1);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = getFilteredTransactions().slice(
@@ -97,7 +98,10 @@ const SalesReport = () => {
           </div>
           <input
             className="form-control"
-            onChange={(e) => setSearchString(e.target.value)}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setSearchString(e.target.value);
+            }}
             placeholder="Search"
             value={searchString}
           />
@@ -134,10 +138,10 @@ const SalesReport = () => {
         <tbody>
           {currentRows.map((transaction, index) => (
             <tr>
-              <td className="text-truncate">{index + 1}</td>
-              <td className="text-truncate">{transaction._id}</td>
-              <td className="text-truncate">{transaction.userId}</td>
-              <td className="text-truncate">
+              <td className="text-wrap">{index + 1}</td>
+              <td className="text-wrap">{transaction._id}</td>
+              <td className="text-wrap">{transaction.userId}</td>
+              <td className="text-wrap">
                 ₱{" "}
                 {transaction.cart
                   .map(
@@ -149,12 +153,12 @@ const SalesReport = () => {
                   .reduce((acc, cur) => acc + cur, 0)
                   .toFixed(2)}
               </td>
-              <td className="text-truncate">
+              <td className="text-wrap">
                 {transaction.cart
                   .map((cartItem) => Number(cartItem.quantity))
                   .reduce((acc, cur) => acc + cur, 0)}
               </td>
-              <td className="text-truncate">
+              <td className="text-wrap">
                 {moment(transaction.date).format("LL")}
               </td>
               <td>
@@ -164,14 +168,15 @@ const SalesReport = () => {
                   className="btn btn-warning"
                   data-target={`#modal`}
                   data-toggle="modal"
+                  title="Export Transaction"
                 >
                   <FontAwesomeIcon icon={faShare} />
                 </button>
-                &nbsp;
+                {/* &nbsp;
                 <DeleteTransactionModalComponents
                   setTransactions={setTransactions}
                   transaction={transaction}
-                />
+                /> */}
               </td>
             </tr>
           ))}

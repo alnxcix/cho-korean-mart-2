@@ -14,9 +14,20 @@ const Products = (props) => {
   const [searchString, setSearchString] = useState("");
   const [propertyToBeSorted, setPropertyToBeSorted] = useState("_id");
   const [sortOrder, setSortOrder] = useState("asc");
+
+  const [criticalItemsOnly, setCriticalItemsOnly] = useState(false);
+
+  const checkIfCriticalItems = () => {
+    return criticalItemsOnly
+      ? products.filter(
+          (product) => product.stockQuantity <= product.criticalLevel
+        )
+      : products;
+  };
+
   const getFilteredProducts = () =>
     sortArray(
-      products.filter((product) =>
+      checkIfCriticalItems().filter((product) =>
         JSON.stringify(Object.values(product))
           .toLowerCase()
           .includes(searchString) && category === "All"
@@ -26,9 +37,9 @@ const Products = (props) => {
       { by: propertyToBeSorted, order: sortOrder }
     );
   const [currentPage, setCurrentPage] = useState(1);
-  // const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
   //test
-  const [rowsPerPage, setRowsPerPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(1);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = getFilteredProducts().slice(
@@ -36,6 +47,7 @@ const Products = (props) => {
     indexOfLastRow
   );
   const chgPage = (pageNum) => setCurrentPage(pageNum);
+
   return (
     <>
       <div className="form-row">
@@ -70,7 +82,10 @@ const Products = (props) => {
           </div>
           <select
             className="custom-select"
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => {
+              setCategory(e.target.value);
+              setCurrentPage(1);
+            }}
             value={category}
           >
             {[
@@ -89,36 +104,51 @@ const Products = (props) => {
           </div>
           <input
             className="form-control"
-            onChange={(e) => setSearchString(e.target.value)}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setSearchString(e.target.value);
+            }}
             placeholder="Search"
             value={searchString}
           />
         </div>
+        <div className="col input-group">
+          <button
+            className="btn btn-outline-dark col"
+            onClick={() => {
+              setCriticalItemsOnly(!criticalItemsOnly);
+              setCurrentPage(1);
+            }}
+          >
+            {criticalItemsOnly ? (
+              <>Show All Items</>
+            ) : (
+              <>Show Items at Critical Level</>
+            )}
+          </button>
+        </div>
       </div>
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
+        <col span="1" style={{ width: "60px" }} />
         <thead>
           <tr>
-            {[
-              "#",
-              "ID",
-              "Image",
-              "Product",
-              "Category",
-              "Price",
-              "Discount",
-              "Stock Quantity",
-              "Actions",
-            ].map((el) => (
-              <th>{el}</th>
-            ))}
+            <th className="text-center">#</th>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Stock Quantity</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {currentRows.map((product, index) => (
             <tr>
-              <td className="text-truncate">{index + 1}</td>
-              <td className="text-truncate">{product._id}</td>
+              <td className="text-center text-wrap">{index + 1}</td>
+              <td className="text-wrap">{product._id}</td>
               <td>
                 <picture>
                   <source srcset={product.imgSrc} />
@@ -130,14 +160,12 @@ const Products = (props) => {
                   />
                 </picture>
               </td>
-              <td className="text-truncate">{product.name}</td>
-              <td className="text-truncate">{product.category}</td>
-              <td className="text-truncate">{`₱ ${product.price.toFixed(
-                2
-              )}`}</td>
-              <td className="text-truncate">{product.discount} %</td>
+              <td className="text-wrap">{product.name}</td>
+              <td className="text-wrap">{product.category}</td>
+              <td className="text-wrap">{`₱ ${product.price.toFixed(2)}`}</td>
+              <td className="text-wrap">{product.discount} %</td>
               <td
-                className="text-truncate"
+                className="text-wrap"
                 style={{
                   backgroundColor:
                     product.stockQuantity <= product.criticalLevel
@@ -155,7 +183,7 @@ const Products = (props) => {
                   setStockHistoryEntries={setStockHistoryEntries}
                 />
                 &nbsp;
-                <DeleteProduct product={product} setProducts={setProducts} />
+                <DeleteProduct activeUser={activeUser}  product={product} setProducts={setProducts} />
               </td>
             </tr>
           ))}

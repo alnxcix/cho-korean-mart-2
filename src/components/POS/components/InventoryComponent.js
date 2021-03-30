@@ -52,9 +52,9 @@ const InventoryComponent = (props) => {
     []
   );
   const [currentPage, setCurrentPage] = useState(1);
-  // const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
   //test
-  const [rowsPerPage, setRowsPerPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(1);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = getFilteredProducts().slice(
@@ -142,7 +142,10 @@ const InventoryComponent = (props) => {
             </div>
             <input
               className="form-control"
-              onChange={(e) => setSearchString(e.target.value)}
+              onChange={(e) => {
+                setCurrentPage(1);
+                setSearchString(e.target.value);
+              }}
               placeholder="Search"
               value={searchString}
             />
@@ -169,7 +172,7 @@ const InventoryComponent = (props) => {
         <tbody>
           {currentRows.map((product) => (
             <tr>
-              <td className="text-truncate">{product._id}</td>
+              <td className="text-wrap">{product._id}</td>
               <td>
                 <picture>
                   <source srcset={product.imgSrc} />
@@ -181,13 +184,11 @@ const InventoryComponent = (props) => {
                   />
                 </picture>
               </td>
-              <td className="text-truncate">{product.name}</td>
-              <td className="text-truncate">{product.category}</td>
-              <td className="text-truncate">{`₱ ${product.price.toFixed(
-                2
-              )}`}</td>
+              <td className="text-wrap">{product.name}</td>
+              <td className="text-wrap">{product.category}</td>
+              <td className="text-wrap">{`₱ ${product.price.toFixed(2)}`}</td>
               <td
-                className="text-truncate"
+                className="text-wrap"
                 style={{
                   backgroundColor:
                     product.stockQuantity <= product.criticalLevel
