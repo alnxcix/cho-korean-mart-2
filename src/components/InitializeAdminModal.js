@@ -40,6 +40,7 @@ const InitializeAdminModal = () => {
         lastName: lastName,
         password: password,
         role: "Administrator",
+        newPass: false,
       })
       .then(() => {
         $("#modalInitAdmin").modal("hide");
