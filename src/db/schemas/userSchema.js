@@ -5,6 +5,7 @@ const userSchema = {
     lastName: { type: "string" },
     password: { type: "string" },
     role: { type: "string" },
+    newPass: { type: "boolean" },
   },
   type: "object",
 };

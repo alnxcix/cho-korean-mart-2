@@ -31,7 +31,11 @@ const EditUser = (props) => {
     window
       .require("electron")
       .remote.getGlobal("users")
-      .update({ ...user, password: password === "" ? user.password : password })
+      .update({
+        ...user,
+        password: password === "" ? user.password : password,
+        newPass: password === "" ? false : true,
+      })
       .then(() => $("#userAlert3").slideDown())
       .catch(() => $("#userAlert4").slideDown());
     window

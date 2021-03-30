@@ -35,6 +35,7 @@ class UserStore {
           lastName: data.lastName,
           password: data.password,
           role: data.role,
+          newPass: data.newPass,
         },
       }
     );

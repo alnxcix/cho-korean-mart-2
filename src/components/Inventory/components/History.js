@@ -145,12 +145,15 @@ const History = (props) => {
               </td>
               <td className="text-wrap">
                 {stockHistoryEntry.product === undefined ? (
-                  <em>Deleted Product</em>
+                  <em>Deleted Product ({stockHistoryEntry.productId})</em>
                 ) : (
                   stockHistoryEntry.product.name
                 )}
               </td>
-              <td className="text-wrap">+{stockHistoryEntry.quantity}</td>
+              <td className="text-wrap">
+                {stockHistoryEntry.inOut == "in" ? <>+</> : <>-</>}
+                {stockHistoryEntry.quantity}
+              </td>
               <td className="text-wrap">
                 {stockHistoryEntry.user === undefined ? (
                   <em>Deleted User</em>

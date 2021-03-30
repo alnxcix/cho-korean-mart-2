@@ -42,6 +42,7 @@ const AddUser = (props) => {
         lastName: lastName,
         password: password,
         role: role,
+        newPass: true,
       })
       .then(() => {
         $("#userAlert1").slideDown();

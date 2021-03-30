@@ -52,6 +52,7 @@ const AddProduct = (props) => {
         .create({
           date: Date.now(),
           productId: _id,
+          inOut: "in",
           quantity: Number(stockQuantity),
           userId: activeUser._id,
         });

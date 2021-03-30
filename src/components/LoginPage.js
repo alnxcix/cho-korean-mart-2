@@ -7,15 +7,52 @@ const LoginPage = (props) => {
   let { setActiveUser } = props;
   const [_id, set_id] = useState("");
   const [password, setPassword] = useState("");
+  const [password4NewPass, setPassword4NewPass] = useState("");
+  const [passState, setPassState] = useState("password");
+
+  const [user, setUser] = useState([]);
+
+  const getPasswordValidity = () =>
+    password4NewPass.match(/[a-z]+/) &&
+    password4NewPass.match(/[0-9]+/) &&
+    password4NewPass.match(/[A-Z]+/) &&
+    //password4NewPass.match(/[~<>?!@#$%^&*()]+/) &&
+    password4NewPass.length >= 8 &&
+    password4NewPass.length <= 20;
   const handleSubmit = (e) => {
     e.preventDefault();
     window
       .require("electron")
       .remote.getGlobal("users")
       .auth(_id, password)
-      .then((user) =>
-        user === null ? $("#loginPageAlert2").slideDown() : setActiveUser(user)
-      );
+      .then((user) => {
+        user === null
+          ? $("#loginPageAlert2").slideDown()
+          : user.newPass
+          ? $("#modalNewPass").modal("show")
+          : setActiveUser(user);
+      });
+  };
+
+  const getUser = () => user.filter((user) => user._id == _id);
+
+  const newPassSet = () => {
+    window
+      .require("electron")
+      .remote.getGlobal("users")
+      .auth(_id, password)
+      .then((user) => setActiveUser(user));
+    getUser().map((user) => {
+      window
+        .require("electron")
+        .remote.getGlobal("users")
+        .update({
+          ...user,
+          password: password4NewPass,
+          newPass: false,
+        });
+    });
+    $("#modalNewPass").modal("hide");
   };
   useEffect(
     () =>
@@ -26,6 +63,15 @@ const LoginPage = (props) => {
         .then((users) =>
           users.length === 0 ? $("#modalInitAdmin").modal("show") : null
         ),
+    []
+  );
+  useEffect(
+    () =>
+      window
+        .require("electron")
+        .remote.getGlobal("users")
+        .readAll()
+        .then((users) => setUser(users)),
     []
   );
   return (
@@ -126,7 +172,91 @@ const LoginPage = (props) => {
               </div>
             </div>
           </div>
+          {/* modal  */}
         </form>
+
+        {/* new pass modal */}
+        <div
+          className="fade modal"
+          data-backdrop="static"
+          data-keyboard="false"
+          id="modalNewPass"
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header" style={{ backgroundColor: "#900" }}>
+                <h5 className="modal-title text-light">Set Your Password</h5>
+              </div>
+              <div className="modal-body">
+                <div className="m-2">
+                  The password you used was an initial password given by an
+                  Administrator/Owner. You must set your own password to
+                  continue.
+                </div>
+                <div className="form-group row">
+                  <label className="col-3 col-form-label">Password</label>
+                  <div className="col ">
+                    <div className="input-group">
+                      <input
+                        className="form-control"
+                        style={{
+                          backgroundColor:
+                            password4NewPass.length === 0 ||
+                            getPasswordValidity()
+                              ? null
+                              : "#ffb3b3",
+                        }}
+                        onChange={(e) => {
+                          setPassword4NewPass(e.target.value);
+                        }}
+                        placeholder="Password"
+                        type={passState}
+                        value={password4NewPass}
+                      />
+                      <div className="input-group-append">
+                        <button
+                          className="input-group-text"
+                          onClick={() => setPassState("text")}
+                          onMouseOut={() => {
+                            setPassState("password");
+                          }}
+                          type="button"
+                        >
+                          View
+                        </button>
+                      </div>
+                      <small className="text-muted">
+                        <br />
+                        Password must be 8-20 characters long, must contain
+                        letters and numbers, and is a mixture of both uppercase
+                        and lowercase letters.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-outline-secondary mr-auto"
+                  onClick={() => setPassword4NewPass("")}
+                  type="button"
+                >
+                  Reset
+                </button>
+                <button
+                  className="btn btn-success"
+                  disabled={
+                    password4NewPass.length === 0 || !getPasswordValidity()
+                  }
+                  type="button"
+                  onClick={() => newPassSet()}
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <InitializeAdminModal />
     </>

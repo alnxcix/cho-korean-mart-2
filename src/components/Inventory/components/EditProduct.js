@@ -15,14 +15,21 @@ const EditProduct = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (product.stockQuantity > props.product.stockQuantity) {
+    if (!(product.stockQuantity == props.product.stockQuantity)) {
       window
         .require("electron")
         .remote.getGlobal("stockHistoryEntries")
         .create({
           date: Date.now(),
           productId: product._id,
-          quantity: Number(product.stockQuantity) - props.product.stockQuantity,
+          inOut:
+            Number(product.stockQuantity) > props.product.stockQuantity
+              ? "in"
+              : "out",
+          quantity:
+            Number(product.stockQuantity) > props.product.stockQuantity
+              ? Number(product.stockQuantity) - props.product.stockQuantity
+              : props.product.stockQuantity - Number(product.stockQuantity),
           userId: activeUser._id,
         });
       window
@@ -220,6 +227,7 @@ const EditProduct = (props) => {
                       placeholder="Stock Quantity"
                       required
                       type="number"
+                      min="0"
                       value={product.stockQuantity}
                     />
                   </div>
@@ -237,6 +245,7 @@ const EditProduct = (props) => {
                       }
                       required
                       type="number"
+                      min="1"
                       value={product.criticalLevel}
                     />
                   </div>
