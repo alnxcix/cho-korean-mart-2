@@ -102,7 +102,10 @@ const TransactionModalComponents = (props) => {
                 </div>
               </div>
               <hr />
-              <table className="table">
+              <table
+                className="table table-bordered"
+                style={{ tableLayout: "fixed" }}
+              >
                 <thead>
                   <tr>
                     <th scope="col">Product</th>
@@ -115,12 +118,20 @@ const TransactionModalComponents = (props) => {
                 </thead>
                 {getModifiedCart().map((cartItem) => (
                   <tr>
-                    <td>{cartItem.name}</td>
-                    <td>{cartItem.quantity}</td>
-                    <td>₱ {cartItem.unitPrice.toFixed(2)}</td>
-                    <td>₱ {cartItem.vat.toFixed(2)}</td>
-                    <td>₱ {cartItem.discount.toFixed(2)}</td>
-                    <td>₱ {cartItem.total.toFixed(2)}</td>
+                    <td className="text-truncate">{cartItem.name}</td>
+                    <td className="text-truncate">{cartItem.quantity}</td>
+                    <td className="text-truncate">
+                      ₱ {cartItem.unitPrice.toFixed(2)}
+                    </td>
+                    <td className="text-truncate">
+                      ₱ {cartItem.vat.toFixed(2)}
+                    </td>
+                    <td className="text-truncate">
+                      ₱ {cartItem.discount.toFixed(2)}
+                    </td>
+                    <td className="text-truncate">
+                      ₱ {cartItem.total.toFixed(2)}
+                    </td>
                   </tr>
                 ))}
                 {transaction.applySpecialDiscount ? (
