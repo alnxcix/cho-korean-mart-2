@@ -105,7 +105,7 @@ const Sidebar = (props) => {
               data-toggle="modal"
               title="Logout"
             >
-              Logout
+              Logout <Link to="/" exact />
             </MenuItem>
           </Menu>
         </SidebarFooter>
