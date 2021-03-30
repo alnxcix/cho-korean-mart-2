@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import bsCustomFileInput from "bs-custom-file-input";
 import $ from "jquery";
 import logo from "../../../assets/ChoKoreanMart.jpg";
 
 const EditProduct = (props) => {
   let { activeUser, setProducts, setStockHistoryEntries } = props;
   const [product, setProduct] = useState({});
-  const reset = () => setProduct(props.product);
+  const reset = () => {
+    setProduct(props.product);
+    $("#imageInput5").next("label").html("Choose image");
+    $("#imageInput5").val(null);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     if (product.stockQuantity > props.product.stockQuantity) {
@@ -48,7 +53,6 @@ const EditProduct = (props) => {
     $(`#modalEdit${product._id}`).modal("hide");
     reset();
   };
-  useEffect(() => setProduct(props.product), [props.product]);
   const uploadImage = (e) => {
     const reader = new FileReader();
     reader.onload = function () {
@@ -59,8 +63,10 @@ const EditProduct = (props) => {
         });
       }
     };
-    reader.readAsDataURL(e[0]);
+    if (e[0]) reader.readAsDataURL(e[0]);
   };
+  useEffect(() => setProduct(props.product), [props.product]);
+  useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
   return (
     <>
       <button
@@ -236,18 +242,18 @@ const EditProduct = (props) => {
                   </div>
                 </div>
                 <div className="form-group row">
-                  <label className="col-sm-12 col-form-label mb-2">
-                    Upload Image
-                  </label>
-                  <div className="col-sm-12">
+                  <label className="col-form-label col-3">Image</label>
+                  <div className="col custom-file mx-3">
                     <input
-                      type="file"
-                      id="formFile"
                       accept="image/*"
+                      className="custom-file-input"
+                      id="imageInput5"
                       onChange={(e) => {
                         uploadImage(e.target.files);
                       }}
+                      type="file"
                     />
+                    <label className="custom-file-label">Choose image</label>
                   </div>
                 </div>
                 <picture>
