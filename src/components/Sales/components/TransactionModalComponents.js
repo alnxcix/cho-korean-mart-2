@@ -140,7 +140,7 @@ const TransactionModalComponents = (props) => {
                   () => null
                 )}
                 <tr>
-                  <td colspan={5}>
+                  <td colSpan={5}>
                     <span className="float-right">Subtotal</span>
                   </td>
                   <td>
@@ -152,7 +152,7 @@ const TransactionModalComponents = (props) => {
                   </td>
                 </tr>
                 <tr>
-                  <td colspan={5}>
+                  <td colSpan={5}>
                     <span className="float-right">Total VAT</span>
                   </td>
                   <td>
@@ -164,7 +164,7 @@ const TransactionModalComponents = (props) => {
                   </td>
                 </tr>
                 <tr>
-                  <td colspan={5}>
+                  <td colSpan={5}>
                     <span className="float-right">Total Discount</span>
                   </td>
                   <td>
@@ -176,7 +176,7 @@ const TransactionModalComponents = (props) => {
                   </td>
                 </tr>
                 <tr>
-                  <td colspan={5}>
+                  <td colSpan={5}>
                     <span className="float-right">Grand Total</span>
                   </td>
                   <td>
