@@ -122,7 +122,7 @@ const Dashboard = (props) => {
             <h1 className="display-4">
               {
                 products.filter(
-                  (product) => product.stockQuantity < product.criticalLevel
+                  (product) => product.stockQuantity <= product.criticalLevel
                 ).length
               }
             </h1>
