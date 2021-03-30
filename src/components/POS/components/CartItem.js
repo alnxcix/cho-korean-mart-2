@@ -9,12 +9,12 @@ const CartItem = (props) => {
       <div className="card-body">
         <div className="media">
           <picture>
-            <source srcset={cartItem.product.imgSrc} />
+            {/* <source srcset={cartItem.product.imgSrc} /> */}
             <img
               alt=""
               className="border border-secondary rounded-lg mr-3"
-              src={logo}
-              style={{ height: 64 }}
+              src={cartItem.product.imgSrc}
+              style={{ height: 60 }}
             />
           </picture>
           <div className="media-body" style={{ minWidth: 0 }}>
