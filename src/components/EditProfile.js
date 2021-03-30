@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import bsCustomFileInput from "bs-custom-file-input";
 import $ from "jquery";
 
-const EditUser = (props) => {
-  let { setUsers, activeUser, setActiveUser } = props;
-  const [user, setUser] = useState(props.user);
+const EditProfile = (props) => {
+  let { activeUser, setActiveUser } = props;
+  const [user, setUser] = useState(activeUser);
   const [verifyUser, setVerification] = useState("");
   const [password, setPassword] = useState("");
   const [passState, setPassState] = useState("password");
@@ -18,11 +16,10 @@ const EditUser = (props) => {
     password.length >= 8 &&
     password.length <= 20;
   const reset = () => {
-    setUser(props.user);
+    setUser(activeUser);
     setPassState("password");
     setPassword("");
     setVerification("");
-    // setValidPassword(true);
     $("#imageInput3").next("label").html("Choose image");
     $("#imageInput3").val(null);
   };
@@ -31,22 +28,16 @@ const EditUser = (props) => {
     window
       .require("electron")
       .remote.getGlobal("users")
-      .update({ ...user, password: password === "" ? user.password : password })
-      .then(() => $("#userAlert3").slideDown())
-      .catch(() => $("#userAlert4").slideDown());
+      .update({
+        ...user,
+        password: password === "" ? user.password : password,
+      });
     window
       .require("electron")
       .remote.getGlobal("users")
-      .readAll()
-      .then((users) => setUsers(users));
-    if (user._id === activeUser._id) {
-      window
-        .require("electron")
-        .remote.getGlobal("users")
-        .read(activeUser._id)
-        .then((user) => setActiveUser(user));
-    }
-    $(`#modalEdit${user._id}`).modal("hide");
+      .read(user._id)
+      .then((user) => setActiveUser(user));
+    $(`#modalProfile`).modal("hide");
     reset();
   };
   const uploadImage = (e) => {
@@ -58,27 +49,20 @@ const EditUser = (props) => {
     };
     reader.readAsDataURL(e[0]);
   };
-  useEffect(() => setUser(props.user), [props.user]);
+  useEffect(() => setUser(activeUser), [activeUser]);
   useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
   return (
     <>
-      <button
-        className="btn btn-warning"
-        data-target={`#modalEdit${user._id}`}
-        data-toggle="modal"
-      >
-        <FontAwesomeIcon icon={faEdit} />
-      </button>
       <div
         className="fade modal"
         data-backdrop="static"
         data-keyboard="false"
-        id={`modalEdit${user._id}`}
+        id="modalProfile"
       >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
-            <div className="modal-header" style={{ backgroundColor: "#900" }}>
-              <h5 className="modal-title text-light">Edit User</h5>
+            <div className="modal-header" style={{ backgroundColor: "#333" }}>
+              <h5 className="modal-title text-light">Edit Profile</h5>
               <button
                 className="close text-light"
                 data-dismiss="modal"
@@ -94,11 +78,7 @@ const EditUser = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      onChange={(e) =>
-                        setUser({ ...user, firstName: e.target.value })
-                      }
-                      placeholder="First Name"
-                      required
+                      disabled
                       value={user.firstName}
                     />
                   </div>
@@ -108,11 +88,7 @@ const EditUser = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      onChange={(e) =>
-                        setUser({ ...user, lastName: e.target.value })
-                      }
-                      placeholder="Last Name"
-                      required
+                      disabled
                       value={user.lastName}
                     />
                   </div>
@@ -163,30 +139,24 @@ const EditUser = (props) => {
                     </div>
                   </div>
                 </div>
-                {user.role !== "Cashier" && user._id === activeUser._id ? (
-                  () => null
-                ) : (
-                  <div className="form-group row">
-                    <label className="col-3 col-form-label">Role</label>
-                    <div className="col">
-                      <select
-                        className="custom-select"
-                        onChange={(e) =>
-                          setUser({ ...user, role: e.target.value })
-                        }
-                        required
-                        value={user.role}
-                      >
-                        <option disabled selected value="">
-                          Select Role
-                        </option>
-                        <option value="Administrator">Administrator</option>
-                        <option value="Cashier">Cashier</option>
-                        <option value="Owner">Owner</option>
-                      </select>
-                    </div>
+                <div className="form-group row">
+                  <label className="col-3 col-form-label">Role</label>
+                  <div className="col">
+                    <select
+                      className="custom-select"
+                      disabled
+                      value={user.role}
+                    >
+                      <option disabled selected value="">
+                        Select Role
+                      </option>
+                      <option value="Administrator">Administrator</option>
+                      <option value="Cashier">Cashier</option>
+                      <option value="Owner">Owner</option>
+                    </select>
                   </div>
-                )}
+                </div>
+
                 <div className="form-group row">
                   <label className="col-form-label col-3">Image</label>
                   <div className="col custom-file mx-3">
@@ -259,4 +229,4 @@ const EditUser = (props) => {
   );
 };
 
-export default EditUser;
+export default EditProfile;

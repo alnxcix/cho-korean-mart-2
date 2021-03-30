@@ -6,6 +6,7 @@ import {
   faCommentDollar,
   faHome,
   faUser,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -19,6 +20,7 @@ import {
 } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import logo from "../assets/ChoKoreanMart.jpg";
+import EditProfile from "./EditProfile";
 
 const Sidebar = (props) => {
   let { collapsed, setActiveUser, activeUser } = props;
@@ -41,7 +43,7 @@ const Sidebar = (props) => {
             {!["Cashier"].includes(activeUser.role) ? (
               <>
                 <MenuItem
-                  icon={<FontAwesomeIcon icon={faUser} />}
+                  icon={<FontAwesomeIcon icon={faUsers} />}
                   title="Accounts"
                 >
                   Accounts <Link to="/accounts" />
@@ -90,6 +92,14 @@ const Sidebar = (props) => {
         <SidebarFooter>
           <Menu iconShape="circle">
             <MenuItem
+              icon={<FontAwesomeIcon icon={faUser} />}
+              data-target="#modalProfile"
+              data-toggle="modal"
+              title="Profile"
+            >
+              Profile
+            </MenuItem>
+            <MenuItem
               icon={<FontAwesomeIcon icon={faChevronLeft} />}
               data-target="#modalLogout"
               data-toggle="modal"
@@ -100,6 +110,10 @@ const Sidebar = (props) => {
           </Menu>
         </SidebarFooter>
       </ProSidebar>
+
+      <EditProfile activeUser={activeUser} setActiveUser={setActiveUser} />
+
+      {/* logout modal */}
       <div
         className="fade modal"
         data-backdrop="static"
