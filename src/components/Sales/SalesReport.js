@@ -9,7 +9,7 @@ import moment from "moment";
 import $ from "jquery";
 import ChartComponent from "../ChartComponent";
 import DateRangePickerComponent from "../DateRangePickerComponent";
-import DeleteTransactionModalComponents from "./DeleteTransactionModalComponents";
+import DeleteTransactionModalComponents from "./components/DeleteTransactionModalComponents";
 import TransactionModalComponents from "./components/TransactionModalComponents";
 import Pagination from "../Pagination";
 
