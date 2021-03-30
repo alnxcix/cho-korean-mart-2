@@ -16,7 +16,8 @@ const Pagination = ({
     pageNums.push(i);
   }
   return (
-    <>
+    <div style={{}}>
+      <div style={{float: 'right'}}>
       <caption className="row m-auto">
         {`Showing ${currentRows.length} of ${totalRows} ${
           totalRows > 1 ? "entries" : "entry"
@@ -61,6 +62,7 @@ const Pagination = ({
           <FontAwesomeIcon icon={faCaretRight} />
         </button>
       </caption>
+      </div>
       <div className="form-row">
         <div className="col input-group">
           <div className="input-group-prepend">
@@ -88,7 +90,8 @@ const Pagination = ({
           </div>
         </div>
       </div>
-    </>
+      
+    </div>
   );
 };
 
