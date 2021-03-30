@@ -82,32 +82,34 @@ const SalesReport = () => {
       </div>
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
+        <col span="1" style={{ width: "60px" }} />
         <thead>
           <tr>
-            {["#", "Product", "Category", "Units Sold"].map((el) => (
-              <th>{el}</th>
-            ))}
+            <th className="text-center">#</th>
+            <th>Product</th>
+            <th>Category</th>
+            <th>Units Sold</th>
           </tr>
         </thead>
         <tbody>
           {getBestSellers(10).map((product, index) => (
             <tr>
-              <td>{index + 1}</td>
-              <td>
+              <td className="text-center text-wrap">{index + 1}</td>
+              <td className="text-wrap">
                 {product.product === undefined ? (
                   <em>Deleted Product</em>
                 ) : (
                   product.product.name
                 )}
               </td>
-              <td>
+              <td className="text-wrap">
                 {product.product === undefined ? (
                   <em>Deleted Product</em>
                 ) : (
                   product.product.category
                 )}
               </td>
-              <td>{product.unitsSold}</td>
+              <td className="text-wrap">{product.unitsSold}</td>
             </tr>
           ))}
         </tbody>
