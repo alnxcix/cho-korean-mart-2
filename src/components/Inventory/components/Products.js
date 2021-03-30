@@ -123,7 +123,7 @@ const Products = (props) => {
             {criticalItemsOnly ? (
               <>Show All Items</>
             ) : (
-              <>Only Show Items at Critical Level</>
+              <>Show Items at Critical Level</>
             )}
           </button>
         </div>
@@ -183,7 +183,7 @@ const Products = (props) => {
                   setStockHistoryEntries={setStockHistoryEntries}
                 />
                 &nbsp;
-                <DeleteProduct product={product} setProducts={setProducts} />
+                <DeleteProduct activeUser={activeUser}  product={product} setProducts={setProducts} />
               </td>
             </tr>
           ))}
