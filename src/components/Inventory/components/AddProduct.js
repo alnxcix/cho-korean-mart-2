@@ -8,7 +8,7 @@ const AddProduct = (props) => {
   const [_id, set_id] = useState("");
   const [category, setCategory] = useState("");
   const [criticalLevel, setCriticalLevel] = useState(20);
-  const [discount, setDiscount] = useState("");
+  const [discount, setDiscount] = useState(0);
   const [imgSrc, setImgSrc] = useState(logo);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -16,7 +16,7 @@ const AddProduct = (props) => {
   const clear = () => {
     set_id("");
     setCategory("");
-    setDiscount("");
+    setDiscount(0);
     setImgSrc(logo);
     setCriticalLevel(20);
     setName("");
