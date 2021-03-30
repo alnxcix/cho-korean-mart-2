@@ -9,9 +9,7 @@ const EditUser = (props) => {
   const [user, setUser] = useState(props.user);
   const [verifyUser, setVerification] = useState("");
   const [password, setPassword] = useState("");
-  // const [logout, setLogout] = useState(false);
   const [passState, setPassState] = useState("password");
-  // const [validPassword, setValidPassword] = useState(true);
   const getPasswordValidity = () =>
     password.match(/[a-z]+/) &&
     password.match(/[0-9]+/) &&
@@ -50,7 +48,6 @@ const EditUser = (props) => {
     }
     $(`#modalEdit${user._id}`).modal("hide");
     reset();
-    // logout ? setActiveUser(() => undefined) : console.log("all is well");
   };
   const uploadImage = (e) => {
     const reader = new FileReader();
@@ -140,17 +137,6 @@ const EditUser = (props) => {
                         }}
                         onChange={(e) => {
                           setPassword(e.target.value);
-                          // const pass = e.target.value;
-                          // if (
-                          //   pass.match(/[a-z]+/) &&
-                          //   pass.match(/[0-9]+/) &&
-                          //   pass.match(/[A-Z]+/) &&
-                          //   //pass.match(/[~<>?!@#$%^&*()]+/) &&
-                          //   pass.length >= 8 &&
-                          //   pass.length <= 20
-                          // ) {
-                          //   setValidPassword(true);
-                          // } else setValidPassword(false);
                         }}
                         placeholder="Password"
                         type={passState}

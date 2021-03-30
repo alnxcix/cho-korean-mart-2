@@ -137,9 +137,10 @@ const AddUser = (props) => {
                       <input
                         className="form-control"
                         style={{
-                          backgroundColor: getPasswordValidity()
-                            ? null
-                            : "#ffb3b3",
+                          backgroundColor:
+                            password.length === 0 || getPasswordValidity()
+                              ? null
+                              : "#ffb3b3",
                         }}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Password"
