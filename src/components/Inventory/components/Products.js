@@ -121,9 +121,9 @@ const Products = (props) => {
             }}
           >
             {criticalItemsOnly ? (
-              <>Show All Items</>
+              <>Show All Products</>
             ) : (
-              <>Show Items at Critical Level</>
+              <>Show Products at Critical Level</>
             )}
           </button>
         </div>
