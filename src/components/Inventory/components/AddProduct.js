@@ -131,7 +131,7 @@ const AddProduct = (props) => {
                 </div>
                 <div className="form-group row">
                   <label className="col-3 col-form-label">Category</label>
-                  <div className="col">
+                  {/* <div className="col">
                     <input
                       className="form-control"
                       onChange={(e) => setCategory(e.target.value)}
@@ -139,6 +139,31 @@ const AddProduct = (props) => {
                       required
                       value={category}
                     />
+                  </div> */}
+                  <div className="col">
+                    <select
+                      className="custom-select"
+                      onChange={(e) => setCategory(e.target.value)}
+                      required
+                      value={category}
+                    >
+                      <option disabled selected value="">
+                        Select Category
+                      </option>
+                      <option value={"General"}>General</option>
+                      <option value={"Meats"}>Meats</option>
+                      <option value={"Vegetables"}>Vegetables</option>
+                      <option value={"Frozen Goods"}>Frozen Goods</option>
+                      <option value={"Canned Goods"}>Canned Goods</option>
+                      <option value={"Fresh Foods"}>Fresh Foods</option>
+                      <option value={"Condiments"}>Condiments</option>
+                      <option value={"Snacks"}>Snacks</option>
+                      <option value={"Sweets"}>Sweets</option>
+                      <option value={"Beverages"}>Beverages</option>
+                      <option value={"Beauty & Health"}>Beauty & Health</option>
+                      <option value={"Living"}>Living</option>
+                      <option value={"Others"}>Others</option>
+                    </select>
                   </div>
                 </div>
                 <div className="form-group row">
