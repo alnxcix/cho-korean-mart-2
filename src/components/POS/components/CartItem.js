@@ -43,7 +43,7 @@ const CartItem = (props) => {
                 max={cartItem.product.stockQuantity}
                 min={1}
                 onChange={(e) =>
-                  updateItemQuantity(cartItem.product, e.target.value)
+                  updateItemQuantity(cartItem.product, Number(e.target.value))
                 }
                 required
                 type="number"

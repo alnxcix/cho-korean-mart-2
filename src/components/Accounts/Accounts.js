@@ -44,7 +44,7 @@ const Accounts = (props) => {
   const currentRows = getFilteredUsers().slice(indexOfFirstRow, indexOfLastRow);
   const chgPage = (pageNum) => setCurrentPage(pageNum);
   return (
-    <div class="p-3">
+    <div className="p-3">
       <div
         className="alert alert-success alert-dismissible collapse"
         id="userAlert1"

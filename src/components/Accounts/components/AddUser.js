@@ -9,7 +9,7 @@ const AddUser = (props) => {
   const [imgSrc, setImgSrc] = useState(logo);
   const [lastName, setLastName] = useState("");
   const [passState, setPassState] = useState("password");
-  const [validPassword, setValidPassword] = useState(true);
+  // const [validPassword, setValidPassword] = useState(true);
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const clear = () => {
@@ -20,8 +20,14 @@ const AddUser = (props) => {
     setPassword("");
     setRole("");
     setPassState("password");
-    setValidPassword(true);
   };
+  const getPasswordValidity = () =>
+    password.match(/[a-z]+/) &&
+    password.match(/[0-9]+/) &&
+    password.match(/[A-Z]+/) &&
+    //password.match(/[~<>?!@#$%^&*()]+/) &&
+    password.length >= 8 &&
+    password.length <= 20;
   const handleSubmit = (e) => {
     e.preventDefault();
     window
@@ -124,27 +130,16 @@ const AddUser = (props) => {
                 </div>
                 <div className="form-group row">
                   <label className="col-3 col-form-label">Password</label>
-                  <div class="col">
+                  <div className="col">
                     <div className="input-group">
                       <input
                         className="form-control"
-                        style={
-                          !validPassword ? { backgroundColor: "#ffb3b3" } : {}
-                        }
-                        onChange={(e) => {
-                          setPassword(e.target.value);
-                          const pass = e.target.value;
-                          if (
-                            pass.match(/[a-z]+/) &&
-                            pass.match(/[0-9]+/) &&
-                            pass.match(/[A-Z]+/) &&
-                            //pass.match(/[~<>?!@#$%^&*()]+/) &&
-                            pass.length >= 8 &&
-                            pass.length <= 20
-                          )
-                            setValidPassword(true);
-                          else setValidPassword(false);
+                        style={{
+                          backgroundColor: getPasswordValidity()
+                            ? null
+                            : "#ffb3b3",
                         }}
+                        onChange={(e) => setPassword(e.target.value)}
                         placeholder="Password"
                         required
                         type={passState}
@@ -152,7 +147,7 @@ const AddUser = (props) => {
                       />
                       <div className="input-group-append">
                         <button
-                          class="input-group-text"
+                          className="input-group-text"
                           onClick={() => setPassState("text")}
                           onMouseOut={() => {
                             setPassState("password");
@@ -162,7 +157,7 @@ const AddUser = (props) => {
                           View
                         </button>
                       </div>
-                      <small id="passwordHelpInline" class="text-muted">
+                      <small id="passwordHelpInline" className="text-muted">
                         <br />
                         Password must be 8-20 characters long, must contain
                         letters and numbers, and is a mixture of both uppercase
@@ -232,7 +227,7 @@ const AddUser = (props) => {
                 <button
                   className="btn btn-success"
                   type="submit"
-                  disabled={!validPassword}
+                  disabled={!getPasswordValidity()}
                 >
                   Save
                 </button>

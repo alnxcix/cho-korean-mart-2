@@ -9,7 +9,7 @@ const InitializeAdminModal = () => {
   const [lastName, setLastName] = useState("");
   const [passState, setPassState] = useState("password");
   const [password, setPassword] = useState("");
-  const [validPassword, setValidPassword] = useState(true);
+  // const [validPassword, setValidPassword] = useState(true);
   const clear = () => {
     set_id("");
     setFirstName("");
@@ -17,8 +17,14 @@ const InitializeAdminModal = () => {
     setLastName("");
     setPassword("");
     setPassState("password");
-    setValidPassword(true);
   };
+  const getPasswordValidity = () =>
+    password.match(/[a-z]+/) &&
+    password.match(/[0-9]+/) &&
+    password.match(/[A-Z]+/) &&
+    //password.match(/[~<>?!@#$%^&*()]+/) &&
+    password.length >= 8 &&
+    password.length <= 20;
   const handleSubmit = (e) => {
     e.preventDefault();
     window
@@ -85,7 +91,7 @@ const InitializeAdminModal = () => {
                 </div>
               </div>
               <div className="form-group row">
-                <label className="col-3 col-form-label">Username/ID</label>
+                <label className="col-3 col-form-label">Username / ID</label>
                 <div className="col">
                   <input
                     className="form-control"
@@ -98,27 +104,17 @@ const InitializeAdminModal = () => {
               </div>
               <div className="form-group row">
                 <label className="col-3 col-form-label">Password</label>
-                <div class="col">
+                <div className="col">
                   <div className="input-group">
                     <input
                       className="form-control"
-                      style={
-                        !validPassword ? { backgroundColor: "#ffb3b3" } : {}
-                      }
-                      onChange={(e) => {
-                        setPassword(e.target.value);
-                        const pass = e.target.value;
-                        if (
-                          pass.match(/[a-z]+/) &&
-                          pass.match(/[0-9]+/) &&
-                          pass.match(/[A-Z]+/) &&
-                          //pass.match(/[~<>?!@#$%^&*()]+/) &&
-                          pass.length >= 8 &&
-                          pass.length <= 20
-                        )
-                          setValidPassword(true);
-                        else setValidPassword(false);
+                      style={{
+                        backgroundColor:
+                          password.length === 0 || getPasswordValidity()
+                            ? null
+                            : "#ffb3b3",
                       }}
+                      onChange={(e) => setPassword(e.target.value)}
                       placeholder="Password"
                       required
                       type={passState}
@@ -126,7 +122,7 @@ const InitializeAdminModal = () => {
                     />
                     <div className="input-group-append">
                       <button
-                        class="input-group-text"
+                        className="input-group-text"
                         onClick={() => setPassState("text")}
                         onMouseOut={() => setPassState("password")}
                         type="button"
@@ -134,7 +130,7 @@ const InitializeAdminModal = () => {
                         View
                       </button>
                     </div>
-                    <small id="passwordHelpInline" class="text-muted">
+                    <small id="passwordHelpInline" className="text-muted">
                       <br />
                       Password must be 8-20 characters long, must contain
                       letters and numbers, and is a mixture of both uppercase
@@ -178,7 +174,7 @@ const InitializeAdminModal = () => {
               <button
                 className="btn btn-success"
                 type="submit"
-                disabled={!validPassword}
+                disabled={!getPasswordValidity()}
               >
                 Save
               </button>

@@ -80,7 +80,7 @@ const InventoryComponent = (props) => {
         id="posAlert1"
         role="alert"
       >
-        <strong>Success:</strong> Transaction complete.
+        <strong>Success:</strong> Transaction completed.
         <button className="close" onClick={() => $("#posAlert1").slideUp()}>
           <span>&times;</span>
         </button>
@@ -156,11 +156,16 @@ const InventoryComponent = (props) => {
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
         <thead>
           <tr>
-            {["ID", "Image", "Product", "Category", "Stock Quantity"].map(
-              (el) => (
-                <th>{el}</th>
-              )
-            )}
+            {[
+              "ID",
+              "Image",
+              "Product",
+              "Category",
+              "Price",
+              "Stock Quantity",
+            ].map((el) => (
+              <th>{el}</th>
+            ))}
             <th>Actions</th>
           </tr>
         </thead>
@@ -181,6 +186,9 @@ const InventoryComponent = (props) => {
               </td>
               <td className="text-truncate">{product.name}</td>
               <td className="text-truncate">{product.category}</td>
+              <td className="text-truncate">{`₱ ${product.price.toFixed(
+                2
+              )}`}</td>
               <td
                 className="text-truncate"
                 style={{
