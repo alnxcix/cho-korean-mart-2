@@ -72,6 +72,14 @@ const AddUser = (props) => {
         className="btn btn-dark btn-lg ml-3 rounded-pill"
         data-target="#modalAddUser"
         data-toggle="modal"
+        onClick={() => {
+          $("#userAlert1").slideUp();
+          $("#userAlert2").slideUp();
+          $("#userAlert3").slideUp();
+          $("#userAlert4").slideUp();
+          $("#userAlert5").slideUp();
+          $("#userAlert6").slideUp();
+        }}
       >
         Add User
       </button>
@@ -207,7 +215,8 @@ const AddUser = (props) => {
                   <img
                     alt=""
                     src={imgSrc}
-                    className="img-fluid img-thumbnail w-50"
+                    className="img-fluid img-thumbnail "
+                    style={{ maxHeight: 150, maxWidth: 150 }}
                   />
                 </picture>
               </div>

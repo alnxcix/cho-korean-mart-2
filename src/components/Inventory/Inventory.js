@@ -90,7 +90,17 @@ const Inventory = (props) => {
       <div className="align-items-center d-flex">
         <h1 className="flex-fill">Inventory</h1>
         <Link to={history ? "/inventory" : "/inventory_history"}>
-          <button className="btn btn-lg btn-outline-dark rounded-pill">
+          <button
+            className="btn btn-lg btn-outline-dark rounded-pill"
+            onClick={() => {
+              $("#productAlert1").slideUp();
+              $("#productAlert2").slideUp();
+              $("#productAlert3").slideUp();
+              $("#productAlert4").slideUp();
+              $("#productAlert5").slideUp();
+              $("#productAlert6").slideUp();
+            }}
+          >
             {history ? "See Products" : "See Stock History"}
           </button>
         </Link>

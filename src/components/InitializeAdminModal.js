@@ -164,7 +164,8 @@ const InitializeAdminModal = () => {
                 <img
                   alt=""
                   src={imgSrc}
-                  className="img-fluid img-thumbnail w-50"
+                  className="img-fluid img-thumbnail"
+                  style={{ maxHeight: 150, maxWidth: 150 }}
                 />
               </picture>
             </div>

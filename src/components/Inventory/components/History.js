@@ -127,6 +127,7 @@ const History = (props) => {
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
         <col span="1" style={{ width: "60px" }} />
+        <col span="1" style={{ width: "200px" }} />
         <thead>
           <tr>
             <th className="text-center">#</th>

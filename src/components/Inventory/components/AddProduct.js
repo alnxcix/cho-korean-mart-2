@@ -87,6 +87,14 @@ const AddProduct = (props) => {
         className="btn btn-dark btn-lg ml-3 rounded-pill"
         data-target="#modalAddProduct"
         data-toggle="modal"
+        onClick={() => {
+          $("#productAlert1").slideUp();
+          $("#productAlert2").slideUp();
+          $("#productAlert3").slideUp();
+          $("#productAlert4").slideUp();
+          $("#productAlert5").slideUp();
+          $("#productAlert6").slideUp();
+        }}
       >
         Add Product
       </button>
@@ -257,7 +265,8 @@ const AddProduct = (props) => {
                   <img
                     alt=""
                     src={imgSrc}
-                    className="img-fluid img-thumbnail w-50"
+                    className="img-fluid img-thumbnail "
+                    style={{ maxHeight: 150, maxWidth: 150 }}
                   />
                 </picture>
               </div>

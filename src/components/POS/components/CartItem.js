@@ -14,7 +14,7 @@ const CartItem = (props) => {
               alt=""
               className="border border-secondary rounded-lg mr-3"
               src={cartItem.product.imgSrc}
-              style={{ height: 60 }}
+              style={{ maxHeight: 60, maxWidth: 60 }}
             />
           </picture>
           <div className="media-body" style={{ minWidth: 0 }}>

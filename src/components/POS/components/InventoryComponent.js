@@ -164,9 +164,9 @@ const InventoryComponent = (props) => {
               "Price",
               "Stock Quantity",
             ].map((el) => (
-              <th>{el}</th>
+              <th style={el == "Image" ? { width: 100 } : {}}>{el}</th>
             ))}
-            <th>Actions</th>
+            <th style={{ width: 100 }}>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -180,7 +180,7 @@ const InventoryComponent = (props) => {
                     alt=""
                     className="img-thumbnail"
                     src={logo}
-                    style={{ maxHeight: 69 }}
+                    style={{ maxHeight: 60, maxWidth: 60 }}
                   />
                 </picture>
               </td>
@@ -200,6 +200,11 @@ const InventoryComponent = (props) => {
               </td>
               <td>
                 <button
+                  title={
+                    productExistsInCart(product) || product.stockQuantity == 0
+                      ? "Add Button Disabled"
+                      : `Add to Cart`
+                  }
                   className="btn btn-danger btn-sm"
                   disabled={
                     productExistsInCart(product) || product.stockQuantity == 0

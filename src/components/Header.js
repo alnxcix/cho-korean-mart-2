@@ -18,7 +18,7 @@ const Header = (props) => {
             alt=""
             className="img-thumbnail ml-3"
             src={activeUser.imgSrc}
-            style={{ maxHeight: 50 }}
+            style={{ maxHeight: 70, maxWidth: 70 }}
           />
         </picture>
       </span>

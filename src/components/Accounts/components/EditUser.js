@@ -70,6 +70,14 @@ const EditUser = (props) => {
         className="btn btn-warning"
         data-target={`#modalEdit${user._id}`}
         data-toggle="modal"
+        onClick={() => {
+          $("#userAlert1").slideUp();
+          $("#userAlert2").slideUp();
+          $("#userAlert3").slideUp();
+          $("#userAlert4").slideUp();
+          $("#userAlert5").slideUp();
+          $("#userAlert6").slideUp();
+        }}
       >
         <FontAwesomeIcon icon={faEdit} />
       </button>
@@ -207,7 +215,8 @@ const EditUser = (props) => {
                   <img
                     alt=""
                     src={user.imgSrc}
-                    className="img-fluid img-thumbnail w-50"
+                    className="img-fluid img-thumbnail "
+                    style={{ maxHeight: 150, maxWidth: 150 }}
                   />
                 </picture>
                 <div className="form-group mt-2">

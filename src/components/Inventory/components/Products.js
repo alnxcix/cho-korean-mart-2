@@ -131,6 +131,10 @@ const Products = (props) => {
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
         <col span="1" style={{ width: "60px" }} />
+        <col span="1" />
+        <col span="1" style={{ width: "100px" }} />
+        <col span="3" />
+        <col span="1" style={{ width: "100px" }} />
         <thead>
           <tr>
             <th className="text-center">#</th>
@@ -156,7 +160,7 @@ const Products = (props) => {
                     alt=""
                     className="img-thumbnail"
                     src={logo}
-                    style={{ maxHeight: 69 }}
+                    style={{ maxHeight: 60, maxWidth: 60 }}
                   />
                 </picture>
               </td>
@@ -183,7 +187,11 @@ const Products = (props) => {
                   setStockHistoryEntries={setStockHistoryEntries}
                 />
                 &nbsp;
-                <DeleteProduct activeUser={activeUser}  product={product} setProducts={setProducts} />
+                <DeleteProduct
+                  activeUser={activeUser}
+                  product={product}
+                  setProducts={setProducts}
+                />
               </td>
             </tr>
           ))}

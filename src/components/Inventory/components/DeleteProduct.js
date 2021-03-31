@@ -12,6 +12,14 @@ const DeleteProduct = (props) => {
         className="btn btn-danger"
         data-target={`#modalDelete${product._id}`}
         data-toggle="modal"
+        onClick={() => {
+          $("#productAlert1").slideUp();
+          $("#productAlert2").slideUp();
+          $("#productAlert3").slideUp();
+          $("#productAlert4").slideUp();
+          $("#productAlert5").slideUp();
+          $("#productAlert6").slideUp();
+        }}
       >
         <FontAwesomeIcon icon={faTrash} />
       </button>

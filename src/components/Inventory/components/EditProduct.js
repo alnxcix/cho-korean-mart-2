@@ -80,6 +80,14 @@ const EditProduct = (props) => {
         className="btn btn-warning"
         data-target={`#modalEdit${product._id}`}
         data-toggle="modal"
+        onClick={() => {
+          $("#productAlert1").slideUp();
+          $("#productAlert2").slideUp();
+          $("#productAlert3").slideUp();
+          $("#productAlert4").slideUp();
+          $("#productAlert5").slideUp();
+          $("#productAlert6").slideUp();
+        }}
       >
         <FontAwesomeIcon icon={faEdit} />
       </button>
@@ -270,7 +278,8 @@ const EditProduct = (props) => {
                   <img
                     alt=""
                     src={product.imgSrc}
-                    className="img-fluid img-thumbnail w-50"
+                    className="img-fluid img-thumbnail "
+                    style={{ maxHeight: 150, maxWidth: 150 }}
                   />
                 </picture>
               </div>

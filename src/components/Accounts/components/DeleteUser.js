@@ -13,6 +13,14 @@ const DeleteUser = (props) => {
         data-target={`#modalDelete${user._id}`}
         data-toggle="modal"
         disabled={user._id === activeUser._id}
+        onClick={() => {
+          $("#userAlert1").slideUp();
+          $("#userAlert2").slideUp();
+          $("#userAlert3").slideUp();
+          $("#userAlert4").slideUp();
+          $("#userAlert5").slideUp();
+          $("#userAlert6").slideUp();
+        }}
       >
         <FontAwesomeIcon icon={faTrash} />
       </button>
