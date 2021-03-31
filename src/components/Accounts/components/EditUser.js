@@ -60,7 +60,7 @@ const EditUser = (props) => {
         setUser({ ...user, imgSrc: reader.result });
       }
     };
-    reader.readAsDataURL(e[0]);
+    if (e[0]) reader.readAsDataURL(e[0]);
   };
   useEffect(() => setUser(props.user), [props.user]);
   useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
