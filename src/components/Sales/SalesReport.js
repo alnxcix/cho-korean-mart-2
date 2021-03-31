@@ -12,6 +12,7 @@ import DateRangePickerComponent from "../DateRangePickerComponent";
 // import DeleteTransactionModalComponents from "./components/DeleteTransactionModalComponents";
 import TransactionModalComponents from "./components/TransactionModalComponents";
 import Pagination from "../Pagination";
+import jsPDF from 'jspdf';
 
 const SalesReport = () => {
   const [endDate, setEndDate] = useState(moment().endOf("d").toDate());
@@ -23,6 +24,12 @@ const SalesReport = () => {
     setEndDate(end);
     setCurrentPage(1);
   };
+  const pdfGenerate = () => {
+    var doc = new jsPDF('portrait', 'px', 'a4', 'false');
+    doc.text(60, 60, 'Hello World')
+    doc.save('sample.pdf')
+
+  }
   const getFilteredTransactions = () =>
     transactions.filter(
       (transaction) =>
@@ -169,6 +176,7 @@ const SalesReport = () => {
                   data-target={`#modal`}
                   data-toggle="modal"
                   title="Export Transaction"
+                  onClick={pdfGenerate}
                 >
                   <FontAwesomeIcon icon={faShare} />
                 </button>
