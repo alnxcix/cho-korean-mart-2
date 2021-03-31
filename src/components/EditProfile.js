@@ -101,8 +101,8 @@ const EditProfile = (props) => {
                 </div>
                 <div className="form-group row">
                   <label className="col-3 col-form-label">Password</label>
-                  <div className="col ">
-                    <div className="input-group">
+                  <div className="col">
+                    <div class="input-group">
                       <input
                         className="form-control"
                         style={{
@@ -118,25 +118,21 @@ const EditProfile = (props) => {
                         type={passState}
                         value={password}
                       />
-                      <div className="input-group-append">
-                        <button
-                          className="input-group-text"
-                          onClick={() => setPassState("text")}
-                          onMouseOut={() => {
-                            setPassState("password");
-                          }}
-                          type="button"
-                        >
-                          View
-                        </button>
+                      <div
+                        className="input-group-append"
+                        onClick={() => setPassState("text")}
+                        onMouseOut={() => {
+                          setPassState("password");
+                        }}
+                      >
+                        <span className="input-group-text">View</span>
                       </div>
-                      <small className="text-muted">
-                        <br />
-                        Password must be 8-20 characters long, must contain
-                        letters and numbers, and is a mixture of both uppercase
-                        and lowercase letters.
-                      </small>
                     </div>
+                    <small className="form-text text-muted">
+                      Password must be 8-20 characters long, must contain
+                      letters and numbers, and is a mixture of both uppercase
+                      and lowercase letters.
+                    </small>
                   </div>
                 </div>
                 <div className="form-group row">

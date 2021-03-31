@@ -146,25 +146,21 @@ const EditUser = (props) => {
                         type={passState}
                         value={password}
                       />
-                      <div className="input-group-append">
-                        <button
-                          className="input-group-text"
-                          onClick={() => setPassState("text")}
-                          onMouseOut={() => {
-                            setPassState("password");
-                          }}
-                          type="button"
-                        >
-                          View
-                        </button>
+                      <div
+                        className="input-group-append"
+                        onClick={() => setPassState("text")}
+                        onMouseOut={() => {
+                          setPassState("password");
+                        }}
+                      >
+                        <span className="input-group-text">View</span>
                       </div>
-                      <small className="text-muted">
-                        <br />
-                        Password must be 8-20 characters long, must contain
-                        letters and numbers, and is a mixture of both uppercase
-                        and lowercase letters.
-                      </small>
                     </div>
+                    <small className="text-muted">
+                      Password must be 8-20 characters long, must contain
+                      letters and numbers, and is a mixture of both uppercase
+                      and lowercase letters.
+                    </small>
                   </div>
                 </div>
                 {user.role !== "Cashier" && user._id === activeUser._id ? (
