@@ -94,10 +94,11 @@ const TransactionModalComponents = (props) => {
                     className="form-control"
                     disabled
                     value={
-                      users.length > 0
-                        ? users.find((user) => user._id === transaction.userId)
-                            .firstName
-                        : null
+                      users.find((u) => u._id === transaction.userId) ===
+                      undefined
+                        ? `Deleted User (${transaction.userId})`
+                        : users.find((u) => u._id === transaction.userId)
+                            .firstName + ` (${transaction.userId})`
                     }
                   />
                 </div>

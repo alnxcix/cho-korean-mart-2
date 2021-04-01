@@ -20,13 +20,27 @@ const SalesReport = () => {
   const [endDate, setEndDate] = useState(moment().endOf("d").toDate());
   const [searchString, setSearchString] = useState("");
   const [startDate, setStartDate] = useState(moment().startOf("d").toDate());
+  const [products, setProducts] = useState([]);
+  const [users, setUsers] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const setDates = (start, end) => {
     setStartDate(start);
     setEndDate(end);
     setCurrentPage(1);
   };
-  const pdfGenerate = () => {
+  const getUser = (id) =>
+    users.find((u) => u._id === id) === undefined
+      ? `Deleted User (${id})`
+      : users.find((u) => u._id === id).firstName + ` (${id})`;
+  const columns = [
+    { title: "Product", dataKey: "Product" },
+    { title: "Quantity", dataKey: "Quantity" },
+    { title: "Unit Price", dataKey: "UnitPrice" },
+    { title: "VAT", dataKey: "VAT" },
+    { title: "Discount", dataKey: "Discount" },
+    { title: "Total", dataKey: "Total" },
+  ];
+  const pdfGenerate = (trans) => {
     var doc = new jsPDF("portrait", "px", "a4", "false");
     doc.text(30, 60, "logo here");
     //doc.addImage(imageData, format, x, y, width, height, alias, compression, rotation)
@@ -43,26 +57,37 @@ const SalesReport = () => {
     doc.setFont("Helvetica", "bold");
     doc.setFontSize(15);
     doc.setTextColor("#900");
-    doc.text(30, 150, "Transaction #");
+    doc.text(30, 150, `Transaction #: ${trans._id}`);
 
     doc.setFont("Helvetica", "normal");
     doc.setTextColor("#000000");
     doc.setFontSize(11);
-    doc.text(30, 175, "Date:");
-    doc.text(90, 175, "Salesperson:");
-
-    doc.autoTable({
+    doc.text(30, 175, `Date: ${new Date(trans.date).toLocaleDateString()}`);
+    doc.text(100, 175, `Salesperson: ${getUser(trans.userId)}`);
+    var rows = trans.cart.map((item) => ({
+      Product:
+        (products.find((product) => product._id === item._id) === undefined
+          ? `Deleted Item (${item._id})`
+          : products.find((product) => product._id === item._id).name) + "",
+      Quantity: item.quantity + "",
+      UnitPrice: "P " + item.price.toFixed(2),
+      VAT: trans.vatRate + "%",
+      Discount: item.discount + "%",
+      Total: "P " + (item.price * item.quantity).toFixed(2),
+    }));
+    console.log(rows);
+    doc.autoTable(columns, rows, {
       startY: 210,
       theme: "striped",
       headStyles: { fillColor: "#900" },
-      head: [["Product", "Quantity", "Unit Price", "VAT", "Discount", "Total"]],
-      body: [
-        ["David", "david@example.com", "Sweden"],
-        ["Castille", "castille@example.com", "Spain"],
-        // ...
-      ],
+      // head: [["Product", "Quantity", "Unit Price", "VAT", "Discount", "Total"]],
+      // body: [
+      //   [1, 2, 3, 4],
+      //   [trans.vat, trans.date],
+      // ],
+      // ...
     });
-    doc.save("sample.pdf");
+    doc.save(`Transaction ${trans._id}.pdf`);
   };
   const getFilteredTransactions = () =>
     transactions.filter(
@@ -72,15 +97,23 @@ const SalesReport = () => {
           .includes(searchString) &&
         moment(transaction.date).isBetween(moment(startDate), moment(endDate))
     );
-  useEffect(
-    () =>
-      window
-        .require("electron")
-        .remote.getGlobal("transactions")
-        .readAll()
-        .then((transactions) => setTransactions(transactions)),
-    []
-  );
+  useEffect(() => {
+    window
+      .require("electron")
+      .remote.getGlobal("products")
+      .readAll()
+      .then((products) => setProducts(products));
+    window
+      .require("electron")
+      .remote.getGlobal("users")
+      .readAll()
+      .then((u) => setUsers(u));
+    window
+      .require("electron")
+      .remote.getGlobal("transactions")
+      .readAll()
+      .then((transactions) => setTransactions(transactions));
+  }, []);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   //test
@@ -207,10 +240,13 @@ const SalesReport = () => {
                 &nbsp;
                 <button
                   className="btn btn-warning"
-                  data-target={`#modal`}
-                  data-toggle="modal"
+                  // data-target={`#modal`}
+                  // data-toggle="modal"
                   title="Export Transaction"
-                  onClick={pdfGenerate}
+                  onClick={() => {
+                    pdfGenerate(transaction);
+                    // console.log(getProducts(transaction.cart));
+                  }}
                 >
                   <FontAwesomeIcon icon={faShare} />
                 </button>
