@@ -28,10 +28,24 @@ const SalesReport = () => {
   };
   const pdfGenerate = () => {
     var doc = new jsPDF('portrait', 'px', 'a4', 'false');
+    doc.text(30, 60, 'logo here')
     //doc.addImage(imageData, format, x, y, width, height, alias, compression, rotation)
-    doc.text(30, 100, 'Transaction #')
+    doc.setFontSize(11)
+    doc.text(350, 40, 'CHO Korean Mart')
+    doc.text(325, 50, 'address, contact num?')
+
+    doc.setFontSize(15)
+    doc.setTextColor('#900')
+    doc.text(30, 125, 'Transaction #')
+    
+    //for date and salesperson
+    doc.setTextColor('#000000')
+    doc.setFontSize(11)
+    doc.text(30, 150, 'Date:')
+    doc.text(90, 150, 'Salesperson:')
+
     doc.autoTable({
-      startY: 150,
+      startY: 180,
       theme: 'striped',
       headStyles: {fillColor: '#900'},
       head: [['Product', 'Quantity', 'Unit Price', 'VAT', 'Discount', 'Total']],
