@@ -13,6 +13,8 @@ import DateRangePickerComponent from "../DateRangePickerComponent";
 import TransactionModalComponents from "./components/TransactionModalComponents";
 import Pagination from "../Pagination";
 import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+//import logo from "../../../assets/ChoKoreanMart.jpg";
 
 const SalesReport = () => {
   const [endDate, setEndDate] = useState(moment().endOf("d").toDate());
@@ -26,7 +28,19 @@ const SalesReport = () => {
   };
   const pdfGenerate = () => {
     var doc = new jsPDF('portrait', 'px', 'a4', 'false');
-    doc.text(60, 60, 'Hello World')
+    //doc.addImage(imageData, format, x, y, width, height, alias, compression, rotation)
+    doc.text(30, 100, 'Transaction #')
+    doc.autoTable({
+      startY: 150,
+      theme: 'striped',
+      headStyles: {fillColor: '#900'},
+      head: [['Product', 'Quantity', 'Unit Price', 'VAT', 'Discount', 'Total']],
+      body: [
+        ['David', 'david@example.com', 'Sweden'],
+        ['Castille', 'castille@example.com', 'Spain'],
+        // ...
+      ],
+    })
     doc.save('sample.pdf')
 
   }

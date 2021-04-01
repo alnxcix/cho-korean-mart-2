@@ -54,6 +54,7 @@ const DeleteProduct = (props) => {
                   Note: You can not delete a product having value in Stock
                   Quantity.
                 </h6>
+                <br></br>
                 <h6>Enter your password to delete the product:</h6>
               </label>
               <input

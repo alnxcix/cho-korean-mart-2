@@ -20,6 +20,7 @@
     "hamburger-react": "^2.4.0",
     "jquery": "^3.5.1",
     "jspdf": "^2.3.1",
+    "jspdf-autotable": "^3.5.14",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "nedb-promises": "^4.1.1",
