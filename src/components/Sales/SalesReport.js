@@ -12,8 +12,8 @@ import DateRangePickerComponent from "../DateRangePickerComponent";
 // import DeleteTransactionModalComponents from "./components/DeleteTransactionModalComponents";
 import TransactionModalComponents from "./components/TransactionModalComponents";
 import Pagination from "../Pagination";
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 //import logo from "../../../assets/ChoKoreanMart.jpg";
 
 const SalesReport = () => {
@@ -27,44 +27,43 @@ const SalesReport = () => {
     setCurrentPage(1);
   };
   const pdfGenerate = () => {
-    var doc = new jsPDF('portrait', 'px', 'a4', 'false');
-    doc.text(30, 60, 'logo here')
+    var doc = new jsPDF("portrait", "px", "a4", "false");
+    doc.text(30, 60, "logo here");
     //doc.addImage(imageData, format, x, y, width, height, alias, compression, rotation)
-    doc.setFontSize(11)
-    doc.setFont('Helvetica', 'bold');
-    doc.text(350, 40, 'CHO Korean Mart')
-    doc.setFont('Helvetica', 'normal');
-    doc.setFontSize(10)
-    doc.text(268, 60, '967 Del Monte Ave corner San Pedro Bautista,')
-    doc.text(340, 70, 'S.D.M., Q.C, Philippines')
-    doc.text(375, 80, '09774400017')
-    doc.text(312, 100, 'facebook.com/chokoreanmart.ph')
+    doc.setFontSize(11);
+    doc.setFont("Helvetica", "bold");
+    doc.text(350, 40, "CHO Korean Mart");
+    doc.setFont("Helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text(268, 60, "967 Del Monte Ave corner San Pedro Bautista,");
+    doc.text(340, 70, "S.D.M., Q.C, Philippines");
+    doc.text(375, 80, "09774400017");
+    doc.text(312, 100, "facebook.com/chokoreanmart.ph");
 
-    doc.setFont('Helvetica', 'bold');
-    doc.setFontSize(15)
-    doc.setTextColor('#900')
-    doc.text(30, 150, 'Transaction #')
-    
-    doc.setFont('Helvetica', 'normal');
-    doc.setTextColor('#000000')
-    doc.setFontSize(11)
-    doc.text(30, 175, 'Date:')
-    doc.text(90, 175, 'Salesperson:')
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(15);
+    doc.setTextColor("#900");
+    doc.text(30, 150, "Transaction #");
+
+    doc.setFont("Helvetica", "normal");
+    doc.setTextColor("#000000");
+    doc.setFontSize(11);
+    doc.text(30, 175, "Date:");
+    doc.text(90, 175, "Salesperson:");
 
     doc.autoTable({
       startY: 210,
-      theme: 'striped',
-      headStyles: {fillColor: '#900'},
-      head: [['Product', 'Quantity', 'Unit Price', 'VAT', 'Discount', 'Total']],
+      theme: "striped",
+      headStyles: { fillColor: "#900" },
+      head: [["Product", "Quantity", "Unit Price", "VAT", "Discount", "Total"]],
       body: [
-        ['David', 'david@example.com', 'Sweden'],
-        ['Castille', 'castille@example.com', 'Spain'],
+        ["David", "david@example.com", "Sweden"],
+        ["Castille", "castille@example.com", "Spain"],
         // ...
       ],
-    })
-    doc.save('sample.pdf')
-
-  }
+    });
+    doc.save("sample.pdf");
+  };
   const getFilteredTransactions = () =>
     transactions.filter(
       (transaction) =>
@@ -83,7 +82,7 @@ const SalesReport = () => {
     []
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   //test
   // const [rowsPerPage, setRowsPerPage] = useState(1);
   const indexOfLastRow = currentPage * rowsPerPage;

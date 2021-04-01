@@ -17,7 +17,7 @@ const Pagination = ({
   }
   return (
     <div style={{}}>
-      <div style={{float: 'right'}}>
+      <div style={{ float: "right" }}>
         <caption className="row m-auto">
           {`Showing ${currentRows.length} of ${totalRows} ${
             totalRows > 1 ? "entries" : "entry"
@@ -62,7 +62,8 @@ const Pagination = ({
             <FontAwesomeIcon icon={faCaretRight} />
           </button>
         </caption>
-      </div><br></br>
+      </div>
+      <br></br>
       <div className="form-row">
         <div className="col input-group">
           <div className="input-group-prepend">
@@ -76,23 +77,17 @@ const Pagination = ({
             }}
             value={rowsPerPage}
           >
-            
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
             <option value="100">100</option>
-
-            {/* test  */}
-            {/* <option value="1">1</option>
-            <option value="3">3</option>
-            <option value="5">5</option> */}
           </select>
           <div className="input-group-append">
             <caption className="input-group-text">entries</caption>
           </div>
         </div>
-      </div>  
+      </div>
     </div>
   );
 };
