@@ -31,21 +31,28 @@ const SalesReport = () => {
     doc.text(30, 60, 'logo here')
     //doc.addImage(imageData, format, x, y, width, height, alias, compression, rotation)
     doc.setFontSize(11)
+    doc.setFont('Helvetica', 'bold');
     doc.text(350, 40, 'CHO Korean Mart')
-    doc.text(325, 50, 'address, contact num?')
+    doc.setFont('Helvetica', 'normal');
+    doc.setFontSize(10)
+    doc.text(268, 60, '967 Del Monte Ave corner San Pedro Bautista,')
+    doc.text(340, 70, 'S.D.M., Q.C, Philippines')
+    doc.text(375, 80, '09774400017')
+    doc.text(312, 100, 'facebook.com/chokoreanmart.ph')
 
+    doc.setFont('Helvetica', 'bold');
     doc.setFontSize(15)
     doc.setTextColor('#900')
-    doc.text(30, 125, 'Transaction #')
+    doc.text(30, 150, 'Transaction #')
     
-    //for date and salesperson
+    doc.setFont('Helvetica', 'normal');
     doc.setTextColor('#000000')
     doc.setFontSize(11)
-    doc.text(30, 150, 'Date:')
-    doc.text(90, 150, 'Salesperson:')
+    doc.text(30, 175, 'Date:')
+    doc.text(90, 175, 'Salesperson:')
 
     doc.autoTable({
-      startY: 180,
+      startY: 210,
       theme: 'striped',
       headStyles: {fillColor: '#900'},
       head: [['Product', 'Quantity', 'Unit Price', 'VAT', 'Discount', 'Total']],
