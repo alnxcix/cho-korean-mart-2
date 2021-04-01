@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import bsCustomFileInput from "bs-custom-file-input";
 import $ from "jquery";
 import logo from "../../../assets/ChoKoreanMart.jpg";
 
@@ -21,6 +22,8 @@ const AddProduct = (props) => {
     setName("");
     setPrice("");
     setStockQuantity("");
+    $("#imageInput4").next("label").html("Choose image");
+    $("#imageInput4").val(null);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -74,8 +77,9 @@ const AddProduct = (props) => {
         setImgSrc(reader.result);
       }
     };
-    reader.readAsDataURL(e[0]);
+    if (e[0]) reader.readAsDataURL(e[0]);
   };
+  useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
   return (
     <>
       <button
@@ -156,6 +160,7 @@ const AddProduct = (props) => {
                       <option value={"Frozen Goods"}>Frozen Goods</option>
                       <option value={"Canned Goods"}>Canned Goods</option>
                       <option value={"Fresh Foods"}>Fresh Foods</option>
+                      <option value={"Instant Foods"}>Instant Foods</option>
                       <option value={"Condiments"}>Condiments</option>
                       <option value={"Snacks"}>Snacks</option>
                       <option value={"Sweets"}>Sweets</option>
@@ -232,18 +237,18 @@ const AddProduct = (props) => {
                   </div>
                 </div>
                 <div className="form-group row">
-                  <label className="col-form-label col-sm-12 mb-2">
-                    Upload Image
-                  </label>
-                  <div className="col-sm-12">
+                  <label className="col-form-label col-3">Image</label>
+                  <div className="col custom-file mx-3">
                     <input
-                      type="file"
-                      id="formFile"
                       accept="image/*"
+                      className="custom-file-input"
+                      id="imageInput4"
                       onChange={(e) => {
                         uploadImage(e.target.files);
                       }}
+                      type="file"
                     />
+                    <label className="custom-file-label">Choose image</label>
                   </div>
                 </div>
                 <picture>

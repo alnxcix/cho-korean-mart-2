@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import bsCustomFileInput from "bs-custom-file-input";
 import $ from "jquery";
 
 const EditUser = (props) => {
@@ -21,6 +22,9 @@ const EditUser = (props) => {
     setPassState("password");
     setPassword("");
     setVerification("");
+    // setValidPassword(true);
+    $("#imageInput3").next("label").html("Choose image");
+    $("#imageInput3").val(null);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -45,7 +49,6 @@ const EditUser = (props) => {
     $(`#modalEdit${user._id}`).modal("hide");
     reset();
   };
-  useEffect(() => setUser(props.user), [props.user]);
   const uploadImage = (e) => {
     const reader = new FileReader();
     reader.onload = function () {
@@ -55,6 +58,8 @@ const EditUser = (props) => {
     };
     reader.readAsDataURL(e[0]);
   };
+  useEffect(() => setUser(props.user), [props.user]);
+  useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
   return (
     <>
       <button
@@ -184,16 +189,18 @@ const EditUser = (props) => {
                   </div>
                 )}
                 <div className="form-group row">
-                  <label className="col-form-label col-sm-12 mb-2">
-                    Upload Image
-                  </label>
-                  <div className="col-sm-12">
+                  <label className="col-form-label col-3">Image</label>
+                  <div className="col custom-file mx-3">
                     <input
-                      type="file"
-                      id="formFile"
                       accept="image/*"
-                      onChange={(e) => uploadImage(e.target.files)}
+                      className="custom-file-input"
+                      id="imageInput3"
+                      onChange={(e) => {
+                        uploadImage(e.target.files);
+                      }}
+                      type="file"
                     />
+                    <label className="custom-file-label">Choose image</label>
                   </div>
                 </div>
                 <picture>
@@ -206,9 +213,9 @@ const EditUser = (props) => {
                 </picture>
                 <div className="form-group mt-2">
                   <label className="form-label">
-                    <h5>
-                      <b>Input Your Password to Implement the Changes</b>
-                    </h5>
+                    <h6>
+                      <br></br>Enter your password to implement the changes:
+                    </h6>
                   </label>
                   <input
                     className="form-control"

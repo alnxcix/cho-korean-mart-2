@@ -172,7 +172,7 @@ const InventoryComponent = (props) => {
         <tbody>
           {currentRows.map((product) => (
             <tr>
-              <td className="text-truncate">{product._id}</td>
+              <td className="text-wrap">{product._id}</td>
               <td>
                 <picture>
                   <source srcset={product.imgSrc} />
@@ -184,13 +184,11 @@ const InventoryComponent = (props) => {
                   />
                 </picture>
               </td>
-              <td className="text-truncate">{product.name}</td>
-              <td className="text-truncate">{product.category}</td>
-              <td className="text-truncate">{`₱ ${product.price.toFixed(
-                2
-              )}`}</td>
+              <td className="text-wrap">{product.name}</td>
+              <td className="text-wrap">{product.category}</td>
+              <td className="text-wrap">{`₱ ${product.price.toFixed(2)}`}</td>
               <td
-                className="text-truncate"
+                className="text-wrap"
                 style={{
                   backgroundColor:
                     product.stockQuantity <= product.criticalLevel

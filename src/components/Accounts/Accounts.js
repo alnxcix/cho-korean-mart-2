@@ -167,20 +167,23 @@ const Accounts = (props) => {
       </div>
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
+        <col span="1" style={{ width: "60px" }} />
         <thead>
           <tr>
-            {["#", "Name", "Username / ID", "Role", "Actions"].map((el) => (
-              <th>{el}</th>
-            ))}
+            <th className="text-center">#</th>
+            <th>Name</th>
+            <th>Username / ID</th>
+            <th>Role</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {currentRows.map((user, index) => (
             <tr>
-              <td className="text-truncate">{index + 1}</td>
-              <td className="text-truncate">{`${user.firstName} ${user.lastName}`}</td>
-              <td className="text-truncate">{user._id}</td>
-              <td className="text-truncate">{user.role}</td>
+              <td className="text-center text-wrap">{index + 1}</td>
+              <td className="text-wrap">{`${user.firstName} ${user.lastName}`}</td>
+              <td className="text-wrap">{user._id}</td>
+              <td className="text-wrap">{user.role}</td>
               <td>
                 <EditUser
                   setUsers={setUsers}

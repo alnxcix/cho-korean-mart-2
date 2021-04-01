@@ -130,28 +130,25 @@ const Products = (props) => {
       </div>
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
+        <col span="1" style={{ width: "60px" }} />
         <thead>
           <tr>
-            {[
-              "#",
-              "ID",
-              "Image",
-              "Product",
-              "Category",
-              "Price",
-              "Discount",
-              "Stock Quantity",
-              "Actions",
-            ].map((el) => (
-              <th>{el}</th>
-            ))}
+            <th className="text-center">#</th>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Stock Quantity</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {currentRows.map((product, index) => (
             <tr>
-              <td className="text-truncate">{index + 1}</td>
-              <td className="text-truncate">{product._id}</td>
+              <td className="text-center text-wrap">{index + 1}</td>
+              <td className="text-wrap">{product._id}</td>
               <td>
                 <picture>
                   <source srcset={product.imgSrc} />
@@ -163,14 +160,12 @@ const Products = (props) => {
                   />
                 </picture>
               </td>
-              <td className="text-truncate">{product.name}</td>
-              <td className="text-truncate">{product.category}</td>
-              <td className="text-truncate">{`₱ ${product.price.toFixed(
-                2
-              )}`}</td>
-              <td className="text-truncate">{product.discount} %</td>
+              <td className="text-wrap">{product.name}</td>
+              <td className="text-wrap">{product.category}</td>
+              <td className="text-wrap">{`₱ ${product.price.toFixed(2)}`}</td>
+              <td className="text-wrap">{product.discount} %</td>
               <td
-                className="text-truncate"
+                className="text-wrap"
                 style={{
                   backgroundColor:
                     product.stockQuantity <= product.criticalLevel
