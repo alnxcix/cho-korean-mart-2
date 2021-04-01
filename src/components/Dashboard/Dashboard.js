@@ -158,7 +158,9 @@ const Dashboard = (props) => {
                 ).length
               }
             </h1>
-            <p className="lead">Income Today:</p>
+            <p className="lead">
+            <FontAwesomeIcon icon={faHashtag} /> Income Today:
+            </p>
             <h1>
               ₱{" "}
               {transactions
