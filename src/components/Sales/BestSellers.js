@@ -97,14 +97,14 @@ const SalesReport = () => {
               <td className="text-center text-wrap">{index + 1}</td>
               <td className="text-wrap">
                 {product.product === undefined ? (
-                  <em>Deleted Product</em>
+                  <em>Deleted Product ({product._id})</em>
                 ) : (
                   product.product.name
                 )}
               </td>
               <td className="text-wrap">
                 {product.product === undefined ? (
-                  <em>Deleted Product</em>
+                  <em>Deleted Product ({product._id})</em>
                 ) : (
                   product.product.category
                 )}
