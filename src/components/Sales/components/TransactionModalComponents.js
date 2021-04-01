@@ -26,7 +26,7 @@ const TransactionModalComponents = (props) => {
           products.length > 0 ? (
             products.find((product) => product._id === cartItem._id) ===
             undefined ? (
-              <em>Deleted Product</em>
+              <em>Deleted Product ({cartItem._id})</em>
             ) : (
               products.find((product) => product._id === cartItem._id).name
             )
