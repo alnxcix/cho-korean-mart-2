@@ -14,9 +14,20 @@ const Products = (props) => {
   const [searchString, setSearchString] = useState("");
   const [propertyToBeSorted, setPropertyToBeSorted] = useState("_id");
   const [sortOrder, setSortOrder] = useState("asc");
+
+  const [criticalItemsOnly, setCriticalItemsOnly] = useState(false);
+
+  const checkIfCriticalItems = () => {
+    return criticalItemsOnly
+      ? products.filter(
+          (product) => product.stockQuantity <= product.criticalLevel
+        )
+      : products;
+  };
+
   const getFilteredProducts = () =>
     sortArray(
-      products.filter((product) =>
+      checkIfCriticalItems().filter((product) =>
         JSON.stringify(Object.values(product))
           .toLowerCase()
           .includes(searchString) && category === "All"
@@ -36,6 +47,7 @@ const Products = (props) => {
     indexOfLastRow
   );
   const chgPage = (pageNum) => setCurrentPage(pageNum);
+
   return (
     <>
       <div className="form-row">
@@ -99,6 +111,21 @@ const Products = (props) => {
             placeholder="Search"
             value={searchString}
           />
+        </div>
+        <div className="col input-group">
+          <button
+            className="btn btn-outline-dark col"
+            onClick={() => {
+              setCriticalItemsOnly(!criticalItemsOnly);
+              setCurrentPage(1);
+            }}
+          >
+            {criticalItemsOnly ? (
+              <>Show All Items</>
+            ) : (
+              <>Only Show Items at Critical Level</>
+            )}
+          </button>
         </div>
       </div>
       <hr />
