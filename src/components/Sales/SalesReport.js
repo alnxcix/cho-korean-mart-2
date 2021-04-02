@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
+import _ from "lodash";
 import $ from "jquery";
 import ChartComponent from "../ChartComponent";
 import DateRangePickerComponent from "../DateRangePickerComponent";
@@ -23,11 +24,14 @@ const SalesReport = () => {
   const [transactions, setTransactions] = useState([]);
   const formatDigits = (num) =>
     num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const [page, setPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const setDates = (start, end) => {
     setStartDate(start);
     setEndDate(end);
-    setCurrentPage(1);
   };
+  const getChunkedFilteredTransactions = () =>
+    _.chunk(getFilteredTransactions(), itemsPerPage);
   const getFilteredTransactions = () =>
     transactions.filter(
       (transaction) =>
@@ -69,17 +73,17 @@ const SalesReport = () => {
       .readAll()
       .then((transactions) => setTransactions(transactions));
   }, []);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
   //test
   // const [rowsPerPage, setRowsPerPage] = useState(1);
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = getFilteredTransactions().slice(
-    indexOfFirstRow,
-    indexOfLastRow
-  );
-  const chgPage = (pageNum) => setCurrentPage(pageNum);
+  // const indexOfLastRow = currentPage * rowsPerPage;
+  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  // const currentRows = getFilteredTransactions().slice(
+  //   indexOfFirstRow,
+  //   indexOfLastRow
+  // );
+  // const chgPage = (pageNum) => setCurrentPage(pageNum);
   return (
     <div className="p-3 mb-5">
       <h1 className="mb-4">Sales</h1>
@@ -127,10 +131,7 @@ const SalesReport = () => {
           </div>
           <input
             className="form-control"
-            onChange={(e) => {
-              setCurrentPage(1);
-              setSearchString(e.target.value);
-            }}
+            onChange={(e) => setSearchString(e.target.value)}
             placeholder="Search"
             value={searchString}
           />
@@ -168,57 +169,71 @@ const SalesReport = () => {
           </tr>
         </thead>
         <tbody>
-          {currentRows.map((transaction, index) => (
-            <tr>
-              <td className="text-wrap">{formatDigits(index + 1)}</td>
-              <td className="text-wrap">{transaction._id}</td>
-              <td className="text-wrap">{transaction.userId}</td>
-              <td className="text-wrap">
-                ₱{" "}
-                {formatDigits(
-                  transaction.cart
-                    .map(
-                      (cartItem) =>
-                        (cartItem.price -
-                          (cartItem.price / 100) * cartItem.discount) *
-                        cartItem.quantity
-                    )
-                    .reduce((acc, cur) => acc + cur, 0)
-                    .toFixed(2)
-                )}
-              </td>
-              <td className="text-wrap">
-                {formatDigits(
-                  transaction.cart
-                    .map((cartItem) => Number(cartItem.quantity))
-                    .reduce((acc, cur) => acc + cur, 0)
-                )}
-              </td>
-              <td className="text-wrap">
-                {moment(transaction.date).format("LL")}
-              </td>
-              <td>
-                <TransactionModalComponents transaction={transaction} />
-                &nbsp;
-                <button
-                  className="btn btn-warning"
-                  onClick={() =>
-                    generatePrintable(products, transaction, users)
-                  }
-                >
-                  <FontAwesomeIcon icon={faShare} />
-                </button>
-                {/* &nbsp;
+          {getFilteredTransactions().length > 0
+            ? getChunkedFilteredTransactions()[page] !== undefined
+              ? getChunkedFilteredTransactions()[page].map(
+                  (transaction, index) => (
+                    <tr>
+                      <td className="text-wrap">{formatDigits(index + 1)}</td>
+                      <td className="text-wrap">{transaction._id}</td>
+                      <td className="text-wrap">{transaction.userId}</td>
+                      <td className="text-wrap">
+                        ₱{" "}
+                        {formatDigits(
+                          transaction.cart
+                            .map(
+                              (cartItem) =>
+                                (cartItem.price -
+                                  (cartItem.price / 100) * cartItem.discount) *
+                                cartItem.quantity
+                            )
+                            .reduce((acc, cur) => acc + cur, 0)
+                            .toFixed(2)
+                        )}
+                      </td>
+                      <td className="text-wrap">
+                        {formatDigits(
+                          transaction.cart
+                            .map((cartItem) => Number(cartItem.quantity))
+                            .reduce((acc, cur) => acc + cur, 0)
+                        )}
+                      </td>
+                      <td className="text-wrap">
+                        {moment(transaction.date).format("LL")}
+                      </td>
+                      <td>
+                        <TransactionModalComponents transaction={transaction} />
+                        &nbsp;
+                        <button
+                          className="btn btn-warning"
+                          onClick={() =>
+                            generatePrintable(products, transaction, users)
+                          }
+                        >
+                          <FontAwesomeIcon icon={faShare} />
+                        </button>
+                        {/* &nbsp;
                 <DeleteTransactionModalComponents
                   setTransactions={setTransactions}
                   transaction={transaction}
                 /> */}
-              </td>
-            </tr>
-          ))}
+                      </td>
+                    </tr>
+                  )
+                )
+              : () => null
+            : () => null}
         </tbody>
+        <Pagination
+          getChunkedDataset={getChunkedFilteredTransactions}
+          getDataset={getFilteredTransactions}
+          itemsPerPage={itemsPerPage}
+          page={page}
+          setItemsPerPage={setItemsPerPage}
+          setPage={setPage}
+        />
       </table>
-      <Pagination
+      {/* <Pagination
         currentRows={currentRows}
         rowsPerPage={rowsPerPage}
         totalRows={getFilteredTransactions().length}
@@ -226,7 +241,7 @@ const SalesReport = () => {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         setRowsPerPage={setRowsPerPage}
-      />
+      /> */}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import $ from "jquery";
+import _ from "lodash";
 import sortArray from "sort-array";
 import AddUser from "./components/AddUser";
 import DeleteUser from "./components/DeleteUser";
@@ -17,6 +18,10 @@ const Accounts = (props) => {
   const [sortOrder, setSortOrder] = useState("asc");
   const formatDigits = (num) =>
     num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const [page, setPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const getChunkedFilteredUsers = () =>
+    _.chunk(getFilteredUsers(), itemsPerPage);
   const getFilteredUsers = () =>
     sortArray(
       users.filter((user) =>
@@ -37,14 +42,14 @@ const Accounts = (props) => {
         .then((users) => setUsers(users)),
     []
   );
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  //test
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
+  // test
   // const [rowsPerPage, setRowsPerPage] = useState(1);
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = getFilteredUsers().slice(indexOfFirstRow, indexOfLastRow);
-  const chgPage = (pageNum) => setCurrentPage(pageNum);
+  // const indexOfLastRow = currentPage * rowsPerPage;
+  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  // const currentRows = getFilteredUsers().slice(indexOfFirstRow, indexOfLastRow);
+  // const chgPage = (pageNum) => setCurrentPage(pageNum);
   return (
     <div className="p-3">
       <div
@@ -160,7 +165,8 @@ const Accounts = (props) => {
             className="form-control"
             onChange={(e) => {
               setSearchString(e.target.value);
-              setCurrentPage(1);
+              // setCurrentPage(1);
+              setPage(0);
             }}
             placeholder="Search"
             value={searchString}
@@ -180,33 +186,45 @@ const Accounts = (props) => {
           </tr>
         </thead>
         <tbody>
-          {currentRows.map((user, index) => (
-            <tr>
-              <td className="text-center text-wrap">
-                {formatDigits(index + 1)}
-              </td>
-              <td className="text-wrap">{`${user.firstName} ${user.lastName}`}</td>
-              <td className="text-wrap">{user._id}</td>
-              <td className="text-wrap">{user.role}</td>
-              <td>
-                <EditUser
-                  setUsers={setUsers}
-                  user={user}
-                  activeUser={activeUser}
-                  setActiveUser={setActiveUser}
-                />
-                &nbsp;
-                <DeleteUser
-                  setUsers={setUsers}
-                  user={user}
-                  activeUser={activeUser}
-                />
-              </td>
-            </tr>
-          ))}
+          {getFilteredUsers().length > 0
+            ? getChunkedFilteredUsers()[page] !== undefined
+              ? getChunkedFilteredUsers()[page].map((user, index) => (
+                  <tr>
+                    <td className="text-center text-wrap">
+                      {formatDigits(index + 1)}
+                    </td>
+                    <td className="text-wrap">{`${user.firstName} ${user.lastName}`}</td>
+                    <td className="text-wrap">{user._id}</td>
+                    <td className="text-wrap">{user.role}</td>
+                    <td>
+                      <EditUser
+                        setUsers={setUsers}
+                        user={user}
+                        activeUser={activeUser}
+                        setActiveUser={setActiveUser}
+                      />
+                      &nbsp;
+                      <DeleteUser
+                        setUsers={setUsers}
+                        user={user}
+                        activeUser={activeUser}
+                      />
+                    </td>
+                  </tr>
+                ))
+              : () => null
+            : () => null}
         </tbody>
+        <Pagination
+          getChunkedDataset={getChunkedFilteredUsers}
+          getDataset={getFilteredUsers}
+          itemsPerPage={itemsPerPage}
+          page={page}
+          setItemsPerPage={setItemsPerPage}
+          setPage={setPage}
+        />
       </table>
-      <Pagination
+      {/* <Pagination
         currentRows={currentRows}
         rowsPerPage={rowsPerPage}
         totalRows={getFilteredUsers().length}
@@ -214,7 +232,7 @@ const Accounts = (props) => {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         setRowsPerPage={setRowsPerPage}
-      />
+      /> */}
     </div>
   );
 };

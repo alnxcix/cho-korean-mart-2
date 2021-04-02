@@ -12,6 +12,8 @@ const InventoryComponent = (props) => {
   const [category, setCategory] = useState("All");
   const [products, setProducts] = useState([]);
   const [searchString, setSearchString] = useState("");
+  const [page, setPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const addToCart = (product) => {
     $("#posAlert1").slideUp();
     $("#posAlert2").slideUp();
@@ -21,6 +23,8 @@ const InventoryComponent = (props) => {
   };
   const formatDigits = (num) =>
     num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const getChunkedFilteredProducts = () =>
+    _.chunk(getFilteredProducts(), itemsPerPage);
   const getFilteredProducts = () =>
     sortArray(
       products.filter((product) =>
@@ -32,7 +36,6 @@ const InventoryComponent = (props) => {
       ),
       { by: "_id" }
     );
-
   const productMatchingIdSearchString = () =>
     getFilteredProducts().find((product) => product._id == searchString);
   const handleSubmit = (e) => {
@@ -82,17 +85,17 @@ const InventoryComponent = (props) => {
         .then((products) => setProducts(products)),
     []
   );
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
   //test
   // const [rowsPerPage, setRowsPerPage] = useState(1);
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = getFilteredProducts().slice(
-    indexOfFirstRow,
-    indexOfLastRow
-  );
-  const chgPage = (pageNum) => setCurrentPage(pageNum);
+  // const indexOfLastRow = currentPage * rowsPerPage;
+  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  // const currentRows = getFilteredProducts().slice(
+  //   indexOfFirstRow,
+  //   indexOfLastRow
+  // );
+  // const chgPage = (pageNum) => setCurrentPage(pageNum);
 
   //test
   // const formatter = (c, places) => {
@@ -183,10 +186,7 @@ const InventoryComponent = (props) => {
             </div>
             <input
               className="form-control"
-              onChange={(e) => {
-                setCurrentPage(1);
-                setSearchString(e.target.value.toLowerCase());
-              }}
+              onChange={(e) => setSearchString(e.target.value.toLowerCase())}
               placeholder="Search"
               value={searchString}
             />
@@ -211,57 +211,71 @@ const InventoryComponent = (props) => {
           </tr>
         </thead>
         <tbody>
-          {currentRows.map((product) => (
-            <tr>
-              <td className="text-wrap">{product._id}</td>
-              <td>
-                <picture>
-                  <source srcset={product.imgSrc} />
-                  <img
-                    alt=""
-                    className="img-thumbnail"
-                    src={logo}
-                    style={{ maxHeight: 60, maxWidth: 60 }}
-                  />
-                </picture>
-              </td>
-              <td className="text-wrap">{product.name}</td>
-              <td className="text-wrap">{product.category}</td>
-              <td className="text-wrap">{`₱ ${formatDigits(
-                product.price.toFixed(2)
-              )}`}</td>
-              <td
-                className="text-wrap"
-                style={{
-                  backgroundColor:
-                    product.stockQuantity <= product.criticalLevel
-                      ? "#ffb3b3"
-                      : "#b3ffbc",
-                }}
-              >
-                {formatDigits(product.stockQuantity)}
-              </td>
-              <td>
-                <button
-                  title={
-                    productExistsInCart(product) || product.stockQuantity == 0
-                      ? "Add Button Disabled"
-                      : `Add to Cart`
-                  }
-                  className="btn btn-danger btn-sm"
-                  disabled={
-                    productExistsInCart(product) || product.stockQuantity == 0
-                  }
-                  onClick={() => addToCart(product)}
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                </button>
-              </td>
-            </tr>
-          ))}
+          {getFilteredProducts().length > 0
+            ? getChunkedFilteredProducts()[page] !== undefined
+              ? getChunkedFilteredProducts()[page].map((product) => (
+                  <tr>
+                    <td className="text-wrap">{product._id}</td>
+                    <td>
+                      <picture>
+                        <source srcset={product.imgSrc} />
+                        <img
+                          alt=""
+                          className="img-thumbnail"
+                          src={logo}
+                          style={{ maxHeight: 60, maxWidth: 60 }}
+                        />
+                      </picture>
+                    </td>
+                    <td className="text-wrap">{product.name}</td>
+                    <td className="text-wrap">{product.category}</td>
+                    <td className="text-wrap">{`₱ ${formatDigits(
+                      product.price.toFixed(2)
+                    )}`}</td>
+                    <td
+                      className="text-wrap"
+                      style={{
+                        backgroundColor:
+                          product.stockQuantity <= product.criticalLevel
+                            ? "#ffb3b3"
+                            : "#b3ffbc",
+                      }}
+                    >
+                      {formatDigits(product.stockQuantity)}
+                    </td>
+                    <td>
+                      <button
+                        title={
+                          productExistsInCart(product) ||
+                          product.stockQuantity == 0
+                            ? "Add Button Disabled"
+                            : `Add to Cart`
+                        }
+                        className="btn btn-danger btn-sm"
+                        disabled={
+                          productExistsInCart(product) ||
+                          product.stockQuantity == 0
+                        }
+                        onClick={() => addToCart(product)}
+                      >
+                        <FontAwesomeIcon icon={faPlus} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              : () => null
+            : () => null}
         </tbody>
+        <Pagination
+          getChunkedDataset={getChunkedFilteredProducts}
+          getDataset={getFilteredProducts}
+          itemsPerPage={itemsPerPage}
+          page={page}
+          setItemsPerPage={setItemsPerPage}
+          setPage={setPage}
+        />
       </table>
-      <Pagination
+      {/* <Pagination
         currentRows={currentRows}
         rowsPerPage={rowsPerPage}
         totalRows={getFilteredProducts().length}
@@ -269,7 +283,7 @@ const InventoryComponent = (props) => {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         setRowsPerPage={setRowsPerPage}
-      />
+      /> */}
     </div>
   );
 };

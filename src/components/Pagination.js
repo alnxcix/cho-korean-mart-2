@@ -1,94 +1,134 @@
-import React from "react"; //https://www.youtube.com/watch?v=IYCa1F-OWmk
+import {
+  faAngleDoubleLeft,
+  faAngleLeft,
+  faAngleDoubleRight,
+  faAngleRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretRight, faCaretLeft } from "@fortawesome/free-solid-svg-icons";
 
-const Pagination = ({
-  currentRows,
-  rowsPerPage,
-  totalRows,
-  chgPage,
-  currentPage,
-  setCurrentPage,
-  setRowsPerPage,
-}) => {
-  const pageNums = [];
-  for (let i = 1; i <= Math.ceil(totalRows / rowsPerPage); i++) {
-    pageNums.push(i);
-  }
+const Pagination = (props) => {
+  let {
+    getChunkedDataset,
+    getDataset,
+    itemsPerPage,
+    page,
+    setItemsPerPage,
+    setPage,
+  } = props;
+  // const pageNums = [];
+  // for (let i = 1; i <= Math.ceil(totalRows / rowsPerPage); i++) {
+  //   pageNums.push(i);
+  // }
   return (
-    <div style={{}}>
-      <div style={{ float: "right" }}>
-        <caption className="row m-auto">
-          {`Showing ${currentRows.length} of ${totalRows} ${
-            totalRows > 1 ? "entries" : "entry"
-          }.`}
-          &nbsp;&nbsp; &nbsp;&nbsp;
+    <caption>
+      <div class="form-inline">
+        <span className="mr-auto">
+          {getDataset().length > 0
+            ? getChunkedDataset()[page] !== undefined
+              ? `Showing ${itemsPerPage * page + 1} - ${
+                  itemsPerPage * page + getChunkedDataset()[page].length
+                } of ${getDataset().length} ${
+                  getDataset().length > 1 ? "entries" : "entry"
+                }.`
+              : () => null
+            : () => null}
+        </span>
+        <div className="btn-group mr-3" role="group">
           <button
-            className="btn btn-light"
-            title="Previous"
-            data-toggle="tool-tip"
-            disabled={currentPage == 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
+            className="btn btn-outline-dark shadow-none"
+            disabled={page === 0}
+            onClick={() => setPage(0)}
           >
-            <FontAwesomeIcon icon={faCaretLeft} />
-          </button>{" "}
-          &nbsp;
-          <nav>
-            <ul className="pagination">
-              {pageNums.map((num) => (
-                <li key={num} className="page-item badge badge-sm badge-light">
-                  <a
-                    onClick={() => chgPage(num)}
-                    className={
-                      currentPage === num
-                        ? "page-link text-danger"
-                        : "page-link text-dark"
-                    }
-                  >
-                    {num}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          &nbsp;
-          <button
-            className="btn btn-light"
-            title="Next"
-            data-toggle="tool-tip"
-            disabled={currentPage == Math.ceil(totalRows / rowsPerPage)}
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
-            <FontAwesomeIcon icon={faCaretRight} />
+            <FontAwesomeIcon icon={faAngleDoubleLeft} />
           </button>
-        </caption>
-      </div>
-      <br></br>
-      <div className="form-row">
-        <div className="col input-group">
-          <div className="input-group-prepend">
-            <caption className="input-group-text">Show</caption>
-          </div>
-          <select
-            className="custom-select col-2"
-            onChange={(e) => {
-              setRowsPerPage(e.target.value);
-              setCurrentPage(1);
-            }}
-            value={rowsPerPage}
+          <button
+            className="btn btn-outline-dark shadow-none"
+            disabled={page === 0}
+            onClick={() => setPage(page > 0 ? page - 1 : page)}
           >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
-          <div className="input-group-append">
-            <caption className="input-group-text">entries</caption>
-          </div>
+            <FontAwesomeIcon icon={faAngleLeft} />
+          </button>
+          {page === 0 ? (
+            () => null
+          ) : page - 1 === 0 ? (
+            () => null
+          ) : (
+            <button
+              className="btn btn-outline-dark shadow-none"
+              onClick={() => setPage(page - 2)}
+            >
+              {page - 1}
+            </button>
+          )}
+          {page === 0 ? (
+            () => null
+          ) : (
+            <button
+              className="btn btn-outline-dark shadow-none"
+              onClick={() => setPage(page - 1)}
+            >
+              {page}
+            </button>
+          )}
+          <button className="btn btn-dark shadow-none">{page + 1}</button>
+          {page + 1 === getChunkedDataset().length ||
+          getChunkedDataset()[page] === undefined ? (
+            () => null
+          ) : (
+            <button
+              className="btn btn-outline-dark shadow-none"
+              onClick={() => setPage(page + 1)}
+            >
+              {page + 2}
+            </button>
+          )}
+          {page + 1 === getChunkedDataset().length ||
+          getChunkedDataset()[page] === undefined ? (
+            () => null
+          ) : page + 2 === getChunkedDataset().length ||
+            getChunkedDataset()[page] === undefined ? (
+            () => null
+          ) : (
+            <button
+              className="btn btn-outline-dark shadow-none"
+              onClick={() => setPage(page + 2)}
+            >
+              {page + 3}
+            </button>
+          )}
+          <button
+            className="btn btn-outline-dark shadow-none"
+            disabled={
+              page + 1 === getChunkedDataset().length ||
+              getChunkedDataset()[page] === undefined
+            }
+            onClick={() => setPage(page + 1)}
+          >
+            <FontAwesomeIcon icon={faAngleRight} />
+          </button>
+          <button
+            className="btn btn-outline-dark shadow-none"
+            disabled={
+              page + 1 === getChunkedDataset().length ||
+              getChunkedDataset()[page] === undefined
+            }
+            onClick={() => setPage(getChunkedDataset().length - 1)}
+          >
+            <FontAwesomeIcon icon={faAngleDoubleRight} />
+          </button>
         </div>
+        <label className="mr-2">Show</label>
+        <select
+          className="custom-select"
+          onChange={(e) => setItemsPerPage(e.target.value)}
+          value={itemsPerPage}
+        >
+          {[5, 10, 25, 50, 100].map((el) => (
+            <option value={el}>{el}</option>
+          ))}
+        </select>
       </div>
-    </div>
+    </caption>
   );
 };
 
