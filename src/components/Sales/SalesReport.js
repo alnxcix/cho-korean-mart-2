@@ -148,6 +148,9 @@ const SalesReport = () => {
       </div>
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
+        <col span="1" style={{ width: "60px" }} />
+        <col span="5" />
+        <col span="1" style={{ width: "120px" }} />
         <thead>
           <tr>
             {[

@@ -189,9 +189,9 @@ const InventoryComponent = (props) => {
               "Price",
               "Stock Quantity",
             ].map((el) => (
-              <th style={el == "Image" ? { width: 100 } : {}}>{el}</th>
+              <th style={el == "Image" ? { width: 90 } : {}}>{el}</th>
             ))}
-            <th style={{ width: 100 }}>Action</th>
+            <th style={{ width: 75 }}>Action</th>
           </tr>
         </thead>
         <tbody>

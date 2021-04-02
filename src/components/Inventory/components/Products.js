@@ -135,6 +135,8 @@ const Products = (props) => {
         <col span="1" style={{ width: "100px" }} />
         <col span="3" />
         <col span="1" style={{ width: "100px" }} />
+        <col span="1" />
+        <col span="1" style={{ width: "120px" }} />
         <thead>
           <tr>
             <th className="text-center">#</th>
