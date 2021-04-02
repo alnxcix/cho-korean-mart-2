@@ -27,7 +27,7 @@ const Accounts = (props) => {
       users.filter((user) =>
         JSON.stringify(Object.values(user))
           .toLowerCase()
-          .includes(searchString) && role === "All"
+          .includes(searchString.toLowerCase()) && role === "All"
           ? true
           : user.role === role
       ),
@@ -164,7 +164,7 @@ const Accounts = (props) => {
           <input
             className="form-control"
             onChange={(e) => {
-              setSearchString(e.target.value);
+              setSearchString(e.target.value) 
               // setCurrentPage(1);
               setPage(0);
             }}

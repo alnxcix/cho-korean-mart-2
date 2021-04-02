@@ -121,7 +121,10 @@ const History = (props) => {
           </div>
           <input
             className="form-control"
-            onChange={(e) => setSearchString(e.target.value)}
+            onChange={(e) => {
+              setSearchString(e.target.value) 
+              setPage(0)
+            }}
             placeholder="Search"
             value={searchString}
           />

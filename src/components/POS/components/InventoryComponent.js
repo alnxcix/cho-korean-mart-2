@@ -30,7 +30,7 @@ const InventoryComponent = (props) => {
       products.filter((product) =>
         JSON.stringify(Object.values(product))
           .toLowerCase()
-          .includes(searchString) && category === "All"
+          .includes(searchString.toLowerCase()) && category === "All"
           ? true
           : product.category === category
       ),
@@ -186,7 +186,10 @@ const InventoryComponent = (props) => {
             </div>
             <input
               className="form-control"
-              onChange={(e) => setSearchString(e.target.value.toLowerCase())}
+              onChange={(e) => {
+                setSearchString(e.target.value) 
+                setPage(0)
+              }}
               placeholder="Search"
               value={searchString}
             />

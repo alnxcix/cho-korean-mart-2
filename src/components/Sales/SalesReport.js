@@ -37,7 +37,7 @@ const SalesReport = () => {
       (transaction) =>
         JSON.stringify(Object.values(transaction))
           .toLowerCase()
-          .includes(searchString) &&
+          .includes(searchString.toLowerCase()) &&
         moment(transaction.date).isBetween(moment(startDate), moment(endDate))
     );
   const getFilteredTransactionsTotalIncome = () =>
@@ -131,8 +131,11 @@ const SalesReport = () => {
           </div>
           <input
             className="form-control"
-            onChange={(e) => setSearchString(e.target.value)}
-            placeholder="Search"
+            onChange={(e) => {
+              setSearchString(e.target.value) 
+              setPage(0)
+            }}
+            placeholder="Search (Transaction ID, Seller ID, Product ID)"
             value={searchString}
           />
         </div>
@@ -143,6 +146,18 @@ const SalesReport = () => {
             </div>
           </div>
           <DateRangePickerComponent setDates={setDates} />
+        </div>
+         <div className="col input-group">
+          <div className="input-group-prepend">
+            <div className="input-group-text bg-white">
+              <b>Total Income:</b>
+            </div>
+          </div> 
+           <input
+            className="form-control bg-white" 
+            disabled 
+            value={`₱ ${formatDigits(getFilteredTransactionsTotalIncome())}`}
+          />
         </div>
         {/* <button className="btn btn-dark">
           <FontAwesomeIcon icon={faShare} /> Export

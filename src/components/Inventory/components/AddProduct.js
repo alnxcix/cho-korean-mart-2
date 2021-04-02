@@ -31,12 +31,12 @@ const AddProduct = (props) => {
       .require("electron")
       .remote.getGlobal("products")
       .create({
-        _id: _id,
+        _id: _id.trim(),
         category: category,
         criticalLevel: Number(criticalLevel),
         discount: Number(discount),
         imgSrc: imgSrc,
-        name: name,
+        name: name.trim(),
         price: Number(price),
         stockQuantity: Number(stockQuantity),
       })
@@ -51,7 +51,7 @@ const AddProduct = (props) => {
         .remote.getGlobal("stockHistoryEntries")
         .create({
           date: Date.now(),
-          productId: _id,
+          productId: _id.trim(),
           inOut: "in",
           quantity: Number(stockQuantity),
           userId: activeUser._id,
@@ -123,7 +123,7 @@ const AddProduct = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      onChange={(e) => set_id(e.target.value.trim())}
+                      onChange={(e) => set_id(e.target.value)}
                       placeholder="ID"
                       required
                       value={_id}
@@ -135,7 +135,7 @@ const AddProduct = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      onChange={(e) => setName(e.target.value.trim())}
+                      onChange={(e) => setName(e.target.value)}
                       placeholder="Product Name"
                       required
                       value={name}

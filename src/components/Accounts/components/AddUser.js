@@ -36,10 +36,10 @@ const AddUser = (props) => {
       .require("electron")
       .remote.getGlobal("users")
       .create({
-        _id: _id,
-        firstName: firstName,
+        _id: _id.trim(),
+        firstName: firstName.trim(),
         imgSrc: imgSrc,
-        lastName: lastName,
+        lastName: lastName.trim(),
         password: password,
         role: role,
         newPass: true,
@@ -108,7 +108,7 @@ const AddUser = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      onChange={(e) => setFirstName(e.target.value.trim())}
+                      onChange={(e) => setFirstName(e.target.value)}
                       placeholder="First Name"
                       required
                       value={firstName}
@@ -120,7 +120,7 @@ const AddUser = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      onChange={(e) => setLastName(e.target.value.trim())}
+                      onChange={(e) => setLastName(e.target.value)}
                       placeholder="Last Name"
                       required
                       value={lastName}
@@ -132,7 +132,7 @@ const AddUser = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      onChange={(e) => set_id(e.target.value.trim())}
+                      onChange={(e) => set_id(e.target.value)}
                       placeholder="Username / ID"
                       required
                       value={_id}

@@ -15,19 +15,21 @@ const Pagination = (props) => {
     setItemsPerPage,
     setPage,
   } = props;
+    const formatDigits = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   // const pageNums = [];
   // for (let i = 1; i <= Math.ceil(totalRows / rowsPerPage); i++) {
   //   pageNums.push(i);
   // }
   return (
-    <caption>
-      <div class="form-inline">
+    <caption className='mb-5'>
+      <div class="form-inline ">
         <span className="mr-auto">
           {getDataset().length > 0
             ? getChunkedDataset()[page] !== undefined
-              ? `Showing ${itemsPerPage * page + 1} - ${
-                  itemsPerPage * page + getChunkedDataset()[page].length
-                } of ${getDataset().length} ${
+              ? `Showing ${formatDigits(itemsPerPage * page + 1)} - ${
+                formatDigits(itemsPerPage * page + getChunkedDataset()[page].length) 
+                } of ${formatDigits(getDataset().length)} ${
                   getDataset().length > 1 ? "entries" : "entry"
                 }.`
               : () => null
@@ -120,7 +122,10 @@ const Pagination = (props) => {
         <label className="mr-2">Show</label>
         <select
           className="custom-select"
-          onChange={(e) => setItemsPerPage(e.target.value)}
+          onChange={(e) => {
+            setItemsPerPage(e.target.value)
+            setPage(0)
+          }}
           value={itemsPerPage}
         >
           {[5, 10, 25, 50, 100].map((el) => (
