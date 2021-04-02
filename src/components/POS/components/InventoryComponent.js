@@ -184,10 +184,7 @@ const InventoryComponent = (props) => {
             </div>
             <input
               className="form-control"
-              onChange={(e) => {
-                setCurrentPage(1);
-                setSearchString(e.target.value.toLowerCase());
-              }}
+              onChange={(e) => setSearchString(e.target.value.toLowerCase())}
               placeholder="Search"
               value={searchString}
             />

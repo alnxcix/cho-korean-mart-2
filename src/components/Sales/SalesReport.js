@@ -130,10 +130,7 @@ const SalesReport = () => {
           </div>
           <input
             className="form-control"
-            onChange={(e) => {
-              setCurrentPage(1);
-              setSearchString(e.target.value);
-            }}
+            onChange={(e) => setSearchString(e.target.value)}
             placeholder="Search"
             value={searchString}
           />
