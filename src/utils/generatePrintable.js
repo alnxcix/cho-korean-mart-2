@@ -1,6 +1,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import moment from "moment";
+import logo from "../assets/ChoKoreanMart.jpg";
 
 export const generatePrintable = (products, transaction, users) => {
   let columns = [
@@ -30,8 +31,8 @@ export const generatePrintable = (products, transaction, users) => {
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   let doc = new jsPDF("portrait", "px", "a4", "false");
-  doc.text(30, 60, "logo here");
-  //doc.addImage(imageData, format, x, y, width, height, alias, compression, rotation)
+  // doc.text(30, 60, "logo here");
+  doc.addImage(logo, "JPG", 30, 15, 100, 100);
   doc.setFontSize(11);
   doc.setFont("Helvetica", "bold");
   doc.text(350, 40, "CHO Korean Mart");

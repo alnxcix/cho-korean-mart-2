@@ -8,6 +8,8 @@ const TransactionModalComponents = (props) => {
   const [products, setProducts] = useState([]);
   const [transaction, setTransaction] = useState(props.transaction);
   const [users, setUsers] = useState([]);
+  const formatDigits = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const getModifiedCart = () =>
     transaction.cart.map((cartItem) => {
       let unitPrice = cartItem.price / 1.12;
@@ -122,15 +124,21 @@ const TransactionModalComponents = (props) => {
                 {getModifiedCart().map((cartItem) => (
                   <tr>
                     <td className="text-wrap">{cartItem.name}</td>
-                    <td className="text-wrap">{cartItem.quantity}</td>
                     <td className="text-wrap">
-                      ₱ {cartItem.unitPrice.toFixed(2)}
+                      {formatDigits(cartItem.quantity)}
                     </td>
-                    <td className="text-wrap">₱ {cartItem.vat.toFixed(2)}</td>
                     <td className="text-wrap">
-                      ₱ {cartItem.discount.toFixed(2)}
+                      ₱ {formatDigits(cartItem.unitPrice.toFixed(2))}
                     </td>
-                    <td className="text-wrap">₱ {cartItem.total.toFixed(2)}</td>
+                    <td className="text-wrap">
+                      ₱ {formatDigits(cartItem.vat.toFixed(2))}
+                    </td>
+                    <td className="text-wrap">
+                      ₱ {formatDigits(cartItem.discount.toFixed(2))}
+                    </td>
+                    <td className="text-wrap">
+                      ₱ {formatDigits(cartItem.total.toFixed(2))}
+                    </td>
                   </tr>
                 ))}
                 {transaction.applySpecialDiscount ? (
@@ -144,10 +152,14 @@ const TransactionModalComponents = (props) => {
                   </td>
                   <td>
                     ₱{" "}
-                    {getModifiedCart()
-                      .map((cartItem) => cartItem.unitPrice * cartItem.quantity)
-                      .reduce((acc, cur) => acc + cur, 0)
-                      .toFixed(2)}
+                    {formatDigits(
+                      getModifiedCart()
+                        .map(
+                          (cartItem) => cartItem.unitPrice * cartItem.quantity
+                        )
+                        .reduce((acc, cur) => acc + cur, 0)
+                        .toFixed(2)
+                    )}
                   </td>
                 </tr>
                 <tr>
@@ -156,10 +168,12 @@ const TransactionModalComponents = (props) => {
                   </td>
                   <td>
                     ₱{" "}
-                    {getModifiedCart()
-                      .map((cartItem) => cartItem.vat * cartItem.quantity)
-                      .reduce((acc, cur) => acc + cur, 0)
-                      .toFixed(2)}
+                    {formatDigits(
+                      getModifiedCart()
+                        .map((cartItem) => cartItem.vat * cartItem.quantity)
+                        .reduce((acc, cur) => acc + cur, 0)
+                        .toFixed(2)
+                    )}
                   </td>
                 </tr>
                 <tr>
@@ -168,10 +182,14 @@ const TransactionModalComponents = (props) => {
                   </td>
                   <td>
                     ₱{" "}
-                    {getModifiedCart()
-                      .map((cartItem) => cartItem.discount * cartItem.quantity)
-                      .reduce((acc, cur) => acc + cur, 0)
-                      .toFixed(2)}
+                    {formatDigits(
+                      getModifiedCart()
+                        .map(
+                          (cartItem) => cartItem.discount * cartItem.quantity
+                        )
+                        .reduce((acc, cur) => acc + cur, 0)
+                        .toFixed(2)
+                    )}
                   </td>
                 </tr>
                 <tr>
@@ -180,16 +198,46 @@ const TransactionModalComponents = (props) => {
                   </td>
                   <td>
                     ₱{" "}
-                    {getModifiedCart()
-                      .map(
-                        (cartItem) =>
-                          (cartItem.unitPrice +
-                            cartItem.vat -
-                            cartItem.discount) *
-                          cartItem.quantity
-                      )
-                      .reduce((acc, cur) => acc + cur, 0)
-                      .toFixed(2)}
+                    {formatDigits(
+                      getModifiedCart()
+                        .map(
+                          (cartItem) =>
+                            (cartItem.unitPrice +
+                              cartItem.vat -
+                              cartItem.discount) *
+                            cartItem.quantity
+                        )
+                        .reduce((acc, cur) => acc + cur, 0)
+                        .toFixed(2)
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={5}>
+                    <span className="float-right">Cash</span>
+                  </td>
+                  <td>₱ {formatDigits(transaction.cash.toFixed(2))}</td>
+                </tr>
+                <tr>
+                  <td colSpan={5}>
+                    <span className="float-right">Change</span>
+                  </td>
+                  <td>
+                    ₱{" "}
+                    {formatDigits(
+                      (
+                        transaction.cash -
+                        getModifiedCart()
+                          .map(
+                            (cartItem) =>
+                              (cartItem.unitPrice +
+                                cartItem.vat -
+                                cartItem.discount) *
+                              cartItem.quantity
+                          )
+                          .reduce((acc, cur) => acc + cur, 0)
+                      ).toFixed(2)
+                    )}
                   </td>
                 </tr>
               </table>
