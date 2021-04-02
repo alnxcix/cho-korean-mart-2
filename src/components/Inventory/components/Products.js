@@ -15,6 +15,10 @@ const Products = (props) => {
   const [propertyToBeSorted, setPropertyToBeSorted] = useState("_id");
   const [sortOrder, setSortOrder] = useState("asc");
   const [criticalItemsOnly, setCriticalItemsOnly] = useState(false);
+  const [page, setPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const getChunkedFilteredProducts = () =>
+    _.chunk(getFilteredProducts(), itemsPerPage);
   const getFilteredProducts = () =>
     sortArray(
       products
@@ -32,18 +36,17 @@ const Products = (props) => {
         ),
       { by: propertyToBeSorted, order: sortOrder }
     );
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
   //test
   // const [rowsPerPage, setRowsPerPage] = useState(1);
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = getFilteredProducts().slice(
-    indexOfFirstRow,
-    indexOfLastRow
-  );
-  const chgPage = (pageNum) => setCurrentPage(pageNum);
-
+  // const indexOfLastRow = currentPage * rowsPerPage;
+  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  // const currentRows = getFilteredProducts().slice(
+  //   indexOfFirstRow,
+  //   indexOfLastRow
+  // );
+  // const chgPage = (pageNum) => setCurrentPage(pageNum);
   return (
     <>
       <div className="form-row">
@@ -115,10 +118,7 @@ const Products = (props) => {
           type="checkbox"
           className="custom-control-input"
           id="criticalLevelSwitch"
-          onChange={() => {
-            setCriticalItemsOnly(!criticalItemsOnly);
-            setCurrentPage(1);
-          }}
+          onChange={() => setCriticalItemsOnly(!criticalItemsOnly)}
           checked={criticalItemsOnly}
         />
         <label className="custom-control-label" for="criticalLevelSwitch">
@@ -147,63 +147,68 @@ const Products = (props) => {
           </tr>
         </thead>
         <tbody>
-          {currentRows.map((product, index) => (
-            <tr>
-              <td className="text-center text-wrap">{index + 1}</td>
-              <td className="text-wrap">{product._id}</td>
-              <td>
-                <picture>
-                  <source srcset={product.imgSrc} />
-                  <img
-                    alt=""
-                    className="img-thumbnail"
-                    src={logo}
-                    style={{ maxHeight: 60, maxWidth: 60 }}
-                  />
-                </picture>
-              </td>
-              <td className="text-wrap">{product.name}</td>
-              <td className="text-wrap">{product.category}</td>
-              <td className="text-wrap">{`₱ ${product.price.toFixed(2)}`}</td>
-              <td className="text-wrap">{product.discount} %</td>
-              <td
-                className="text-wrap"
-                style={{
-                  backgroundColor:
-                    product.stockQuantity <= product.criticalLevel
-                      ? "#ffb3b3"
-                      : "#b3ffbc",
-                }}
-              >
-                {product.stockQuantity}
-              </td>
-              <td>
-                <EditProduct
-                  activeUser={activeUser}
-                  product={product}
-                  setProducts={setProducts}
-                  setStockHistoryEntries={setStockHistoryEntries}
-                />
-                &nbsp;
-                <DeleteProduct
-                  activeUser={activeUser}
-                  product={product}
-                  setProducts={setProducts}
-                />
-              </td>
-            </tr>
-          ))}
+          {getFilteredProducts().length > 0
+            ? getChunkedFilteredProducts()[page] !== undefined
+              ? getChunkedFilteredProducts()[page].map((product, index) => (
+                  <tr>
+                    <td className="text-center text-wrap">{index + 1}</td>
+                    <td className="text-wrap">{product._id}</td>
+                    <td>
+                      <picture>
+                        <source srcset={product.imgSrc} />
+                        <img
+                          alt=""
+                          className="img-thumbnail"
+                          src={logo}
+                          style={{ maxHeight: 60, maxWidth: 60 }}
+                        />
+                      </picture>
+                    </td>
+                    <td className="text-wrap">{product.name}</td>
+                    <td className="text-wrap">{product.category}</td>
+                    <td className="text-wrap">{`₱ ${product.price.toFixed(
+                      2
+                    )}`}</td>
+                    <td className="text-wrap">{product.discount} %</td>
+                    <td
+                      className="text-wrap"
+                      style={{
+                        backgroundColor:
+                          product.stockQuantity <= product.criticalLevel
+                            ? "#ffb3b3"
+                            : "#b3ffbc",
+                      }}
+                    >
+                      {product.stockQuantity}
+                    </td>
+                    <td>
+                      <EditProduct
+                        activeUser={activeUser}
+                        product={product}
+                        setProducts={setProducts}
+                        setStockHistoryEntries={setStockHistoryEntries}
+                      />
+                      &nbsp;
+                      <DeleteProduct
+                        activeUser={activeUser}
+                        product={product}
+                        setProducts={setProducts}
+                      />
+                    </td>
+                  </tr>
+                ))
+              : () => null
+            : () => null}
         </tbody>
+        <Pagination
+          getChunkedDataset={getChunkedFilteredProducts}
+          getDataset={getFilteredProducts}
+          itemsPerPage={itemsPerPage}
+          page={page}
+          setItemsPerPage={setItemsPerPage}
+          setPage={setPage}
+        />
       </table>
-      <Pagination
-        currentRows={currentRows}
-        rowsPerPage={rowsPerPage}
-        totalRows={getFilteredProducts().length}
-        chgPage={chgPage}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        setRowsPerPage={setRowsPerPage}
-      />
     </>
   );
 };

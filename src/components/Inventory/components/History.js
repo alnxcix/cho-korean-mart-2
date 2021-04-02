@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { faCalendar, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import _ from "lodash";
 import moment from "moment";
 import sortArray from "sort-array";
 import DateRangePickerComponent from "../../DateRangePickerComponent";
@@ -15,12 +16,16 @@ const History = (props) => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [startDate, setStartDate] = useState(moment().startOf("d").toDate());
   const [users, setUsers] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   //test
   // const [rowsPerPage, setRowsPerPage] = useState(1);
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  // const indexOfLastRow = currentPage * rowsPerPage;
+  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const getChunkedFilteredStockHistoryEntries = () =>
+    _.chunk(getFilteredStockHistoryEntries(), itemsPerPage);
   const getFilteredStockHistoryEntries = () =>
     sortArray(
       stockHistoryEntries
@@ -54,7 +59,6 @@ const History = (props) => {
   const setDates = (start, end) => {
     setStartDate(start);
     setEndDate(end);
-    setCurrentPage(1);
   };
   useEffect(() => {
     window
@@ -68,11 +72,11 @@ const History = (props) => {
       .readAll()
       .then((users) => setUsers(users));
   }, []);
-  const currentRows = getFilteredStockHistoryEntries().slice(
-    indexOfFirstRow,
-    indexOfLastRow
-  );
-  const chgPage = (pageNum) => setCurrentPage(pageNum);
+  // const currentRows = getFilteredStockHistoryEntries().slice(
+  //   indexOfFirstRow,
+  //   indexOfLastRow
+  // );
+  // const chgPage = (pageNum) => setCurrentPage(pageNum);
   return (
     <>
       <div className="form-row">
@@ -138,43 +142,50 @@ const History = (props) => {
           </tr>
         </thead>
         <tbody>
-          {currentRows.map((stockHistoryEntry, index) => (
-            <tr>
-              <td className="text-center text-wrap">{index + 1}</td>
-              <td className="text-wrap">
-                {moment(stockHistoryEntry.date).format("LL")}
-              </td>
-              <td className="text-wrap">
-                {stockHistoryEntry.product === undefined ? (
-                  <em>Deleted Product ({stockHistoryEntry.productId})</em>
-                ) : (
-                  stockHistoryEntry.product.name
-                )}
-              </td>
-              <td className="text-wrap">
-                {stockHistoryEntry.inOut == "in" ? <>+</> : <>-</>}
-                {stockHistoryEntry.quantity}
-              </td>
-              <td className="text-wrap">
-                {stockHistoryEntry.user === undefined ? (
-                  <em>Deleted User</em>
-                ) : (
-                  `${stockHistoryEntry.user.firstName} ${stockHistoryEntry.user.lastName}`
-                )}
-              </td>
-            </tr>
-          ))}
+          {getFilteredStockHistoryEntries().length > 0
+            ? getChunkedFilteredStockHistoryEntries()[page] !== undefined
+              ? getChunkedFilteredStockHistoryEntries()[page].map(
+                  (stockHistoryEntry, index) => (
+                    <tr>
+                      <td className="text-center text-wrap">{index + 1}</td>
+                      <td className="text-wrap">
+                        {moment(stockHistoryEntry.date).format("LL")}
+                      </td>
+                      <td className="text-wrap">
+                        {stockHistoryEntry.product === undefined ? (
+                          <em>
+                            Deleted Product ({stockHistoryEntry.productId})
+                          </em>
+                        ) : (
+                          stockHistoryEntry.product.name
+                        )}
+                      </td>
+                      <td className="text-wrap">
+                        {stockHistoryEntry.inOut == "in" ? <>+</> : <>-</>}
+                        {stockHistoryEntry.quantity}
+                      </td>
+                      <td className="text-wrap">
+                        {stockHistoryEntry.user === undefined ? (
+                          <em>Deleted User</em>
+                        ) : (
+                          `${stockHistoryEntry.user.firstName} ${stockHistoryEntry.user.lastName}`
+                        )}
+                      </td>
+                    </tr>
+                  )
+                )
+              : () => null
+            : () => null}
         </tbody>
+        <Pagination
+          getChunkedDataset={getChunkedFilteredStockHistoryEntries}
+          getDataset={getFilteredStockHistoryEntries}
+          itemsPerPage={itemsPerPage}
+          page={page}
+          setItemsPerPage={setItemsPerPage}
+          setPage={setPage}
+        />
       </table>
-      <Pagination
-        rowsPerPage={rowsPerPage}
-        totalRows={getFilteredStockHistoryEntries().length}
-        chgPage={chgPage}
-        currentPage={currentPage}
-        currentRows={currentRows}
-        setCurrentPage={setCurrentPage}
-        setRowsPerPage={setRowsPerPage}
-      />
     </>
   );
 };
