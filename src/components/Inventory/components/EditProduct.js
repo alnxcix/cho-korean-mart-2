@@ -127,7 +127,7 @@ const EditProduct = (props) => {
                     <input
                       className="form-control"
                       onChange={(e) =>
-                        setProduct({ ...product, name: e.target.value })
+                        setProduct({ ...product, name: e.target.value.trim() })
                       }
                       placeholder="Product Name"
                       required

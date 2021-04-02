@@ -1,11 +1,16 @@
 import { useState } from "react";
 import CartComponent from "./components/CartComponent";
 import InventoryComponent from "./components/InventoryComponent";
+import $ from "jquery";
 
 const POS = (props) => {
   let { activeUser } = props;
   const [cartItems, setCartItems] = useState([]);
-  const updateItemQuantity = (product, newQuantity) =>
+  const updateItemQuantity = (product, newQuantity) => {
+    $("#posAlert1").slideUp();
+    $("#posAlert2").slideUp();
+    $("#posAlert3").slideUp();
+    $("#posAlert4").slideUp();
     setCartItems(
       cartItems.map((cartItem) => {
         cartItem.quantity =
@@ -15,6 +20,7 @@ const POS = (props) => {
         return cartItem;
       })
     );
+  };
   return (
     <div className="align-items-stretch d-flex h-100">
       <InventoryComponent

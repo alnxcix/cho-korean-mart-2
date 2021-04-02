@@ -123,7 +123,7 @@ const AddProduct = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      onChange={(e) => set_id(e.target.value)}
+                      onChange={(e) => set_id(e.target.value.trim())}
                       placeholder="ID"
                       required
                       value={_id}
@@ -135,7 +135,7 @@ const AddProduct = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => setName(e.target.value.trim())}
                       placeholder="Product Name"
                       required
                       value={name}

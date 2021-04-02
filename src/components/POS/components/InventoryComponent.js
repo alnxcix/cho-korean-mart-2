@@ -16,6 +16,7 @@ const InventoryComponent = (props) => {
     $("#posAlert1").slideUp();
     $("#posAlert2").slideUp();
     $("#posAlert3").slideUp();
+    $("#posAlert4").slideUp();
     setCartItems([...cartItems, { product: product, quantity: 1 }]);
   };
   const getFilteredProducts = () =>
@@ -32,7 +33,6 @@ const InventoryComponent = (props) => {
 
   const productMatchingIdSearchString = () =>
     getFilteredProducts().find((product) => product._id == searchString);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (getFilteredProducts().length === 0) {
@@ -42,27 +42,31 @@ const InventoryComponent = (props) => {
       productMatchingIdSearchString() !== undefined &&
       [productMatchingIdSearchString()].length === 1
     ) {
-      productExistsInCart(productMatchingIdSearchString())
-        ? updateItemQuantity(
-            productMatchingIdSearchString(),
-            cartItems.find(
-              (cartItem) =>
-                cartItem.product._id === productMatchingIdSearchString()._id
-            ).quantity + 1
-          )
-        : addToCart(productMatchingIdSearchString());
-      setSearchString("");
+      if (productMatchingIdSearchString().stockQuantity > 0) {
+        productExistsInCart(productMatchingIdSearchString())
+          ? updateItemQuantity(
+              productMatchingIdSearchString(),
+              cartItems.find(
+                (cartItem) =>
+                  cartItem.product._id === productMatchingIdSearchString()._id
+              ).quantity + 1
+            )
+          : addToCart(productMatchingIdSearchString());
+        setSearchString("");
+      } else $("#posAlert4").slideDown();
     } else {
-      productExistsInCart(getFilteredProducts()[0])
-        ? updateItemQuantity(
-            getFilteredProducts()[0],
-            cartItems.find(
-              (cartItem) =>
-                cartItem.product._id === getFilteredProducts()[0]._id
-            ).quantity + 1
-          )
-        : addToCart(getFilteredProducts()[0]);
-      setSearchString("");
+      if (getFilteredProducts()[0].stockQuantity > 0) {
+        productExistsInCart(getFilteredProducts()[0])
+          ? updateItemQuantity(
+              getFilteredProducts()[0],
+              cartItems.find(
+                (cartItem) =>
+                  cartItem.product._id === getFilteredProducts()[0]._id
+              ).quantity + 1
+            )
+          : addToCart(getFilteredProducts()[0]);
+        setSearchString("");
+      } else $("#posAlert4").slideDown();
     }
   };
   const productExistsInCart = (product) =>
@@ -127,6 +131,16 @@ const InventoryComponent = (props) => {
       >
         <strong>Error:</strong> Product not found.
         <button className="close" onClick={() => $("#posAlert3").slideUp()}>
+          <span>&times;</span>
+        </button>
+      </div>
+      <div
+        className="alert alert-danger alert-dismissible collapse"
+        id="posAlert4"
+        role="alert"
+      >
+        <strong>Error:</strong> Product unavailable.
+        <button className="close" onClick={() => $("#posAlert4").slideUp()}>
           <span>&times;</span>
         </button>
       </div>

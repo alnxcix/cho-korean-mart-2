@@ -108,7 +108,7 @@ const AddUser = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      onChange={(e) => setFirstName(e.target.value)}
+                      onChange={(e) => setFirstName(e.target.value.trim())}
                       placeholder="First Name"
                       required
                       value={firstName}
@@ -120,7 +120,7 @@ const AddUser = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      onChange={(e) => setLastName(e.target.value)}
+                      onChange={(e) => setLastName(e.target.value.trim())}
                       placeholder="Last Name"
                       required
                       value={lastName}
@@ -132,7 +132,7 @@ const AddUser = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      onChange={(e) => set_id(e.target.value)}
+                      onChange={(e) => set_id(e.target.value.trim())}
                       placeholder="Username / ID"
                       required
                       value={_id}

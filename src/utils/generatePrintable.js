@@ -11,6 +11,24 @@ export const generatePrintable = (products, transaction, users) => {
     { title: "Discount", dataKey: "Discount" },
     { title: "Total", dataKey: "Total" },
   ];
+  const getTotal = transaction.cart
+    .map((cartItem) =>
+      Number(
+        (cartItem.price * cartItem.quantity * (100 - cartItem.discount)) / 100
+      )
+    )
+    .reduce((acc, cur) => acc + cur, 0);
+  const getTotalDisc = transaction.cart
+    .map((cartItem) =>
+      Number((cartItem.price * cartItem.quantity * cartItem.discount) / 100)
+    )
+    .reduce((acc, cur) => acc + cur, 0);
+  const formatDigits = (num) =>
+    num
+      .toFixed(2)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
   let doc = new jsPDF("portrait", "px", "a4", "false");
   doc.text(30, 60, "logo here");
   //doc.addImage(imageData, format, x, y, width, height, alias, compression, rotation)
@@ -43,7 +61,9 @@ export const generatePrintable = (products, transaction, users) => {
     `${
       users.find((user) => user._id === transaction.userId) === undefined
         ? `Deleted User (${transaction.userId})`
-        : users.find((user) => user._id === transaction.userId).firstName
+        : `${
+            users.find((user) => user._id === transaction.userId).firstName
+          } (${transaction.userId})`
     }`
   );
   let rows = transaction.cart.map((cartItem) => ({
@@ -52,21 +72,41 @@ export const generatePrintable = (products, transaction, users) => {
         ? `Deleted Item (${cartItem._id})`
         : products.find((product) => product._id === cartItem._id).name,
     Quantity: cartItem.quantity,
-    UnitPrice: `Php ${cartItem.price.toFixed(2)}`,
+    UnitPrice: `Php ${formatDigits(cartItem.price / 1.12)}`,
     VAT: `${transaction.vatRate}%`,
     Discount: `${cartItem.discount}%`,
-    Total: `Php ${(cartItem.price * cartItem.quantity).toFixed(2)}`,
+    Total: `Php ${formatDigits(
+      (cartItem.price * cartItem.quantity * (100 - cartItem.discount)) / 100
+    )}`,
   }));
   doc.autoTable(columns, rows, {
     startY: 205,
     theme: "striped",
     headStyles: { fillColor: "#900" },
-    // head: [["Product", "Quantity", "Unit Price", "VAT", "Discount", "Total"]],
-    // body: [
-    //   [1, 2, 3, 4],
-    //   [trans.vat, trans.date],
-    // ],
-    // ...
+  });
+  // doc.autoTable(columns, rows, {
+  //   // startY: 205,
+  //   theme: "striped",
+  //   headStyles: { fillColor: "#900" },
+  // });
+  doc.autoTable({
+    theme: "striped",
+    body: [
+      [
+        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", //bakdshfghwbsd
+        "Subtotal: ",
+        `Php ${formatDigits(getTotal / 1.12)}`,
+      ],
+      [
+        "",
+        `Total VAT (${transaction.vatRate}%): `,
+        `Php ${formatDigits(getTotal - getTotal / 1.12)}`,
+      ],
+      ["", `Total Discount: `, `Php ${formatDigits(getTotalDisc)}`],
+      ["", `Grand Total: `, `Php ${formatDigits(getTotal)}`],
+      ["", `Cash: `, `Php ${formatDigits(transaction.cash)}`],
+      ["", `Change: `, `Php ${formatDigits(transaction.cash - getTotal)}`],
+    ],
   });
   doc.save(`Transaction ${transaction._id}.pdf`);
 };

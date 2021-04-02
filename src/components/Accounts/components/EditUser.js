@@ -107,7 +107,7 @@ const EditUser = (props) => {
                     <input
                       className="form-control"
                       onChange={(e) =>
-                        setUser({ ...user, firstName: e.target.value })
+                        setUser({ ...user, firstName: e.target.value.trim() })
                       }
                       placeholder="First Name"
                       required
@@ -121,7 +121,7 @@ const EditUser = (props) => {
                     <input
                       className="form-control"
                       onChange={(e) =>
-                        setUser({ ...user, lastName: e.target.value })
+                        setUser({ ...user, lastName: e.target.value.trim() })
                       }
                       placeholder="Last Name"
                       required
