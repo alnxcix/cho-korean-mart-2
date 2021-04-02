@@ -12,7 +12,7 @@ global.settings = require("electron-settings");
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1000,
+    width: 1100,
     height: 700,
     frame: false,
     webPreferences: { nodeIntegration: true, enableRemoteModule: true },

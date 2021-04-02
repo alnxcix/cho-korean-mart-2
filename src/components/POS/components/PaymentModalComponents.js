@@ -15,17 +15,20 @@ const PaymentModalComponents = (props) => {
       .remote.getGlobal("products")
       .readAll()
       .then((products) => setProducts(products));
-    window
-      .require("electron")
-      .remote.getGlobal("transactions")
-      .readAll()
-      .then((transactions) => setTransactions(transactions));
+    getTransactions();
     window
       .require("electron")
       .remote.getGlobal("users")
       .readAll()
       .then((users) => setUsers(users));
   }, []);
+  const getTransactions = () => {
+    window
+      .require("electron")
+      .remote.getGlobal("transactions")
+      .readAll()
+      .then((transactions) => setTransactions(transactions));
+  };
   const formatter = (c, places) => {
     let z = places - (c + "").length;
     let string = "";
@@ -153,22 +156,22 @@ const PaymentModalComponents = (props) => {
       .then((transaction) => {
         $("#posAlert1").slideDown();
         if (willExport) generatePrintable(products, transaction, users);
+        cartItems.map((cartItem) => {
+          cartItem.product.stockQuantity -= cartItem.quantity;
+          return window
+            .require("electron")
+            .remote.getGlobal("products")
+            .update(cartItem.product);
+        });
+        setCartItems([]);
+        setCash("");
+        toggleSpecialDiscount(false);
+        $("#paymentModal").modal("hide");
       })
       .catch((e) => {
         $("#posAlert2").slideDown();
         console.log(e);
       });
-    cartItems.map((cartItem) => {
-      cartItem.product.stockQuantity -= cartItem.quantity;
-      return window
-        .require("electron")
-        .remote.getGlobal("products")
-        .update(cartItem.product);
-    });
-    setCartItems([]);
-    setCash("");
-    toggleSpecialDiscount(false);
-    $("#paymentModal").modal("hide");
   };
   return (
     <div
@@ -256,6 +259,7 @@ const PaymentModalComponents = (props) => {
                       autoFocus
                       className="form-control"
                       onChange={(e) => setCash(e.target.value)}
+                      onClick={() => getTransactions()}
                       required
                       type="number"
                       value={cash}
