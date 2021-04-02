@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
-import { generatePrintable } from "../utils/generatePrintable";
+import { generatePrintable } from "../../../utils/generatePrintable";
 
 const TransactionModalComponents = (props) => {
   const [products, setProducts] = useState([]);

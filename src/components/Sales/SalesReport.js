@@ -12,7 +12,7 @@ import DateRangePickerComponent from "../DateRangePickerComponent";
 // import DeleteTransactionModalComponents from "./components/DeleteTransactionModalComponents";
 import TransactionModalComponents from "./components/TransactionModalComponents";
 import Pagination from "../Pagination";
-import { generatePrintable } from "./utils/generatePrintable";
+import { generatePrintable } from "../../utils/generatePrintable";
 // import logo from "../../../assets/ChoKoreanMart.jpg";
 
 const SalesReport = () => {

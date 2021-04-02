@@ -1,20 +1,31 @@
 import { useState, useEffect } from "react";
 import $ from "jquery";
+import { generatePrintable } from "../../../utils/generatePrintable";
 
 const PaymentModalComponents = (props) => {
   let { activeUser, cartItems, setCartItems, vatRate } = props;
   const [applySpecialDiscount, toggleSpecialDiscount] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [cash, setCash] = useState("");
-  useEffect(
-    () =>
-      window
-        .require("electron")
-        .remote.getGlobal("transactions")
-        .readAll()
-        .then((transactions) => setTransactions(transactions)),
-    []
-  );
+  const [products, setProducts] = useState([]);
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    window
+      .require("electron")
+      .remote.getGlobal("products")
+      .readAll()
+      .then((products) => setProducts(products));
+    window
+      .require("electron")
+      .remote.getGlobal("transactions")
+      .readAll()
+      .then((transactions) => setTransactions(transactions));
+    window
+      .require("electron")
+      .remote.getGlobal("users")
+      .readAll()
+      .then((users) => setUsers(users));
+  }, []);
   const formatter = (c, places) => {
     let z = places - (c + "").length;
     let string = "";
@@ -118,7 +129,7 @@ const PaymentModalComponents = (props) => {
       .reduce((acc, cur) => acc + cur, 0);
   const getGrandTotal = () =>
     getSubTotal() + getTotalVat() - getTotalDiscount();
-  const onCheckout = (e) => {
+  const onCheckout = (e, willExport) => {
     e.preventDefault();
     window
       .require("electron")
@@ -139,8 +150,14 @@ const PaymentModalComponents = (props) => {
         userId: activeUser._id,
         vatRate: vatRate,
       })
-      .then(() => $("#posAlert1").slideDown())
-      .catch(() => $("#posAlert2").slideDown());
+      .then((transaction) => {
+        $("#posAlert1").slideDown();
+        if (willExport) generatePrintable(products, transaction, users);
+      })
+      .catch((e) => {
+        $("#posAlert2").slideDown();
+        console.log(e);
+      });
     cartItems.map((cartItem) => {
       cartItem.product.stockQuantity -= cartItem.quantity;
       return window
@@ -168,7 +185,7 @@ const PaymentModalComponents = (props) => {
               <span>&times;</span>
             </button>
           </div>
-          <form onSubmit={onCheckout}>
+          <form onSubmit={(e) => onCheckout(e, false)}>
             <div className="modal-body">
               <div className="form-row">
                 <div className=" col form-group">
@@ -294,7 +311,8 @@ const PaymentModalComponents = (props) => {
               <button
                 className="btn btn-success"
                 disabled={cash < getGrandTotal()}
-                type="submit"
+                onClick={(e) => onCheckout(e, true)}
+                type="button"
               >
                 Checkout and Export
               </button>
