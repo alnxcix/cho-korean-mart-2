@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import _ from "lodash";
+import _, { fromPairs } from "lodash";
 import sortArray from "sort-array";
 import DeleteProduct from "./DeleteProduct";
 import EditProduct from "./EditProduct";
 import logo from "../../../assets/ChoKoreanMart.jpg";
 import Pagination from "../../Pagination"; //https://www.youtube.com/watch?v=IYCa1F-OWmk
+import { formatDigits } from "../../../utils/formatDigits";
 
 const Products = (props) => {
   let { activeUser, products, setProducts, setStockHistoryEntries } = props;
@@ -15,8 +16,6 @@ const Products = (props) => {
   const [propertyToBeSorted, setPropertyToBeSorted] = useState("_id");
   const [sortOrder, setSortOrder] = useState("asc");
   const [criticalItemsOnly, setCriticalItemsOnly] = useState(false);
-  const formatDigits = (num) =>
-    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const getChunkedFilteredProducts = () =>

@@ -10,9 +10,9 @@ import _ from "lodash";
 import $ from "jquery";
 import ChartComponent from "../ChartComponent";
 import DateRangePickerComponent from "../DateRangePickerComponent";
-// import DeleteTransactionModalComponents from "./components/DeleteTransactionModalComponents";
 import TransactionModalComponents from "./components/TransactionModalComponents";
 import Pagination from "../Pagination";
+import { formatDigits } from "../../utils/formatDigits";
 import { generatePrintable } from "../../utils/generatePrintable";
 
 const SalesReport = () => {
@@ -22,8 +22,6 @@ const SalesReport = () => {
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
   const [transactions, setTransactions] = useState([]);
-  const formatDigits = (num) =>
-    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const setDates = (start, end) => {
@@ -75,7 +73,7 @@ const SalesReport = () => {
   }, []);
   // const [currentPage, setCurrentPage] = useState(1);
   // const [rowsPerPage, setRowsPerPage] = useState(10);
-  //test
+  // test
   // const [rowsPerPage, setRowsPerPage] = useState(1);
   // const indexOfLastRow = currentPage * rowsPerPage;
   // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -144,9 +142,6 @@ const SalesReport = () => {
           </div>
           <DateRangePickerComponent setDates={setDates} />
         </div>
-        {/* <button className="btn btn-dark">
-          <FontAwesomeIcon icon={faShare} /> Export
-        </button> */}
       </div>
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
@@ -155,8 +150,8 @@ const SalesReport = () => {
         <col span="1" style={{ width: "120px" }} />
         <thead>
           <tr>
+            <th className="text-center">#</th>
             {[
-              "#",
               "Transaction ID",
               "Seller",
               "Grand Total",
@@ -174,9 +169,20 @@ const SalesReport = () => {
               ? getChunkedFilteredTransactions()[page].map(
                   (transaction, index) => (
                     <tr>
-                      <td className="text-wrap">{formatDigits(index + 1)}</td>
+                      <td className="text-center text-wrap">
+                        {formatDigits(index + 1)}
+                      </td>
                       <td className="text-wrap">{transaction._id}</td>
-                      <td className="text-wrap">{transaction.userId}</td>
+                      <td className="text-wrap">
+                        {users.find(
+                          (user) => user._id === transaction.userId
+                        ) === undefined ? (
+                          <em>Deleted User ({transaction.userId})</em>
+                        ) : (
+                          users.find((user) => user._id === transaction.userId)
+                            .firstName
+                        )}
+                      </td>
                       <td className="text-wrap">
                         ₱{" "}
                         {formatDigits(
@@ -212,11 +218,6 @@ const SalesReport = () => {
                         >
                           <FontAwesomeIcon icon={faShare} />
                         </button>
-                        {/* &nbsp;
-                <DeleteTransactionModalComponents
-                  setTransactions={setTransactions}
-                  transaction={transaction}
-                /> */}
                       </td>
                     </tr>
                   )
@@ -233,15 +234,6 @@ const SalesReport = () => {
           setPage={setPage}
         />
       </table>
-      {/* <Pagination
-        currentRows={currentRows}
-        rowsPerPage={rowsPerPage}
-        totalRows={getFilteredTransactions().length}
-        chgPage={chgPage}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        setRowsPerPage={setRowsPerPage}
-      /> */}
     </div>
   );
 };

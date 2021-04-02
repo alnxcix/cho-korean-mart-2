@@ -73,7 +73,9 @@ export const generatePrintable = (products, transaction, users) => {
         ? `Deleted Item (${cartItem._id})`
         : products.find((product) => product._id === cartItem._id).name,
     Quantity: cartItem.quantity,
-    UnitPrice: `Php ${formatDigits(cartItem.price / 1.12)}`,
+    UnitPrice: `Php ${formatDigits(
+      (cartItem.price / (100 + transaction.vatRate)) * 100
+    )}`,
     VAT: `${transaction.vatRate}%`,
     Discount: `${cartItem.discount}%`,
     Total: `Php ${formatDigits(
@@ -96,12 +98,14 @@ export const generatePrintable = (products, transaction, users) => {
       [
         "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", //bakdshfghwbsd
         "Subtotal: ",
-        `Php ${formatDigits(getTotal / 1.12)}`,
+        `Php ${formatDigits((getTotal / (100 + transaction.vatRate)) * 100)}`,
       ],
       [
         "",
         `Total VAT (${transaction.vatRate}%): `,
-        `Php ${formatDigits(getTotal - getTotal / 1.12)}`,
+        `Php ${formatDigits(
+          getTotal - (getTotal / (100 + transaction.vatRate)) * 100
+        )}`,
       ],
       ["", `Total Discount: `, `Php ${formatDigits(getTotalDisc)}`],
       ["", `Grand Total: `, `Php ${formatDigits(getTotal)}`],

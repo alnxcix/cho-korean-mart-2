@@ -6,6 +6,7 @@ import moment from "moment";
 import sortArray from "sort-array";
 import DateRangePickerComponent from "../../DateRangePickerComponent";
 import Pagination from "../../Pagination"; //https://www.youtube.com/watch?v=IYCa1F-OWmk
+import { formatDigits } from "../../../utils/formatDigits";
 
 const History = (props) => {
   let { stockHistoryEntries } = props;
@@ -24,8 +25,6 @@ const History = (props) => {
   // const [rowsPerPage, setRowsPerPage] = useState(1);
   // const indexOfLastRow = currentPage * rowsPerPage;
   // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const formatDigits = (num) =>
-    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const getChunkedFilteredStockHistoryEntries = () =>
     _.chunk(getFilteredStockHistoryEntries(), itemsPerPage);
   const getFilteredStockHistoryEntries = () =>

@@ -3,12 +3,11 @@ import $ from "jquery";
 import CartItem from "./CartItem";
 import EditVatModalComponents from "./EditVatModalComponents";
 import PaymentModalComponents from "./PaymentModalComponents";
+import { formatDigits } from "../../../utils/formatDigits";
 
 const CartComponent = (props) => {
   let { activeUser, cartItems, setCartItems, updateItemQuantity } = props;
   const [vatRate, setVatRate] = useState();
-  const formatDigits = (num) =>
-    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const getGrandTotal = () =>
     cartItems.length === 0
       ? 0
@@ -17,7 +16,7 @@ const CartComponent = (props) => {
             (cartItem) =>
               (cartItem.product.price -
                 (cartItem.product.price / 100) * cartItem.product.discount) *
-              Number(cartItem.quantity)
+              cartItem.quantity
           )
           .reduce((acc, cur) => acc + cur);
   const removeFromCart = (product) =>
@@ -58,12 +57,6 @@ const CartComponent = (props) => {
               )
             </small>
           </h1>
-          {/* <button
-            className="btn btn-outline-dark btn-sm rounded-pill"
-            type="button"
-          >
-            SC/PWD toggle
-          </button> */}
           <button
             className="btn btn-dark btn-lg ml-3 rounded-pill"
             onClick={() => setCartItems([])}
@@ -78,7 +71,6 @@ const CartComponent = (props) => {
               cartItem={cartItem}
               removeFromCart={removeFromCart}
               updateItemQuantity={updateItemQuantity}
-              formatDigits={formatDigits}
             />
           ))}
         </div>
@@ -87,7 +79,10 @@ const CartComponent = (props) => {
             <h6>
               Subtotal:{" "}
               <span className="text-muted">
-                ₱ {formatDigits((getGrandTotal() / 1.12).toFixed(2))}
+                ₱{" "}
+                {formatDigits(
+                  ((getGrandTotal() / (100 + vatRate)) * 100).toFixed(2)
+                )}
               </span>
             </h6>
             <h6>

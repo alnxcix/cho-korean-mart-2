@@ -7,9 +7,6 @@ const productSchema = {
     price: { type: "number" },
     stockQuantity: { type: "integer" },
     criticalLevel: { type: "integer" },
-    // pwdDiscounted: { type: "boolean" },
-    // scDiscounted: { type: "boolean" },
-    // withVAT: { type: "boolean" },
   },
   type: "object",
 };
