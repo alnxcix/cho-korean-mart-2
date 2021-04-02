@@ -62,8 +62,12 @@ const SalesReport = () => {
     doc.setFont("Helvetica", "normal");
     doc.setTextColor("#000000");
     doc.setFontSize(11);
-    doc.text(30, 175, `Date: ${new Date(trans.date).toLocaleDateString()}`);
-    doc.text(100, 175, `Salesperson: ${getUser(trans.userId)}`);
+    doc.setFont("Helvetica", "bold");
+    doc.text(30, 175, `Date: `);
+    doc.text(100, 175, `Salesperson: `);
+    doc.setFont("Helvetica", "normal");
+    doc.text(30, 185, `${new Date(trans.date).toLocaleDateString()}`);
+    doc.text(100, 185, `${getUser(trans.userId)}`);
     var rows = trans.cart.map((item) => ({
       Product:
         (products.find((product) => product._id === item._id) === undefined
@@ -77,7 +81,7 @@ const SalesReport = () => {
     }));
     console.log(rows);
     doc.autoTable(columns, rows, {
-      startY: 210,
+      startY: 205,
       theme: "striped",
       headStyles: { fillColor: "#900" },
       // head: [["Product", "Quantity", "Unit Price", "VAT", "Discount", "Total"]],
