@@ -12,8 +12,12 @@ const InventoryComponent = (props) => {
   const [category, setCategory] = useState("All");
   const [products, setProducts] = useState([]);
   const [searchString, setSearchString] = useState("");
-  const addToCart = (product) =>
+  const addToCart = (product) => {
+    $("#posAlert1").slideUp();
+    $("#posAlert2").slideUp();
+    $("#posAlert3").slideUp();
     setCartItems([...cartItems, { product: product, quantity: 1 }]);
+  };
   const getFilteredProducts = () =>
     sortArray(
       products.filter((product) =>
@@ -25,10 +29,30 @@ const InventoryComponent = (props) => {
       ),
       { by: "_id" }
     );
+
+  const productMatchingIdSearchString = () =>
+    getFilteredProducts().find((product) => product._id == searchString);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (getFilteredProducts().length === 0) $("#posAlert3").slideDown();
-    else
+    if (getFilteredProducts().length === 0) {
+      $("#posAlert3").slideDown();
+      // setSearchString(e);
+    } else if (
+      productMatchingIdSearchString() !== undefined &&
+      [productMatchingIdSearchString()].length === 1
+    ) {
+      productExistsInCart(productMatchingIdSearchString())
+        ? updateItemQuantity(
+            productMatchingIdSearchString(),
+            cartItems.find(
+              (cartItem) =>
+                cartItem.product._id === productMatchingIdSearchString()._id
+            ).quantity + 1
+          )
+        : addToCart(productMatchingIdSearchString());
+      setSearchString("");
+    } else {
       productExistsInCart(getFilteredProducts()[0])
         ? updateItemQuantity(
             getFilteredProducts()[0],
@@ -38,7 +62,8 @@ const InventoryComponent = (props) => {
             ).quantity + 1
           )
         : addToCart(getFilteredProducts()[0]);
-    setSearchString("");
+      setSearchString("");
+    }
   };
   const productExistsInCart = (product) =>
     cartItems.some((cartItem) => cartItem.product._id === product._id);
@@ -144,7 +169,7 @@ const InventoryComponent = (props) => {
               className="form-control"
               onChange={(e) => {
                 setCurrentPage(1);
-                setSearchString(e.target.value);
+                setSearchString(e.target.value.toLowerCase());
               }}
               placeholder="Search"
               value={searchString}
