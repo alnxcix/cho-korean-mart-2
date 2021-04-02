@@ -192,6 +192,7 @@ const AddProduct = (props) => {
                         onChange={(e) => setPrice(e.target.value)}
                         placeholder="Price"
                         required
+                        step="0.01"
                         type="number"
                         value={price}
                       />

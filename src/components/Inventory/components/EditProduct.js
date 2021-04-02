@@ -185,11 +185,12 @@ const EditProduct = (props) => {
                         onChange={(e) =>
                           setProduct({
                             ...product,
-                            price: e.target.value,
+                            price: Number(e.target.value),
                           })
                         }
                         placeholder="Price"
                         required
+                        step="0.01"
                         type="number"
                         value={product.price}
                       />

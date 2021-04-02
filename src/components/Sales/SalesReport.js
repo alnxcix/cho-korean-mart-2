@@ -142,9 +142,9 @@ const SalesReport = () => {
           </div>
           <DateRangePickerComponent setDates={setDates} />
         </div>
-        <button className="btn btn-dark">
+        {/* <button className="btn btn-dark">
           <FontAwesomeIcon icon={faShare} /> Export
-        </button>
+        </button> */}
       </div>
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>

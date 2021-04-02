@@ -14,26 +14,22 @@ const Products = (props) => {
   const [searchString, setSearchString] = useState("");
   const [propertyToBeSorted, setPropertyToBeSorted] = useState("_id");
   const [sortOrder, setSortOrder] = useState("asc");
-
   const [criticalItemsOnly, setCriticalItemsOnly] = useState(false);
-
-  const checkIfCriticalItems = () => {
-    return criticalItemsOnly
-      ? products.filter(
-          (product) => product.stockQuantity <= product.criticalLevel
-        )
-      : products;
-  };
-
   const getFilteredProducts = () =>
     sortArray(
-      checkIfCriticalItems().filter((product) =>
-        JSON.stringify(Object.values(product))
-          .toLowerCase()
-          .includes(searchString) && category === "All"
-          ? true
-          : product.category === category
-      ),
+      products
+        .filter((product) =>
+          JSON.stringify(Object.values(product))
+            .toLowerCase()
+            .includes(searchString) && category === "All"
+            ? true
+            : product.category === category
+        )
+        .filter((product) =>
+          criticalItemsOnly
+            ? product.stockQuantity <= product.criticalLevel
+            : product
+        ),
       { by: propertyToBeSorted, order: sortOrder }
     );
   const [currentPage, setCurrentPage] = useState(1);
@@ -112,23 +108,23 @@ const Products = (props) => {
             value={searchString}
           />
         </div>
-        <div className="col input-group">
-          <button
-            className="btn btn-outline-dark col"
-            onClick={() => {
-              setCriticalItemsOnly(!criticalItemsOnly);
-              setCurrentPage(1);
-            }}
-          >
-            {criticalItemsOnly ? (
-              <>Show All Products</>
-            ) : (
-              <>Show Products at Critical Level</>
-            )}
-          </button>
-        </div>
       </div>
       <hr />
+      <div className="custom-control custom-switch mb-3">
+        <input
+          type="checkbox"
+          className="custom-control-input"
+          id="criticalLevelSwitch"
+          onChange={() => {
+            setCriticalItemsOnly(!criticalItemsOnly);
+            setCurrentPage(1);
+          }}
+          checked={criticalItemsOnly}
+        />
+        <label className="custom-control-label" for="criticalLevelSwitch">
+          <strong>Only show products at critical level</strong>
+        </label>
+      </div>
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>
         <col span="1" style={{ width: "60px" }} />
         <col span="1" />
