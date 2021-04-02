@@ -12,9 +12,8 @@ import DateRangePickerComponent from "../DateRangePickerComponent";
 // import DeleteTransactionModalComponents from "./components/DeleteTransactionModalComponents";
 import TransactionModalComponents from "./components/TransactionModalComponents";
 import Pagination from "../Pagination";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
-//import logo from "../../../assets/ChoKoreanMart.jpg";
+import { generatePrintable } from "./utils/generatePrintable";
+// import logo from "../../../assets/ChoKoreanMart.jpg";
 
 const SalesReport = () => {
   const [endDate, setEndDate] = useState(moment().endOf("d").toDate());
@@ -28,71 +27,6 @@ const SalesReport = () => {
     setEndDate(end);
     setCurrentPage(1);
   };
-  const getUser = (id) =>
-    users.find((u) => u._id === id) === undefined
-      ? `Deleted User (${id})`
-      : users.find((u) => u._id === id).firstName + ` (${id})`;
-  const columns = [
-    { title: "Product", dataKey: "Product" },
-    { title: "Quantity", dataKey: "Quantity" },
-    { title: "Unit Price", dataKey: "UnitPrice" },
-    { title: "VAT", dataKey: "VAT" },
-    { title: "Discount", dataKey: "Discount" },
-    { title: "Total", dataKey: "Total" },
-  ];
-  const pdfGenerate = (trans) => {
-    var doc = new jsPDF("portrait", "px", "a4", "false");
-    doc.text(30, 60, "logo here");
-    //doc.addImage(imageData, format, x, y, width, height, alias, compression, rotation)
-    doc.setFontSize(11);
-    doc.setFont("Helvetica", "bold");
-    doc.text(350, 40, "CHO Korean Mart");
-    doc.setFont("Helvetica", "normal");
-    doc.setFontSize(10);
-    doc.text(268, 60, "967 Del Monte Ave corner San Pedro Bautista,");
-    doc.text(340, 70, "S.D.M., Q.C, Philippines");
-    doc.text(375, 80, "09774400017");
-    doc.text(312, 100, "facebook.com/chokoreanmart.ph");
-
-    doc.setFont("Helvetica", "bold");
-    doc.setFontSize(15);
-    doc.setTextColor("#900");
-    doc.text(30, 150, `Transaction #: ${trans._id}`);
-
-    doc.setFont("Helvetica", "normal");
-    doc.setTextColor("#000000");
-    doc.setFontSize(11);
-    doc.setFont("Helvetica", "bold");
-    doc.text(30, 175, `Date: `);
-    doc.text(100, 175, `Salesperson: `);
-    doc.setFont("Helvetica", "normal");
-    doc.text(30, 185, `${new Date(trans.date).toLocaleDateString()}`);
-    doc.text(100, 185, `${getUser(trans.userId)}`);
-    var rows = trans.cart.map((item) => ({
-      Product:
-        (products.find((product) => product._id === item._id) === undefined
-          ? `Deleted Item (${item._id})`
-          : products.find((product) => product._id === item._id).name) + "",
-      Quantity: item.quantity + "",
-      UnitPrice: "P " + item.price.toFixed(2),
-      VAT: trans.vatRate + "%",
-      Discount: item.discount + "%",
-      Total: "P " + (item.price * item.quantity).toFixed(2),
-    }));
-    console.log(rows);
-    doc.autoTable(columns, rows, {
-      startY: 205,
-      theme: "striped",
-      headStyles: { fillColor: "#900" },
-      // head: [["Product", "Quantity", "Unit Price", "VAT", "Discount", "Total"]],
-      // body: [
-      //   [1, 2, 3, 4],
-      //   [trans.vat, trans.date],
-      // ],
-      // ...
-    });
-    doc.save(`Transaction ${trans._id}.pdf`);
-  };
   const getFilteredTransactions = () =>
     transactions.filter(
       (transaction) =>
@@ -101,6 +35,22 @@ const SalesReport = () => {
           .includes(searchString) &&
         moment(transaction.date).isBetween(moment(startDate), moment(endDate))
     );
+  const getFilteredTransactionsTotalIncome = () =>
+    (getFilteredTransactions().length > 0
+      ? getFilteredTransactions()
+          .map((transaction) =>
+            transaction.cart
+              .map(
+                (cartItem) =>
+                  (cartItem.price -
+                    (cartItem.price / 100) * cartItem.discount) *
+                  cartItem.quantity
+              )
+              .reduce((acc, cur) => acc + cur, 0)
+          )
+          .reduce((acc, cur) => acc + cur, 0)
+      : 0
+    ).toFixed(2);
   useEffect(() => {
     window
       .require("electron")
@@ -244,13 +194,9 @@ const SalesReport = () => {
                 &nbsp;
                 <button
                   className="btn btn-warning"
-                  // data-target={`#modal`}
-                  // data-toggle="modal"
-                  title="Export Transaction"
-                  onClick={() => {
-                    pdfGenerate(transaction);
-                    // console.log(getProducts(transaction.cart));
-                  }}
+                  onClick={() =>
+                    generatePrintable(products, transaction, users)
+                  }
                 >
                   <FontAwesomeIcon icon={faShare} />
                 </button>

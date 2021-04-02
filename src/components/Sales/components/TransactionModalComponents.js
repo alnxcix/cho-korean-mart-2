@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
+import { generatePrintable } from "../utils/generatePrintable";
 
 const TransactionModalComponents = (props) => {
   const [products, setProducts] = useState([]);
@@ -194,7 +195,10 @@ const TransactionModalComponents = (props) => {
               </table>
             </div>
             <div className="modal-footer">
-              <button className="btn btn-dark" onClick={() => null}>
+              <button
+                className="btn btn-dark"
+                onClick={() => generatePrintable(products, transaction, users)}
+              >
                 Export
               </button>
             </div>
