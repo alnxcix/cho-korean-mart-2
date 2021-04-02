@@ -19,6 +19,8 @@ const InventoryComponent = (props) => {
     $("#posAlert4").slideUp();
     setCartItems([...cartItems, { product: product, quantity: 1 }]);
   };
+  const formatDigits = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const getFilteredProducts = () =>
     sortArray(
       products.filter((product) =>
@@ -225,7 +227,9 @@ const InventoryComponent = (props) => {
               </td>
               <td className="text-wrap">{product.name}</td>
               <td className="text-wrap">{product.category}</td>
-              <td className="text-wrap">{`₱ ${product.price.toFixed(2)}`}</td>
+              <td className="text-wrap">{`₱ ${formatDigits(
+                product.price.toFixed(2)
+              )}`}</td>
               <td
                 className="text-wrap"
                 style={{
@@ -235,7 +239,7 @@ const InventoryComponent = (props) => {
                       : "#b3ffbc",
                 }}
               >
-                {product.stockQuantity}
+                {formatDigits(product.stockQuantity)}
               </td>
               <td>
                 <button

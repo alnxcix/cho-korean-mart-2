@@ -1,9 +1,8 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import logo from "../../../assets/ChoKoreanMart.jpg";
 
 const CartItem = (props) => {
-  let { cartItem, updateItemQuantity, removeFromCart } = props;
+  let { cartItem, updateItemQuantity, removeFromCart, formatDigits } = props;
   return (
     <div className="bg-light card mb-3 rounded-lg">
       <div className="card-body">
@@ -53,11 +52,13 @@ const CartItem = (props) => {
                 value={cartItem.quantity}
               />
             </div>
-            <small className="form-text text-muted">{`₱ ${(
-              (cartItem.product.price -
-                (cartItem.product.price / 100) * cartItem.product.discount) *
-              Number(cartItem.quantity)
-            ).toFixed(2)}`}</small>
+            <small className="form-text text-muted">{`₱ ${formatDigits(
+              (
+                (cartItem.product.price -
+                  (cartItem.product.price / 100) * cartItem.product.discount) *
+                Number(cartItem.quantity)
+              ).toFixed(2)
+            )}`}</small>
           </div>
         </div>
       </div>

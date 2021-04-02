@@ -15,6 +15,8 @@ const Dashboard = (props) => {
   const [products, setProducts] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [users, setUsers] = useState([]);
+  const formatDigits = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   useEffect(() => {
     window
       .require("electron")
@@ -58,7 +60,9 @@ const Dashboard = (props) => {
                   <FontAwesomeIcon icon={faHashtag} /> Admins:
                 </p>
                 <h1 className="display-4">
-                  {users.filter((user) => user.role === "Administrator").length}
+                  {formatDigits(
+                    users.filter((user) => user.role === "Administrator").length
+                  )}
                 </h1>
               </div>
               <div>
@@ -66,7 +70,9 @@ const Dashboard = (props) => {
                   <FontAwesomeIcon icon={faHashtag} /> Cashiers:
                 </p>
                 <h1 className="display-4">
-                  {users.filter((user) => user.role === "Cashier").length}
+                  {formatDigits(
+                    users.filter((user) => user.role === "Cashier").length
+                  )}
                 </h1>
               </div>
               <div>
@@ -74,7 +80,9 @@ const Dashboard = (props) => {
                   <FontAwesomeIcon icon={faHashtag} /> Owners:
                 </p>
                 <h1 className="display-4">
-                  {users.filter((user) => user.role === "Owner").length}
+                  {formatDigits(
+                    users.filter((user) => user.role === "Owner").length
+                  )}
                 </h1>
               </div>
             </div>
@@ -109,11 +117,11 @@ const Dashboard = (props) => {
               <FontAwesomeIcon icon={faHashtag} /> Products at critical level:
             </p>
             <h1 className="display-4">
-              {
+              {formatDigits(
                 products.filter(
                   (product) => product.stockQuantity <= product.criticalLevel
                 ).length
-              }
+              )}
             </h1>
           </div>
           <div className="card-footer">
@@ -152,33 +160,35 @@ const Dashboard = (props) => {
               <FontAwesomeIcon icon={faHashtag} /> Transactions Today:
             </p>
             <h1 className="display-4">
-              {
+              {formatDigits(
                 transactions.filter((transaction) =>
                   moment(transaction.date).isSame(moment(), "d")
                 ).length
-              }
+              )}
             </h1>
             <p className="lead">
-            <FontAwesomeIcon icon={faHashtag} /> Income Today:
+              <FontAwesomeIcon icon={faHashtag} /> Income Today:
             </p>
             <h1>
               ₱{" "}
-              {transactions
-                .filter((transaction) =>
-                  moment(transaction.date).isSame(moment(), "d")
-                )
-                .map((transaction) =>
-                  transaction.cart
-                    .map(
-                      (cartItem) =>
-                        (cartItem.price -
-                          (cartItem.price / 100) * cartItem.discount) *
-                        cartItem.quantity
-                    )
-                    .reduce((acc, cur) => acc + cur, 0)
-                )
-                .reduce((acc, cur) => acc + cur, 0)
-                .toFixed(2)}
+              {formatDigits(
+                transactions
+                  .filter((transaction) =>
+                    moment(transaction.date).isSame(moment(), "d")
+                  )
+                  .map((transaction) =>
+                    transaction.cart
+                      .map(
+                        (cartItem) =>
+                          (cartItem.price -
+                            (cartItem.price / 100) * cartItem.discount) *
+                          cartItem.quantity
+                      )
+                      .reduce((acc, cur) => acc + cur, 0)
+                  )
+                  .reduce((acc, cur) => acc + cur, 0)
+                  .toFixed(2)
+              )}
             </h1>
           </div>
           <div className="card-footer">

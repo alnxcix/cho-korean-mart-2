@@ -7,6 +7,8 @@ import PaymentModalComponents from "./PaymentModalComponents";
 const CartComponent = (props) => {
   let { activeUser, cartItems, setCartItems, updateItemQuantity } = props;
   const [vatRate, setVatRate] = useState();
+  const formatDigits = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const getGrandTotal = () =>
     cartItems.length === 0
       ? 0
@@ -46,11 +48,13 @@ const CartComponent = (props) => {
             Cart{" "}
             <small className="text-muted">
               (
-              {cartItems.length === 0
-                ? 0
-                : cartItems
-                    .map((cartItem) => Number(cartItem.quantity))
-                    .reduce((acc, cur) => acc + cur)}
+              {formatDigits(
+                cartItems.length === 0
+                  ? 0
+                  : cartItems
+                      .map((cartItem) => Number(cartItem.quantity))
+                      .reduce((acc, cur) => acc + cur)
+              )}
               )
             </small>
           </h1>
@@ -74,6 +78,7 @@ const CartComponent = (props) => {
               cartItem={cartItem}
               removeFromCart={removeFromCart}
               updateItemQuantity={updateItemQuantity}
+              formatDigits={formatDigits}
             />
           ))}
         </div>
@@ -82,7 +87,7 @@ const CartComponent = (props) => {
             <h6>
               Subtotal:{" "}
               <span className="text-muted">
-                ₱ {(getGrandTotal() / 1.12).toFixed(2)}
+                ₱ {formatDigits((getGrandTotal() / 1.12).toFixed(2))}
               </span>
             </h6>
             <h6>
@@ -90,19 +95,23 @@ const CartComponent = (props) => {
                 vatRate={vatRate}
                 setVatRate={setVatRate}
               />
-              {`VAT (${vatRate})%:`}
+              {`VAT (${vatRate})%: `}
               <span className="text-muted">
                 ₱{" "}
-                {(
-                  getGrandTotal() -
-                  (getGrandTotal() / (100 + vatRate)) * 100
-                ).toFixed(2)}
+                {formatDigits(
+                  (
+                    getGrandTotal() -
+                    (getGrandTotal() / (100 + vatRate)) * 100
+                  ).toFixed(2)
+                )}
               </span>
             </h6>
             <hr />
             <h5>
               Grand Total:{" "}
-              <span className="text-muted">₱ {getGrandTotal().toFixed(2)}</span>
+              <span className="text-muted">
+                ₱ {formatDigits(getGrandTotal().toFixed(2))}
+              </span>
             </h5>
             <hr />
             <button

@@ -9,6 +9,8 @@ const PaymentModalComponents = (props) => {
   const [cash, setCash] = useState("");
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
+  const formatDigits = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   useEffect(() => {
     window
       .require("electron")
@@ -200,7 +202,7 @@ const PaymentModalComponents = (props) => {
                     <input
                       className="form-control"
                       disabled
-                      value={getSubTotal().toFixed(2)}
+                      value={formatDigits(getSubTotal().toFixed(2))}
                     />
                   </div>
                 </div>
@@ -215,7 +217,7 @@ const PaymentModalComponents = (props) => {
                     <input
                       className="form-control"
                       disabled
-                      value={getTotalVat().toFixed(2)}
+                      value={formatDigits(getTotalVat().toFixed(2))}
                     />
                   </div>
                 </div>
@@ -230,7 +232,7 @@ const PaymentModalComponents = (props) => {
                     <input
                       className="form-control"
                       disabled
-                      value={getTotalDiscount().toFixed(2)}
+                      value={formatDigits(getTotalDiscount().toFixed(2))}
                     />
                   </div>
                 </div>
@@ -243,7 +245,7 @@ const PaymentModalComponents = (props) => {
                     <input
                       className="form-control"
                       disabled
-                      value={getGrandTotal().toFixed(2)}
+                      value={formatDigits(getGrandTotal().toFixed(2))}
                     />
                   </div>
                 </div>
@@ -278,14 +280,14 @@ const PaymentModalComponents = (props) => {
                       value={
                         cash < getGrandTotal()
                           ? "Insufficient Cash"
-                          : (cash - getGrandTotal()).toFixed(2)
+                          : formatDigits(cash - getGrandTotal().toFixed(2))
                       }
                     />
                   </div>
                 </div>
               </div>
               <hr />
-              <div className="form-check">
+              {/* <div className="form-check">
                 <input
                   className="form-check-input"
                   type="checkbox"
@@ -295,7 +297,7 @@ const PaymentModalComponents = (props) => {
                 <label className="form-check-label">
                   Apply Special Discount
                 </label>
-              </div>
+              </div> */}
             </div>
             <div className="modal-footer">
               <button

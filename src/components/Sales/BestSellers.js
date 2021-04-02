@@ -11,6 +11,8 @@ const SalesReport = () => {
   const [startDate, setStartDate] = useState(moment().startOf("d").toDate());
   const [products, setProducts] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const formatDigits = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const setDates = (start, end) => {
     setStartDate(start);
     setEndDate(end);
@@ -109,7 +111,7 @@ const SalesReport = () => {
                   product.product.category
                 )}
               </td>
-              <td className="text-wrap">{product.unitsSold}</td>
+              <td className="text-wrap">{formatDigits(product.unitsSold)}</td>
             </tr>
           ))}
         </tbody>

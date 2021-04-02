@@ -3,6 +3,11 @@ import Chart from "chart.js";
 import moment from "moment";
 
 const ChartComponent = () => {
+  const formatDigits = (num) =>
+    num
+      .toFixed(2)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   useEffect(
     () =>
       window
@@ -55,12 +60,14 @@ const ChartComponent = () => {
               options: {
                 scales: {
                   yAxes: [
-                    { ticks: { callback: (tick) => `₱ ${tick.toFixed(2)}` } },
+                    {
+                      ticks: { callback: (tick) => `₱ ${formatDigits(tick)}` },
+                    },
                   ],
                 },
                 tooltips: {
                   callbacks: {
-                    label: (label) => `₱ ${label.yLabel.toFixed(2)}`,
+                    label: (label) => `₱ ${formatDigits(label.yLabel)}`,
                   },
                 },
               },

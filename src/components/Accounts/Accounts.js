@@ -15,6 +15,8 @@ const Accounts = (props) => {
   const [searchString, setSearchString] = useState("");
   const [propertyToBeSorted, setPropertyToBeSorted] = useState("_id");
   const [sortOrder, setSortOrder] = useState("asc");
+  const formatDigits = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const getFilteredUsers = () =>
     sortArray(
       users.filter((user) =>
@@ -180,7 +182,9 @@ const Accounts = (props) => {
         <tbody>
           {currentRows.map((user, index) => (
             <tr>
-              <td className="text-center text-wrap">{index + 1}</td>
+              <td className="text-center text-wrap">
+                {formatDigits(index + 1)}
+              </td>
               <td className="text-wrap">{`${user.firstName} ${user.lastName}`}</td>
               <td className="text-wrap">{user._id}</td>
               <td className="text-wrap">{user.role}</td>

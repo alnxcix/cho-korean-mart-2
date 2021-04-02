@@ -15,6 +15,8 @@ const Products = (props) => {
   const [propertyToBeSorted, setPropertyToBeSorted] = useState("_id");
   const [sortOrder, setSortOrder] = useState("asc");
   const [criticalItemsOnly, setCriticalItemsOnly] = useState(false);
+  const formatDigits = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const getFilteredProducts = () =>
     sortArray(
       products
@@ -149,7 +151,9 @@ const Products = (props) => {
         <tbody>
           {currentRows.map((product, index) => (
             <tr>
-              <td className="text-center text-wrap">{index + 1}</td>
+              <td className="text-center text-wrap">
+                {formatDigits(index + 1)}
+              </td>
               <td className="text-wrap">{product._id}</td>
               <td>
                 <picture>
@@ -164,7 +168,9 @@ const Products = (props) => {
               </td>
               <td className="text-wrap">{product.name}</td>
               <td className="text-wrap">{product.category}</td>
-              <td className="text-wrap">{`₱ ${product.price.toFixed(2)}`}</td>
+              <td className="text-wrap">{`₱ ${formatDigits(
+                product.price.toFixed(2)
+              )}`}</td>
               <td className="text-wrap">{product.discount} %</td>
               <td
                 className="text-wrap"
@@ -175,7 +181,7 @@ const Products = (props) => {
                       : "#b3ffbc",
                 }}
               >
-                {product.stockQuantity}
+                {formatDigits(product.stockQuantity)}
               </td>
               <td>
                 <EditProduct

@@ -13,7 +13,6 @@ import DateRangePickerComponent from "../DateRangePickerComponent";
 import TransactionModalComponents from "./components/TransactionModalComponents";
 import Pagination from "../Pagination";
 import { generatePrintable } from "../../utils/generatePrintable";
-// import logo from "../../../assets/ChoKoreanMart.jpg";
 
 const SalesReport = () => {
   const [endDate, setEndDate] = useState(moment().endOf("d").toDate());
@@ -22,6 +21,8 @@ const SalesReport = () => {
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const formatDigits = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const setDates = (start, end) => {
     setStartDate(start);
     setEndDate(end);
@@ -169,25 +170,29 @@ const SalesReport = () => {
         <tbody>
           {currentRows.map((transaction, index) => (
             <tr>
-              <td className="text-wrap">{index + 1}</td>
+              <td className="text-wrap">{formatDigits(index + 1)}</td>
               <td className="text-wrap">{transaction._id}</td>
               <td className="text-wrap">{transaction.userId}</td>
               <td className="text-wrap">
                 ₱{" "}
-                {transaction.cart
-                  .map(
-                    (cartItem) =>
-                      (cartItem.price -
-                        (cartItem.price / 100) * cartItem.discount) *
-                      cartItem.quantity
-                  )
-                  .reduce((acc, cur) => acc + cur, 0)
-                  .toFixed(2)}
+                {formatDigits(
+                  transaction.cart
+                    .map(
+                      (cartItem) =>
+                        (cartItem.price -
+                          (cartItem.price / 100) * cartItem.discount) *
+                        cartItem.quantity
+                    )
+                    .reduce((acc, cur) => acc + cur, 0)
+                    .toFixed(2)
+                )}
               </td>
               <td className="text-wrap">
-                {transaction.cart
-                  .map((cartItem) => Number(cartItem.quantity))
-                  .reduce((acc, cur) => acc + cur, 0)}
+                {formatDigits(
+                  transaction.cart
+                    .map((cartItem) => Number(cartItem.quantity))
+                    .reduce((acc, cur) => acc + cur, 0)
+                )}
               </td>
               <td className="text-wrap">
                 {moment(transaction.date).format("LL")}

@@ -21,6 +21,8 @@ const History = (props) => {
   // const [rowsPerPage, setRowsPerPage] = useState(1);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const formatDigits = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const getFilteredStockHistoryEntries = () =>
     sortArray(
       stockHistoryEntries
@@ -140,7 +142,9 @@ const History = (props) => {
         <tbody>
           {currentRows.map((stockHistoryEntry, index) => (
             <tr>
-              <td className="text-center text-wrap">{index + 1}</td>
+              <td className="text-center text-wrap">
+                {formatDigits(index + 1)}
+              </td>
               <td className="text-wrap">
                 {moment(stockHistoryEntry.date).format("LL")}
               </td>
