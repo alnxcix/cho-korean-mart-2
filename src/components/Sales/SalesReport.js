@@ -148,7 +148,7 @@ const SalesReport = () => {
         <div className="col input-group">
           <div className="input-group-prepend">
             <div className="input-group-text bg-white">
-              <b>Total Income:</b>
+              <b>Total Sales:</b>
             </div>
           </div>
           <input
