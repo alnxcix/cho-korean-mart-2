@@ -223,7 +223,7 @@ const LoginPage = (props) => {
                         onChange={(e) => {
                           setPassword4NewPass(e.target.value);
                         }}
-                        placeholder="Password"
+                        placeholder="New Password"
                         type={passState}
                         value={password4NewPass}
                       />

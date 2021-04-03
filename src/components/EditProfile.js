@@ -117,7 +117,7 @@ const EditProfile = (props) => {
                         onChange={(e) => {
                           setPassword(e.target.value);
                         }}
-                        placeholder="Password"
+                        placeholder="New Password"
                         type={passState}
                         value={password}
                       />
@@ -183,7 +183,8 @@ const EditProfile = (props) => {
                 <div className="form-group mt-2">
                   <label className="form-label">
                     <h6>
-                      <br></br>Enter your old password to implement the changes:
+                      <br></br>Enter your current password to implement the
+                      changes:
                     </h6>
                   </label>
                   <input
