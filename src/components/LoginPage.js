@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import $ from "jquery";
 import InitializeAdminModal from "./InitializeAdminModal";
 import logo from "../assets/ChoKoreanMart.jpg";
+import bcrypt from "bcryptjs";
 
 const LoginPage = (props) => {
   let { setActiveUser } = props;
@@ -24,14 +25,25 @@ const LoginPage = (props) => {
     window
       .require("electron")
       .remote.getGlobal("users")
-      .auth(_id, password)
+      .read(_id)
       .then((user) => {
-        user === null
-          ? $("#loginPageAlert2").slideDown()
-          : user.newPass
-          ? $("#modalNewPass").modal("show")
-          : setActiveUser(user);
-      });
+        if (user !== null)
+          bcrypt.compareSync(password, user.password)
+            ? user.newPass
+              ? $("#modalNewPass").modal("show")
+              : setActiveUser(user)
+            : $("#loginPageAlert2").slideDown();
+        else $("#loginPageAlert2").slideDown();
+      })
+      .catch(() => $("#loginPageAlert2").slideDown());
+    // .auth(_id, hashedPassword(password))
+    // .then((user) => {
+    //   user === null
+    //     ? $("#loginPageAlert2").slideDown()
+    //     : user.newPass
+    //     ? $("#modalNewPass").modal("show")
+    //     : setActiveUser(user);
+    // });
   };
 
   const getUser = () => user.filter((user) => user._id == _id);
@@ -40,7 +52,7 @@ const LoginPage = (props) => {
     window
       .require("electron")
       .remote.getGlobal("users")
-      .auth(_id, password)
+      .read(_id)
       .then((user) => setActiveUser(user));
     getUser().map((user) => {
       window
@@ -48,7 +60,7 @@ const LoginPage = (props) => {
         .remote.getGlobal("users")
         .update({
           ...user,
-          password: password4NewPass,
+          password: hashedPassword(password4NewPass),
           newPass: false,
         });
     });
@@ -74,6 +86,8 @@ const LoginPage = (props) => {
         .then((users) => setUser(users)),
     []
   );
+
+  const hashedPassword = (pass) => bcrypt.hashSync(pass, bcrypt.genSaltSync());
   return (
     <>
       <div className="container" style={{ maxWidth: 300 }}>

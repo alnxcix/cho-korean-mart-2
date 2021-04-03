@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import bsCustomFileInput from "bs-custom-file-input";
 import $ from "jquery";
 import logo from "../../../assets/ChoKoreanMart.jpg";
+import bcrypt from "bcryptjs";
 
 const AddUser = (props) => {
   let { setUsers } = props;
@@ -40,7 +41,7 @@ const AddUser = (props) => {
         firstName: firstName.trim(),
         imgSrc: imgSrc,
         lastName: lastName.trim(),
-        password: password,
+        password: hashedPassword(password),
         role: role,
         newPass: true,
       })
@@ -66,6 +67,14 @@ const AddUser = (props) => {
     if (e[0]) reader.readAsDataURL(e[0]);
   };
   useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
+
+  // const test = (pass) => {
+  //   const hash = bcrypt.hashSync(pass, bcrypt.genSaltSync());
+  //   console.log(pass);
+  //   console.log(hash);
+  //   console.log(bcrypt.compareSync(pass, hash));
+  // };
+  const hashedPassword = (pass) => bcrypt.hashSync(pass, bcrypt.genSaltSync());
   return (
     <>
       <button
@@ -109,6 +118,7 @@ const AddUser = (props) => {
                     <input
                       className="form-control"
                       onChange={(e) => setFirstName(e.target.value)}
+                      // onClick={() => test("password")}
                       placeholder="First Name"
                       required
                       value={firstName}

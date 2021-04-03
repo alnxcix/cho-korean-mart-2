@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import bsCustomFileInput from "bs-custom-file-input";
 import $ from "jquery";
+import bcrypt from "bcryptjs";
 
 const EditProfile = (props) => {
   let { activeUser, setActiveUser } = props;
@@ -30,7 +31,7 @@ const EditProfile = (props) => {
       .remote.getGlobal("users")
       .update({
         ...user,
-        password: password === "" ? user.password : password,
+        password: password === "" ? user.password : hashedPassword(password),
       });
     window
       .require("electron")
@@ -51,6 +52,7 @@ const EditProfile = (props) => {
   };
   useEffect(() => setUser(activeUser), [activeUser]);
   useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
+  const hashedPassword = (pass) => bcrypt.hashSync(pass, bcrypt.genSaltSync());
   return (
     <>
       <div

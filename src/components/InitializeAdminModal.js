@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import bsCustomFileInput from "bs-custom-file-input";
 import $ from "jquery";
 import logo from "../assets/ChoKoreanMart.jpg";
+import bcrypt from "bcryptjs";
 
 const InitializeAdminModal = () => {
   const [_id, set_id] = useState("");
@@ -38,7 +39,7 @@ const InitializeAdminModal = () => {
         firstName: firstName,
         imgSrc: imgSrc,
         lastName: lastName,
-        password: password,
+        password: hashedPassword(password),
         role: "Administrator",
         newPass: false,
       })
@@ -57,6 +58,7 @@ const InitializeAdminModal = () => {
     reader.readAsDataURL(e[0]);
   };
   useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
+  const hashedPassword = (pass) => bcrypt.hashSync(pass, bcrypt.genSaltSync());
   return (
     <div
       className="fade modal"
