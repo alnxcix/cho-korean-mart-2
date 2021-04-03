@@ -71,14 +71,7 @@
   "author": "Cho Korean Mart",
   "build": {
     "appId": "com.app.cho-korean-mart",
-    "files": [
-      "build/**/*",
-      "node_modules/**/*"
-    ],
-    "directories": {
-      "buildResources": "assets"
-    },
-    "icon": "build/icon.ico"
+    "icon": "./build/icon.ico"
   },
   "homepage": ".",
   "main": "./public/electron.js",

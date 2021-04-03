@@ -10,7 +10,9 @@ global.transactions = require("./db/stores/transactionStore");
 global.settings = require("electron-settings");
 
 function createWindow() {
+  // Remove menu
   Menu.setApplicationMenu(false);
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1100,
@@ -18,9 +20,6 @@ function createWindow() {
     frame: false,
     webPreferences: { nodeIntegration: true, enableRemoteModule: true },
   });
-
-  // Remove menu
-  // mainWindow.setMenu(null);
 
   // and load the index.html of the app.
   mainWindow.loadURL(
@@ -30,7 +29,7 @@ function createWindow() {
   );
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  if (isDev) mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
