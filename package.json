@@ -34,11 +34,14 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "dev": "concurrently \"SET BROWSER=none && yarn start\" \"wait-on http://localhost:3000 && electron .\""
+    "build": "yarn react-build && yarn electron-build",
+    "dev": "concurrently \"SET BROWSER=none && yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-build": "electron-builder",
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "react-test": "react-scripts test",
+    "react-eject": "react-scripts eject",
+    "release": "yarn react-build && electron-builder --publish=always"
   },
   "eslintConfig": {
     "extends": [
@@ -63,6 +66,17 @@
     "electron": "^11.2.2",
     "electron-builder": "^22.9.1",
     "wait-on": "^5.2.1"
+  },
+  "author": "Cho Korean Mart",
+  "build": {
+    "appId": "com.app.cho-korean-mart",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
   },
   "homepage": ".",
   "main": "./public/electron.js"
