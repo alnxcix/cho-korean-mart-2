@@ -6,6 +6,7 @@ import _ from "lodash";
 import $ from "jquery";
 import logo from "../../../assets/ChoKoreanMart.jpg";
 import Pagination from "../../Pagination"; //https://www.youtube.com/watch?v=IYCa1F-OWmk
+import { formatDigits } from "../../../utils/formatDigits";
 
 const InventoryComponent = (props) => {
   let { cartItems, setCartItems, updateItemQuantity } = props;
@@ -21,8 +22,6 @@ const InventoryComponent = (props) => {
     $("#posAlert4").slideUp();
     setCartItems([...cartItems, { product: product, quantity: 1 }]);
   };
-  const formatDigits = (num) =>
-    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const getChunkedFilteredProducts = () =>
     _.chunk(getFilteredProducts(), itemsPerPage);
   const getFilteredProducts = () =>

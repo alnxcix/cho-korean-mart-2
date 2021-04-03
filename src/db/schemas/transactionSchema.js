@@ -1,6 +1,5 @@
 const transactionSchema = {
   properties: {
-    applySpecialDiscount: { type: "boolean" },
     cart: { type: "array" },
     cash: { type: "number" },
     date: { type: "integer" },

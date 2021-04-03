@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import $ from "jquery";
+import { formatDigits } from "../../../utils/formatDigits";
 import { generatePrintable } from "../../../utils/generatePrintable";
 
 const PaymentModalComponents = (props) => {
   let { activeUser, cartItems, setCartItems, vatRate } = props;
-  const [applySpecialDiscount, toggleSpecialDiscount] = useState(false);
-  const [transactions, setTransactions] = useState([]);
   const [cash, setCash] = useState("");
   const [products, setProducts] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [users, setUsers] = useState([]);
-  const formatDigits = (num) =>
-    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   useEffect(() => {
     window
       .require("electron")
@@ -67,69 +65,29 @@ const PaymentModalComponents = (props) => {
       5
     )}`;
   };
-  // old formulas
-  // const getSubTotal = () =>
-  //   cartItems
-  //     .map(
-  //       (cartItem) =>
-  //         ((cartItem.product.price -
-  //           (cartItem.product.price / 100) * cartItem.product.discount) /
-  //           1.12) *
-  //         cartItem.quantity
-  //     )
-  //     .reduce((acc, cur) => acc + cur, 0);
-  // const getTotalVat = () =>
-  //   cartItems
-  //     .map((cartItem) =>
-  //       cartItem.product.discount === 0 && applySpecialDiscount
-  //         ? 0
-  //         : (((cartItem.product.price / 100) * cartItem.product.discount) /
-  //             1.12) *
-  //           cartItem.quantity
-  //     )
-  //     .reduce((acc, cur) => acc + cur, 0);
-  // const getGrandTotal = () =>
-  //   cartItems
-  //     .map(
-  //       (cartItem) =>
-  //         (cartItem.product.price /
-  //           (applySpecialDiscount && cartItem.product.discount === 0
-  //             ? 1.12
-  //             : 1) -
-  //           (cartItem.product.price /
-  //             (applySpecialDiscount && cartItem.product.discount === 0
-  //               ? 1.12
-  //               : 1) /
-  //             100) *
-  //             (cartItem.product.discount > 0
-  //               ? cartItem.product.discount
-  //               : applySpecialDiscount
-  //               ? 20
-  //               : 0)) *
-  //         cartItem.quantity
-  //     )
-  //     .reduce((acc, cur) => acc + cur, 0);
   const getSubTotal = () =>
     cartItems
-      .map((cartItem) => (cartItem.product.price / 1.12) * cartItem.quantity)
+      .map(
+        (cartItem) =>
+          (cartItem.product.price / (100 + vatRate)) * 100 * cartItem.quantity
+      )
       .reduce((acc, cur) => acc + cur, 0);
   const getTotalVat = () =>
     cartItems
-      .map((cartItem) =>
-        (cartItem.product.discount === 0) & applySpecialDiscount
-          ? 0
-          : (cartItem.product.price - cartItem.product.price / 1.12) *
-            cartItem.quantity
+      .map(
+        (cartItem) =>
+          (cartItem.product.price -
+            (cartItem.product.price / (100 + vatRate)) * 100) *
+          cartItem.quantity
       )
       .reduce((acc, cur) => acc + cur, 0);
   const getTotalDiscount = () =>
     cartItems
-      .map((cartItem) =>
-        (cartItem.product.discount === 0) & applySpecialDiscount
-          ? (cartItem.product.price / 1.12 / 100) * 20 * cartItem.quantity
-          : (cartItem.product.price / 100) *
-            cartItem.product.discount *
-            cartItem.quantity
+      .map(
+        (cartItem) =>
+          (cartItem.product.price / 100) *
+          cartItem.product.discount *
+          cartItem.quantity
       )
       .reduce((acc, cur) => acc + cur, 0);
   const getGrandTotal = () =>
@@ -141,7 +99,6 @@ const PaymentModalComponents = (props) => {
       .remote.getGlobal("transactions")
       .create({
         _id: getTransactionId(),
-        applySpecialDiscount: applySpecialDiscount,
         date: Date.now(),
         cart: cartItems.map((cartItem) => {
           return {
@@ -167,7 +124,6 @@ const PaymentModalComponents = (props) => {
         });
         setCartItems([]);
         setCash("");
-        toggleSpecialDiscount(false);
         $("#paymentModal").modal("hide");
       })
       .catch((e) => {
@@ -208,7 +164,7 @@ const PaymentModalComponents = (props) => {
                 </div>
                 <div className="col form-group">
                   <label>
-                    VAT <small className="text-muted">(12%)</small>
+                    VAT <small className="text-muted">({vatRate}%)</small>
                   </label>
                   <div className="input-group">
                     <div className="input-group-prepend">
@@ -286,18 +242,6 @@ const PaymentModalComponents = (props) => {
                   </div>
                 </div>
               </div>
-              <hr />
-              {/* <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  onChange={() => toggleSpecialDiscount(!applySpecialDiscount)}
-                  value={applySpecialDiscount}
-                />
-                <label className="form-check-label">
-                  Apply Special Discount
-                </label>
-              </div> */}
             </div>
             <div className="modal-footer">
               <button

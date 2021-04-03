@@ -7,16 +7,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import ChartComponent from "../ChartComponent";
 import moment from "moment";
+import ChartComponent from "../ChartComponent";
+import { formatDigits } from "../../utils/formatDigits";
 
 const Dashboard = (props) => {
   let { activeUser } = props;
   const [products, setProducts] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [users, setUsers] = useState([]);
-  const formatDigits = (num) =>
-    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   useEffect(() => {
     window
       .require("electron")

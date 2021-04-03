@@ -8,6 +8,7 @@ import AddUser from "./components/AddUser";
 import DeleteUser from "./components/DeleteUser";
 import EditUser from "./components/EditUser";
 import Pagination from "../Pagination";
+import { formatDigits } from "../../utils/formatDigits";
 
 const Accounts = (props) => {
   let { activeUser, setActiveUser } = props;
@@ -16,8 +17,6 @@ const Accounts = (props) => {
   const [searchString, setSearchString] = useState("");
   const [propertyToBeSorted, setPropertyToBeSorted] = useState("_id");
   const [sortOrder, setSortOrder] = useState("asc");
-  const formatDigits = (num) =>
-    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const getChunkedFilteredUsers = () =>

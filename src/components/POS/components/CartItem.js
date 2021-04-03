@@ -1,14 +1,14 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { formatDigits } from "../../../utils/formatDigits";
 
 const CartItem = (props) => {
-  let { cartItem, updateItemQuantity, removeFromCart, formatDigits } = props;
+  let { cartItem, updateItemQuantity, removeFromCart } = props;
   return (
     <div className="bg-light card mb-3 rounded-lg">
       <div className="card-body">
         <div className="media">
           <picture>
-            {/* <source srcset={cartItem.product.imgSrc} /> */}
             <img
               alt=""
               className="border border-secondary rounded-lg mr-3"
@@ -56,7 +56,7 @@ const CartItem = (props) => {
               (
                 (cartItem.product.price -
                   (cartItem.product.price / 100) * cartItem.product.discount) *
-                Number(cartItem.quantity)
+                cartItem.quantity
               ).toFixed(2)
             )}`}</small>
           </div>

@@ -5,14 +5,13 @@ import _ from "lodash";
 import moment from "moment";
 import sortArray from "sort-array";
 import DateRangePickerComponent from "../DateRangePickerComponent";
+import { formatDigits } from "../../utils/formatDigits";
 
 const SalesReport = () => {
   const [endDate, setEndDate] = useState(moment().endOf("d").toDate());
   const [startDate, setStartDate] = useState(moment().startOf("d").toDate());
   const [products, setProducts] = useState([]);
   const [transactions, setTransactions] = useState([]);
-  const formatDigits = (num) =>
-    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const setDates = (start, end) => {
     setStartDate(start);
     setEndDate(end);

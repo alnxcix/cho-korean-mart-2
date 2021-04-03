@@ -2,17 +2,16 @@ import { useEffect, useState } from "react";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
+import { formatDigits } from "../../../utils/formatDigits";
 import { generatePrintable } from "../../../utils/generatePrintable";
 
 const TransactionModalComponents = (props) => {
   const [products, setProducts] = useState([]);
   const [transaction, setTransaction] = useState(props.transaction);
   const [users, setUsers] = useState([]);
-  const formatDigits = (num) =>
-    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const getModifiedCart = () =>
     transaction.cart.map((cartItem) => {
-      let unitPrice = cartItem.price / 1.12;
+      let unitPrice = (cartItem.price / (100 + transaction.vatRate)) * 100;
       let vat =
         unitPrice *
         (transaction.applySpecialDiscount && cartItem.discount === 0
