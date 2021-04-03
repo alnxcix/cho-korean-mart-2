@@ -53,6 +53,7 @@ const EditProfile = (props) => {
   useEffect(() => setUser(activeUser), [activeUser]);
   useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
   const hashedPassword = (pass) => bcrypt.hashSync(pass, bcrypt.genSaltSync());
+  const samePass = (pass, hash) => bcrypt.compareSync(pass, hash);
   return (
     <>
       <div
@@ -212,7 +213,7 @@ const EditProfile = (props) => {
                 <button
                   className="btn btn-success"
                   disabled={
-                    activeUser.password !== verifyUser ||
+                    !samePass(verifyUser, activeUser.password) ||
                     (password.length > 0 && !getPasswordValidity())
                   }
                   type="submit"

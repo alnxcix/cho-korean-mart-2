@@ -77,7 +77,8 @@
     ],
     "directories": {
       "buildResources": "assets"
-    }
+    },
+    "icon": "build/icon.ico"
   },
   "homepage": ".",
   "main": "./public/electron.js",

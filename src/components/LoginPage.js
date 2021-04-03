@@ -49,11 +49,6 @@ const LoginPage = (props) => {
   const getUser = () => user.filter((user) => user._id == _id);
 
   const newPassSet = () => {
-    window
-      .require("electron")
-      .remote.getGlobal("users")
-      .read(_id)
-      .then((user) => setActiveUser(user));
     getUser().map((user) => {
       window
         .require("electron")
@@ -64,6 +59,11 @@ const LoginPage = (props) => {
           newPass: false,
         });
     });
+    window
+      .require("electron")
+      .remote.getGlobal("users")
+      .read(_id)
+      .then((user) => setActiveUser(user));
     $("#modalNewPass").modal("hide");
   };
   useEffect(

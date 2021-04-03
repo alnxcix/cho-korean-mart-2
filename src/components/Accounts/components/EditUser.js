@@ -3,6 +3,7 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import bsCustomFileInput from "bs-custom-file-input";
 import $ from "jquery";
+import bcrypt from "bcryptjs";
 
 const EditUser = (props) => {
   let { setUsers, activeUser, setActiveUser } = props;
@@ -33,7 +34,7 @@ const EditUser = (props) => {
       .remote.getGlobal("users")
       .update({
         ...user,
-        password: password === "" ? user.password : password,
+        password: password === "" ? user.password : hashedPassword(password),
         newPass: password === "" ? false : true,
       })
       .then(() => $("#userAlert3").slideDown())
@@ -64,6 +65,8 @@ const EditUser = (props) => {
   };
   useEffect(() => setUser(props.user), [props.user]);
   useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
+  const hashedPassword = (pass) => bcrypt.hashSync(pass, bcrypt.genSaltSync());
+  const samePass = (pass, hash) => bcrypt.compareSync(pass, hash);
   return (
     <>
       <button
@@ -252,7 +255,7 @@ const EditUser = (props) => {
                 <button
                   className="btn btn-success"
                   disabled={
-                    activeUser.password !== verifyUser ||
+                    !samePass(verifyUser, activeUser.password) ||
                     (password.length > 0 && !getPasswordValidity())
                   }
                   type="submit"

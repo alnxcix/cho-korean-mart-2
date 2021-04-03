@@ -2,10 +2,12 @@ import { useState } from "react";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import $ from "jquery";
+import bcrypt from "bcryptjs";
 
 const DeleteProduct = (props) => {
   let { product, setProducts, activeUser } = props;
   const [verifyUser, setVerification] = useState("");
+  const samePass = (pass, hash) => bcrypt.compareSync(pass, hash);
   return (
     <>
       <button
@@ -77,7 +79,7 @@ const DeleteProduct = (props) => {
                 className="btn btn-danger"
                 data-dismiss="modal"
                 disabled={
-                  activeUser.password !== verifyUser ||
+                  !samePass(verifyUser, activeUser.password) ||
                   product.stockQuantity > 0
                 }
                 onClick={() => {
