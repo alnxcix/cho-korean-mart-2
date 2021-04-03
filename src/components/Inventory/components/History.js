@@ -86,7 +86,7 @@ const History = (props) => {
             <span className="input-group-text">Sort by</span>
           </div>
           <select
-            className="custom-select"
+            className="custom-select btn"
             onChange={(e) => setPropertyToBeSorted(e.target.value)}
             value={propertyToBeSorted}
           >
@@ -96,7 +96,7 @@ const History = (props) => {
             <option value="userFullName">User</option>
           </select>
           <select
-            className="custom-select"
+            className="custom-select btn"
             onChange={(e) => setSortOrder(e.target.value)}
             value={sortOrder}
           >
@@ -121,8 +121,8 @@ const History = (props) => {
           <input
             className="form-control"
             onChange={(e) => {
-              setSearchString(e.target.value) 
-              setPage(0)
+              setSearchString(e.target.value);
+              setPage(0);
             }}
             placeholder="Search"
             value={searchString}

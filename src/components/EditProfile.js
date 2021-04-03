@@ -125,7 +125,7 @@ const EditProfile = (props) => {
                           setPassState("password");
                         }}
                       >
-                        <span className="input-group-text">View</span>
+                        <span className="input-group-text btn">View</span>
                       </div>
                     </div>
                     <small className="form-text text-muted">

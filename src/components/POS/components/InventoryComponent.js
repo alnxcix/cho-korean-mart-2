@@ -165,7 +165,7 @@ const InventoryComponent = (props) => {
               <label className="input-group-text">Category</label>
             </div>
             <select
-              className="custom-select"
+              className="custom-select btn"
               onChange={(e) => setCategory(e.target.value)}
               value={category}
             >
@@ -186,8 +186,8 @@ const InventoryComponent = (props) => {
             <input
               className="form-control"
               onChange={(e) => {
-                setSearchString(e.target.value) 
-                setPage(0)
+                setSearchString(e.target.value);
+                setPage(0);
               }}
               placeholder="Search"
               value={searchString}

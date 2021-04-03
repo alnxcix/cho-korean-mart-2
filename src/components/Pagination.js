@@ -5,6 +5,7 @@ import {
   faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { formatDigits } from "../utils/formatDigits";
 
 const Pagination = (props) => {
   let {
@@ -15,21 +16,21 @@ const Pagination = (props) => {
     setItemsPerPage,
     setPage,
   } = props;
-    const formatDigits = (num) =>
-    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   // const pageNums = [];
   // for (let i = 1; i <= Math.ceil(totalRows / rowsPerPage); i++) {
   //   pageNums.push(i);
   // }
   return (
-    <caption className='mb-5'>
+    <caption className="mb-5">
       <div class="form-inline ">
         <span className="mr-auto">
           {getDataset().length > 0
             ? getChunkedDataset()[page] !== undefined
-              ? `Showing ${formatDigits(itemsPerPage * page + 1)} - ${
-                formatDigits(itemsPerPage * page + getChunkedDataset()[page].length) 
-                } of ${formatDigits(getDataset().length)} ${
+              ? `Showing ${formatDigits(
+                  itemsPerPage * page + 1
+                )} - ${formatDigits(
+                  itemsPerPage * page + getChunkedDataset()[page].length
+                )} of ${formatDigits(getDataset().length)} ${
                   getDataset().length > 1 ? "entries" : "entry"
                 }.`
               : () => null
@@ -121,10 +122,10 @@ const Pagination = (props) => {
         </div>
         <label className="mr-2">Show</label>
         <select
-          className="custom-select"
+          className="custom-select btn"
           onChange={(e) => {
-            setItemsPerPage(e.target.value)
-            setPage(0)
+            setItemsPerPage(e.target.value);
+            setPage(0);
           }}
           value={itemsPerPage}
         >

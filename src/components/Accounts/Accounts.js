@@ -122,7 +122,7 @@ const Accounts = (props) => {
             <span className="input-group-text">Sort by</span>
           </div>
           <select
-            className="custom-select"
+            className="custom-select btn"
             onChange={(e) => setPropertyToBeSorted(e.target.value)}
             value={propertyToBeSorted}
           >
@@ -132,7 +132,7 @@ const Accounts = (props) => {
             <option value="role">Role</option>
           </select>
           <select
-            className="custom-select"
+            className="custom-select btn"
             onChange={(e) => setSortOrder(e.target.value)}
             value={sortOrder}
           >
@@ -145,7 +145,7 @@ const Accounts = (props) => {
             <label className="input-group-text">Role</label>
           </div>
           <select
-            className="custom-select"
+            className="custom-select btn"
             onChange={(e) => setRole(e.target.value)}
             value={role}
           >
@@ -163,7 +163,7 @@ const Accounts = (props) => {
           <input
             className="form-control"
             onChange={(e) => {
-              setSearchString(e.target.value) 
+              setSearchString(e.target.value);
               // setCurrentPage(1);
               setPage(0);
             }}

@@ -56,7 +56,7 @@ const Products = (props) => {
             <span className="input-group-text">Sort by</span>
           </div>
           <select
-            className="custom-select"
+            className="custom-select btn"
             onChange={(e) => setPropertyToBeSorted(e.target.value)}
             value={propertyToBeSorted}
           >
@@ -68,7 +68,7 @@ const Products = (props) => {
             <option value="stockQuantity">Stock Quantity</option>
           </select>
           <select
-            className="custom-select"
+            className="custom-select btn"
             onChange={(e) => setSortOrder(e.target.value)}
             value={sortOrder}
           >
@@ -81,7 +81,7 @@ const Products = (props) => {
             <label className="input-group-text">Category</label>
           </div>
           <select
-            className="custom-select"
+            className="custom-select btn"
             onChange={(e) => setCategory(e.target.value)}
             value={category}
           >
@@ -102,8 +102,8 @@ const Products = (props) => {
           <input
             className="form-control"
             onChange={(e) => {
-              setSearchString(e.target.value)
-              setPage(0)
+              setSearchString(e.target.value);
+              setPage(0);
             }}
             placeholder="Search"
             value={searchString}
@@ -111,15 +111,18 @@ const Products = (props) => {
         </div>
       </div>
       <hr />
-      <div className="custom-control custom-switch mb-3">
+      <div className="custom-control custom-switch mb-3 col">
         <input
           type="checkbox"
-          className="custom-control-input"
+          className="custom-control-input btn"
           id="criticalLevelSwitch"
           onChange={() => setCriticalItemsOnly(!criticalItemsOnly)}
           checked={criticalItemsOnly}
         />
-        <label className="custom-control-label" for="criticalLevelSwitch">
+        <label
+          className="custom-control-label btn p-0"
+          for="criticalLevelSwitch"
+        >
           <strong>Only show products at critical level</strong>
         </label>
       </div>

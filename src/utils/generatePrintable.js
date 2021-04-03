@@ -2,6 +2,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import moment from "moment";
 import logo from "../assets/ChoKoreanMart.jpg";
+import { formatDigits } from "./formatDigits";
 
 export const generatePrintable = (products, transaction, users) => {
   let columns = [
@@ -24,12 +25,6 @@ export const generatePrintable = (products, transaction, users) => {
       Number((cartItem.price * cartItem.quantity * cartItem.discount) / 100)
     )
     .reduce((acc, cur) => acc + cur, 0);
-  const formatDigits = (num) =>
-    num
-      .toFixed(2)
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
   let doc = new jsPDF("portrait", "px", "a4", "false");
   // doc.text(30, 60, "logo here");
   doc.addImage(logo, "JPG", 30, 15, 100, 100);
@@ -74,12 +69,15 @@ export const generatePrintable = (products, transaction, users) => {
         : products.find((product) => product._id === cartItem._id).name,
     Quantity: cartItem.quantity,
     UnitPrice: `Php ${formatDigits(
-      (cartItem.price / (100 + transaction.vatRate)) * 100
+      ((cartItem.price / (100 + transaction.vatRate)) * 100).toFixed(2)
     )}`,
     VAT: `${transaction.vatRate}%`,
     Discount: `${cartItem.discount}%`,
     Total: `Php ${formatDigits(
-      (cartItem.price * cartItem.quantity * (100 - cartItem.discount)) / 100
+      (
+        (cartItem.price * cartItem.quantity * (100 - cartItem.discount)) /
+        100
+      ).toFixed(2)
     )}`,
   }));
   doc.autoTable(columns, rows, {
@@ -98,19 +96,25 @@ export const generatePrintable = (products, transaction, users) => {
       [
         "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", //bakdshfghwbsd
         "Subtotal: ",
-        `Php ${formatDigits((getTotal / (100 + transaction.vatRate)) * 100)}`,
+        `Php ${formatDigits(
+          ((getTotal / (100 + transaction.vatRate)) * 100).toFixed(2)
+        )}`,
       ],
       [
         "",
         `Total VAT (${transaction.vatRate}%): `,
         `Php ${formatDigits(
-          getTotal - (getTotal / (100 + transaction.vatRate)) * 100
+          (getTotal - (getTotal / (100 + transaction.vatRate)) * 100).toFixed(2)
         )}`,
       ],
-      ["", `Total Discount: `, `Php ${formatDigits(getTotalDisc)}`],
-      ["", `Grand Total: `, `Php ${formatDigits(getTotal)}`],
-      ["", `Cash: `, `Php ${formatDigits(transaction.cash)}`],
-      ["", `Change: `, `Php ${formatDigits(transaction.cash - getTotal)}`],
+      ["", `Total Discount: `, `Php ${formatDigits(getTotalDisc.toFixed(2))}`],
+      ["", `Grand Total: `, `Php ${formatDigits(getTotal.toFixed(2))}`],
+      ["", `Cash: `, `Php ${formatDigits(transaction.cash.toFixed(2))}`],
+      [
+        "",
+        `Change: `,
+        `Php ${formatDigits((transaction.cash - getTotal).toFixed(2))}`,
+      ],
     ],
   });
   doc.save(`Transaction ${transaction._id}.pdf`);

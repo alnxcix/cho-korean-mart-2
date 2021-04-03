@@ -1,13 +1,9 @@
 import { useEffect } from "react";
 import Chart from "chart.js";
 import moment from "moment";
+import { formatDigits } from "../utils/formatDigits";
 
 const ChartComponent = () => {
-  const formatDigits = (num) =>
-    num
-      .toFixed(2)
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   useEffect(
     () =>
       window
@@ -61,13 +57,17 @@ const ChartComponent = () => {
                 scales: {
                   yAxes: [
                     {
-                      ticks: { callback: (tick) => `₱ ${formatDigits(tick)}` },
+                      ticks: {
+                        callback: (tick) =>
+                          `₱ ${formatDigits(tick.toFixed(2))}`,
+                      },
                     },
                   ],
                 },
                 tooltips: {
                   callbacks: {
-                    label: (label) => `₱ ${formatDigits(label.yLabel)}`,
+                    label: (label) =>
+                      `₱ ${formatDigits(label.yLabel.toFixed(2))}`,
                   },
                 },
               },

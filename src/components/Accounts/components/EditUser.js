@@ -107,7 +107,7 @@ const EditUser = (props) => {
                     <input
                       className="form-control"
                       onChange={(e) =>
-                        setUser({ ...user, firstName: e.target.value})
+                        setUser({ ...user, firstName: e.target.value })
                       }
                       placeholder="First Name"
                       required
@@ -161,7 +161,7 @@ const EditUser = (props) => {
                           setPassState("password");
                         }}
                       >
-                        <span className="input-group-text">View</span>
+                        <span className="input-group-text btn">View</span>
                       </div>
                     </div>
                     <small className="text-muted">
