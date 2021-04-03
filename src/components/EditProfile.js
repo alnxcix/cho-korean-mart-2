@@ -183,7 +183,7 @@ const EditProfile = (props) => {
                 <div className="form-group mt-2">
                   <label className="form-label">
                     <h6>
-                      <br></br>Enter your password to implement the changes:
+                      <br></br>Enter your old password to implement the changes:
                     </h6>
                   </label>
                   <input
