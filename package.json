@@ -79,5 +79,6 @@
     }
   },
   "homepage": ".",
-  "main": "./public/electron.js"
+  "main": "./public/electron.js",
+  "productName": "CHO Korean Mart"
 }
