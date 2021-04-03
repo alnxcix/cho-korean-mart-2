@@ -236,7 +236,7 @@ const PaymentModalComponents = (props) => {
                       value={
                         cash < getGrandTotal()
                           ? "Insufficient Cash"
-                          : formatDigits(cash - getGrandTotal().toFixed(2))
+                          : formatDigits((cash - getGrandTotal()).toFixed(2))
                       }
                     />
                   </div>
