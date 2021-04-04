@@ -44,6 +44,7 @@ const CartItem = (props) => {
                 className="form-control"
                 max={cartItem.product.stockQuantity}
                 min={1}
+                max="9999999999"
                 onChange={(e) =>
                   updateItemQuantity(cartItem.product, Number(e.target.value))
                 }

@@ -119,6 +119,7 @@ const AddUser = (props) => {
                       className="form-control"
                       onChange={(e) => setFirstName(e.target.value)}
                       // onClick={() => test("password")}
+                      maxLength="100"
                       placeholder="First Name"
                       required
                       value={firstName}
@@ -130,6 +131,7 @@ const AddUser = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
+                      maxLength="100"
                       onChange={(e) => setLastName(e.target.value)}
                       placeholder="Last Name"
                       required
@@ -144,6 +146,7 @@ const AddUser = (props) => {
                       className="form-control"
                       onChange={(e) => set_id(e.target.value)}
                       placeholder="Username / ID"
+                      maxLength="20"
                       required
                       value={_id}
                     />
@@ -155,6 +158,7 @@ const AddUser = (props) => {
                     <div className="input-group">
                       <input
                         className="form-control"
+                        maxLength="20"
                         style={{
                           backgroundColor:
                             password.length === 0 || getPasswordValidity()

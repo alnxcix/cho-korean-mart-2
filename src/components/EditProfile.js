@@ -81,6 +81,7 @@ const EditProfile = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
+                      maxLength="100"
                       disabled
                       value={user.firstName}
                     />
@@ -91,6 +92,7 @@ const EditProfile = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
+                      maxLength="100"
                       disabled
                       value={user.lastName}
                     />
@@ -108,6 +110,7 @@ const EditProfile = (props) => {
                     <div class="input-group">
                       <input
                         className="form-control"
+                        maxLength="20"
                         style={{
                           backgroundColor:
                             password.length === 0 || getPasswordValidity()
@@ -117,6 +120,7 @@ const EditProfile = (props) => {
                         onChange={(e) => {
                           setPassword(e.target.value);
                         }}
+                        maxlength="5"
                         placeholder="New Password"
                         type={passState}
                         value={password}

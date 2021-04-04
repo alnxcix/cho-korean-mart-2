@@ -123,6 +123,7 @@ const AddProduct = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
+                      maxLength="10"
                       onChange={(e) => set_id(e.target.value)}
                       placeholder="ID"
                       required
@@ -135,6 +136,7 @@ const AddProduct = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
+                      maxLength="100"
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Product Name"
                       required
@@ -192,6 +194,8 @@ const AddProduct = (props) => {
                         onChange={(e) => setPrice(e.target.value)}
                         placeholder="Price"
                         required
+                        min="0.01"
+                        max="99999999.99"
                         step="0.01"
                         type="number"
                         value={price}
@@ -209,6 +213,7 @@ const AddProduct = (props) => {
                         placeholder="Discount"
                         required
                         type="number"
+                        step="0.01"
                         value={discount}
                         min="0"
                         max="100"
@@ -227,6 +232,7 @@ const AddProduct = (props) => {
                       onChange={(e) => setStockQuantity(e.target.value)}
                       placeholder="Stock Quantity"
                       required
+                      max="9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
                       type="number"
                       value={stockQuantity}
                       min="1"
@@ -242,6 +248,7 @@ const AddProduct = (props) => {
                       required
                       type="number"
                       value={criticalLevel}
+                      max="999999999999999999999999999999"
                       min="1"
                     />
                   </div>

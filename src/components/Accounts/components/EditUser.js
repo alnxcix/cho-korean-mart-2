@@ -109,6 +109,7 @@ const EditUser = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
+                      maxLength="100"
                       onChange={(e) =>
                         setUser({ ...user, firstName: e.target.value })
                       }
@@ -123,6 +124,7 @@ const EditUser = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
+                      maxLength="100"
                       onChange={(e) =>
                         setUser({ ...user, lastName: e.target.value })
                       }
@@ -144,6 +146,7 @@ const EditUser = (props) => {
                     <div className="input-group">
                       <input
                         className="form-control"
+                        maxLength="20"
                         style={{
                           backgroundColor:
                             password.length === 0 || getPasswordValidity()

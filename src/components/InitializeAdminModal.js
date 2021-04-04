@@ -78,6 +78,7 @@ const InitializeAdminModal = () => {
                 <div className="col">
                   <input
                     className="form-control"
+                    maxLength="100"
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder="First Name"
                     required
@@ -90,6 +91,7 @@ const InitializeAdminModal = () => {
                 <div className="col">
                   <input
                     className="form-control"
+                    maxLength="100"
                     onChange={(e) => setLastName(e.target.value)}
                     placeholder="Last Name"
                     required
@@ -102,6 +104,7 @@ const InitializeAdminModal = () => {
                 <div className="col">
                   <input
                     className="form-control"
+                    maxLength="20"
                     onChange={(e) => set_id(e.target.value)}
                     placeholder="Username / ID"
                     required
@@ -115,6 +118,7 @@ const InitializeAdminModal = () => {
                   <div class="input-group">
                     <input
                       className="form-control"
+                      maxLength="20"
                       style={{
                         backgroundColor:
                           password.length === 0 || getPasswordValidity()

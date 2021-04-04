@@ -213,6 +213,7 @@ const LoginPage = (props) => {
                     <div className="input-group">
                       <input
                         className="form-control"
+                        maxLength="20"
                         style={{
                           backgroundColor:
                             password4NewPass.length === 0 ||

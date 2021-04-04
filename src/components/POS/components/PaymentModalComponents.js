@@ -216,6 +216,7 @@ const PaymentModalComponents = (props) => {
                     <input
                       autoFocus
                       className="form-control"
+                      max="99999999.99"
                       onChange={(e) => setCash(e.target.value)}
                       onClick={() => getTransactions()}
                       required
