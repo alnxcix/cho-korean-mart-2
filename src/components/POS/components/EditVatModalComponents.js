@@ -1,5 +1,4 @@
 import { useState } from "react";
-import $ from "jquery";
 
 const EditVatModalComponents = (props) => {
   let { vatRate, setVatRate } = props;
