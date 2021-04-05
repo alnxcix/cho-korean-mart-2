@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import $ from "jquery";
 import CartItem from "./CartItem";
 import EditVatModalComponents from "./EditVatModalComponents";
@@ -23,15 +23,6 @@ const CartComponent = (props) => {
     setCartItems(
       cartItems.filter((cartItem) => cartItem.product._id !== product._id)
     );
-  useEffect(
-    () =>
-      window
-        .require("electron")
-        .remote.getGlobal("settings")
-        .get("vatRate")
-        .then((vatRate) => setVatRate(vatRate)),
-    []
-  );
   return (
     <>
       <form
