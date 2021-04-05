@@ -7,7 +7,6 @@ global.users = require("./db/stores/userStore");
 global.products = require("./db/stores/productStore");
 global.stockHistoryEntries = require("./db/stores/stockHistoryEntryStore");
 global.transactions = require("./db/stores/transactionStore");
-global.settings = require("electron-settings");
 
 function createWindow() {
   // Remove menu

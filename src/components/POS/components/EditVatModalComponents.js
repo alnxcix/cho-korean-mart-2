@@ -1,14 +1,11 @@
+import { useState } from "react";
 import $ from "jquery";
 
 const EditVatModalComponents = (props) => {
   let { vatRate, setVatRate } = props;
-  const updateVatRate = () => {
-    window
-      .require("electron")
-      .remote.getGlobal("settings")
-      .set("vatRate", Number(vatRate));
-    $("#modalEditVAT").modal("hide");
-  };
+  const [newVatRate, setNewVatRate] = useState(vatRate);
+  const reset = () => setNewVatRate(vatRate);
+  const updateVatRate = () => setVatRate(newVatRate);
   return (
     <>
       <a
@@ -29,7 +26,12 @@ const EditVatModalComponents = (props) => {
           <div className="modal-content">
             <div className="modal-header" style={{ backgroundColor: "#900" }}>
               <h5 className="modal-title text-light">Edit VAT Rate</h5>
-              <button className="close text-light" data-dismiss="modal">
+              <button
+                className="close text-light"
+                data-dismiss="modal"
+                onClick={() => reset()}
+                type="button"
+              >
                 <span>&times;</span>
               </button>
             </div>
@@ -39,9 +41,9 @@ const EditVatModalComponents = (props) => {
                 <div className="input-group">
                   <input
                     className="form-control"
-                    onChange={(e) => setVatRate(e.target.value)}
+                    onChange={(e) => setNewVatRate(Number(e.target.value))}
                     type="number"
-                    value={vatRate}
+                    value={newVatRate}
                   />
                   <div className="input-group-append">
                     <span className="input-group-text">%</span>
@@ -53,6 +55,7 @@ const EditVatModalComponents = (props) => {
               <button
                 className="btn btn-dark"
                 data-dismiss="modal"
+                onClick={() => reset()}
                 type="button"
               >
                 Cancel
