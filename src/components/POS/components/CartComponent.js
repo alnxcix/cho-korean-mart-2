@@ -7,7 +7,7 @@ import { formatDigits } from "../../../utils/formatDigits";
 
 const CartComponent = (props) => {
   let { activeUser, cartItems, setCartItems, updateItemQuantity } = props;
-  const [vatRate, setVatRate] = useState();
+  const [vatRate, setVatRate] = useState(12);
   const getGrandTotal = () =>
     cartItems.length === 0
       ? 0
