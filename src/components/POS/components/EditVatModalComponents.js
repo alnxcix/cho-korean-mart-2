@@ -62,6 +62,7 @@ const EditVatModalComponents = (props) => {
               </button>
               <button
                 className="btn btn-success"
+                data-dismiss="modal"
                 disabled={vatRate === "" || vatRate < 0 || vatRate > 100}
                 onClick={() => updateVatRate()}
                 type="button"
