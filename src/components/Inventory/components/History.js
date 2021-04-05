@@ -30,6 +30,15 @@ const History = (props) => {
   const getFilteredStockHistoryEntries = () =>
     sortArray(
       stockHistoryEntries
+        .map((stockHistoryEntry) => {
+          return {
+            ...stockHistoryEntry,
+            product: products.find(
+              (product) => product._id === stockHistoryEntry.productId
+            ),
+            user: users.find((user) => user._id === stockHistoryEntry.userId),
+          };
+        })
         .filter(
           (stockHistoryEntry) =>
             JSON.stringify(Object.values(stockHistoryEntry))
@@ -39,22 +48,7 @@ const History = (props) => {
               moment(startDate),
               moment(endDate)
             )
-        )
-        .map((stockHistoryEntry) => {
-          return {
-            ...stockHistoryEntry,
-            product:
-              products.length > 0
-                ? products.find(
-                    (product) => product._id === stockHistoryEntry.productId
-                  )
-                : undefined,
-            user:
-              users.length > 0
-                ? users.find((user) => user._id === stockHistoryEntry.userId)
-                : undefined,
-          };
-        }),
+        ),
       { by: propertyToBeSorted, order: sortOrder }
     );
   const setDates = (start, end) => {
@@ -164,12 +158,12 @@ const History = (props) => {
                         )}
                       </td>
                       <td className="text-wrap">
-                        {stockHistoryEntry.inOut == "in" ? <>+</> : <>-</>}
+                        {stockHistoryEntry.inOut == "in" ? "+" : "-"}
                         {formatDigits(stockHistoryEntry.quantity)}
                       </td>
                       <td className="text-wrap">
                         {stockHistoryEntry.user === undefined ? (
-                          <em>Deleted User</em>
+                          <em>Deleted User ({stockHistoryEntry.userId})</em>
                         ) : (
                           `${stockHistoryEntry.user.firstName} ${stockHistoryEntry.user.lastName}`
                         )}

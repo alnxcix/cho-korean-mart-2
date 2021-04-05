@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import _, { fromPairs } from "lodash";
+import _ from "lodash";
 import sortArray from "sort-array";
 import DeleteProduct from "./DeleteProduct";
 import EditProduct from "./EditProduct";

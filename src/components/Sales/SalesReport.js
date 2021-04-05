@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
+import sortArray from "sort-array";
 import _ from "lodash";
 import $ from "jquery";
 import ChartComponent from "../ChartComponent";
@@ -31,12 +32,25 @@ const SalesReport = () => {
   const getChunkedFilteredTransactions = () =>
     _.chunk(getFilteredTransactions(), itemsPerPage);
   const getFilteredTransactions = () =>
-    transactions.filter(
-      (transaction) =>
-        JSON.stringify(Object.values(transaction))
-          .toLowerCase()
-          .includes(searchString.toLowerCase()) &&
-        moment(transaction.date).isBetween(moment(startDate), moment(endDate))
+    sortArray(
+      transactions
+        .map((transaction) => {
+          return {
+            ...transaction,
+            user: users.find((user) => user._id === transaction.userId),
+          };
+        })
+        .filter(
+          (transaction) =>
+            JSON.stringify(Object.values(transaction))
+              .toLowerCase()
+              .includes(searchString.toLowerCase()) &&
+            moment(transaction.date).isBetween(
+              moment(startDate),
+              moment(endDate)
+            )
+        ),
+      { by: "date", order: "desc" }
     );
   const getFilteredTransactionsTotalIncome = () =>
     (getFilteredTransactions().length > 0
@@ -192,13 +206,10 @@ const SalesReport = () => {
                       </td>
                       <td className="text-wrap">{transaction._id}</td>
                       <td className="text-wrap">
-                        {users.find(
-                          (user) => user._id === transaction.userId
-                        ) === undefined ? (
+                        {transaction.user === undefined ? (
                           <em>Deleted User ({transaction.userId})</em>
                         ) : (
-                          users.find((user) => user._id === transaction.userId)
-                            .firstName
+                          `${transaction.user.firstName} ${transaction.user.lastName}`
                         )}
                       </td>
                       <td className="text-wrap">
