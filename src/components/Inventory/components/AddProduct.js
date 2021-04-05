@@ -41,29 +41,29 @@ const AddProduct = (props) => {
         stockQuantity: Number(stockQuantity),
       })
       .then(() => {
+        if (stockQuantity > 0) {
+          window
+            .require("electron")
+            .remote.getGlobal("stockHistoryEntries")
+            .create({
+              date: Date.now(),
+              productId: _id.trim(),
+              inOut: "in",
+              quantity: Number(stockQuantity),
+              userId: activeUser._id,
+            });
+          window
+            .require("electron")
+            .remote.getGlobal("stockHistoryEntries")
+            .readAll()
+            .then((stockHistoryEntries) =>
+              setStockHistoryEntries(stockHistoryEntries)
+            );
+        }
         $("#productAlert1").slideDown();
         clear();
       })
       .catch(() => $("#productAlert2").slideDown());
-    if (stockQuantity > 0) {
-      window
-        .require("electron")
-        .remote.getGlobal("stockHistoryEntries")
-        .create({
-          date: Date.now(),
-          productId: _id.trim(),
-          inOut: "in",
-          quantity: Number(stockQuantity),
-          userId: activeUser._id,
-        });
-      window
-        .require("electron")
-        .remote.getGlobal("stockHistoryEntries")
-        .readAll()
-        .then((stockHistoryEntries) =>
-          setStockHistoryEntries(stockHistoryEntries)
-        );
-    }
     window
       .require("electron")
       .remote.getGlobal("products")
