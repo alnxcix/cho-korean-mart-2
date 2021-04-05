@@ -123,7 +123,7 @@ const AddProduct = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
-                      maxLength="10"
+                      maxLength="20"
                       onChange={(e) => set_id(e.target.value)}
                       placeholder="ID"
                       required
