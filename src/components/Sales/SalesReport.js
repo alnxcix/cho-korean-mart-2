@@ -29,17 +29,19 @@ const SalesReport = () => {
     setStartDate(start);
     setEndDate(end);
   };
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const [
+    chunkedFilteredTransactions,
+    setChunkedFilteredTransactions,
+  ] = useState([]);
+
   const getChunkedFilteredTransactions = () =>
-    _.chunk(getFilteredTransactions(), itemsPerPage);
+    // console.log(`getChunkedFilteredTransactions`);
+    _.chunk(filteredTransactions, itemsPerPage);
   const getFilteredTransactions = () =>
+    // console.log(`getFilteredTransactions `);
     sortArray(
       transactions
-        .map((transaction) => {
-          return {
-            ...transaction,
-            user: users.find((user) => user._id === transaction.userId),
-          };
-        })
         .filter(
           (transaction) =>
             JSON.stringify(Object.values(transaction))
@@ -49,12 +51,19 @@ const SalesReport = () => {
               moment(startDate),
               moment(endDate)
             )
-        ),
+        )
+        .map((transaction) => {
+          return {
+            ...transaction,
+            user: users.find((user) => user._id === transaction.userId),
+          };
+        }),
       { by: "date", order: "desc" }
     );
+
   const getFilteredTransactionsTotalIncome = () =>
-    (getFilteredTransactions().length > 0
-      ? getFilteredTransactions()
+    (filteredTransactions.length > 0
+      ? filteredTransactions
           .map((transaction) =>
             transaction.cart
               .map(
@@ -68,6 +77,43 @@ const SalesReport = () => {
           .reduce((acc, cur) => acc + cur, 0)
       : 0
     ).toFixed(2);
+
+  // useEffect(() => {
+  //   setFilteredTransactions(getFilteredTransactions("mamammo"));
+  //   setChunkedFilteredTransactions(getChunkedFilteredTransactions("mamammo"));
+  //   console.log(`startDate`);
+  // }, [startDate]);
+  // useEffect(() => {
+  //   setFilteredTransactions(getFilteredTransactions("mamammo"));
+  //   setChunkedFilteredTransactions(getChunkedFilteredTransactions("mamammo"));
+  //   console.log(`endDate`);
+  // }, [endDate]);
+  // useEffect(() => {
+  //   setFilteredTransactions(getFilteredTransactions("mamammo"));
+  //   setChunkedFilteredTransactions(getChunkedFilteredTransactions("mamammo"));
+  //   console.log(`itemsPerPage`);
+  // }, [itemsPerPage]);
+  // useEffect(() => {
+  //   setFilteredTransactions(getFilteredTransactions("mamammo"));
+  //   setChunkedFilteredTransactions(getChunkedFilteredTransactions("mamammo"));
+  //   console.log(`page`);
+  // }, [page]);
+
+  useEffect(() => {
+    setFilteredTransactions(getFilteredTransactions());
+    setChunkedFilteredTransactions(getChunkedFilteredTransactions());
+  }, [startDate, endDate, itemsPerPage, page]);
+
+  useEffect(() => {
+    const mamamo = setTimeout(() => {
+      setPage(1);
+      setPage(0);
+      console.log(`HAHAHAHAHHA mema sorry di ko alam pano dapat`);
+    }, 500);
+    setFilteredTransactions(getFilteredTransactions());
+    setChunkedFilteredTransactions(getChunkedFilteredTransactions());
+  }, [searchString]);
+
   useEffect(() => {
     window
       .require("electron")
@@ -85,17 +131,7 @@ const SalesReport = () => {
       .readAll()
       .then((transactions) => setTransactions(transactions));
   }, []);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [rowsPerPage, setRowsPerPage] = useState(10);
-  // test
-  // const [rowsPerPage, setRowsPerPage] = useState(1);
-  // const indexOfLastRow = currentPage * rowsPerPage;
-  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  // const currentRows = getFilteredTransactions().slice(
-  //   indexOfFirstRow,
-  //   indexOfLastRow
-  // );
-  // const chgPage = (pageNum) => setCurrentPage(pageNum);
+
   return (
     <div className="p-3 mb-5">
       <h1 className="mb-4">Sales</h1>
@@ -196,67 +232,65 @@ const SalesReport = () => {
           </tr>
         </thead>
         <tbody>
-          {getFilteredTransactions().length > 0
-            ? getChunkedFilteredTransactions()[page] !== undefined
-              ? getChunkedFilteredTransactions()[page].map(
-                  (transaction, index) => (
-                    <tr>
-                      <td className="text-center text-wrap">
-                        {formatDigits(index + 1)}
-                      </td>
-                      <td className="text-wrap">{transaction._id}</td>
-                      <td className="text-wrap">
-                        {transaction.user === undefined ? (
-                          <em>Deleted User ({transaction.userId})</em>
-                        ) : (
-                          `${transaction.user.firstName} ${transaction.user.lastName}`
-                        )}
-                      </td>
-                      <td className="text-wrap">
-                        ₱{" "}
-                        {formatDigits(
-                          transaction.cart
-                            .map(
-                              (cartItem) =>
-                                (cartItem.price -
-                                  (cartItem.price / 100) * cartItem.discount) *
-                                cartItem.quantity
-                            )
-                            .reduce((acc, cur) => acc + cur, 0)
-                            .toFixed(2)
-                        )}
-                      </td>
-                      <td className="text-wrap">
-                        {formatDigits(
-                          transaction.cart
-                            .map((cartItem) => Number(cartItem.quantity))
-                            .reduce((acc, cur) => acc + cur, 0)
-                        )}
-                      </td>
-                      <td className="text-wrap">
-                        {moment(transaction.date).format("LL")}
-                      </td>
-                      <td>
-                        <TransactionModalComponents transaction={transaction} />
-                        &nbsp;
-                        <button
-                          className="btn btn-warning"
-                          onClick={() =>
-                            generatePrintable(products, transaction, users)
-                          }
-                        >
-                          <FontAwesomeIcon icon={faShare} />
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                )
+          {filteredTransactions.length > 0
+            ? chunkedFilteredTransactions[page] !== undefined
+              ? chunkedFilteredTransactions[page].map((transaction, index) => (
+                  <tr>
+                    <td className="text-center text-wrap">
+                      {formatDigits(index + 1)}
+                    </td>
+                    <td className="text-wrap">{transaction._id}</td>
+                    <td className="text-wrap">
+                      {transaction.user === undefined ? (
+                        <em>Deleted User ({transaction.userId})</em>
+                      ) : (
+                        `${transaction.user.firstName} ${transaction.user.lastName}`
+                      )}
+                    </td>
+                    <td className="text-wrap">
+                      ₱{" "}
+                      {formatDigits(
+                        transaction.cart
+                          .map(
+                            (cartItem) =>
+                              (cartItem.price -
+                                (cartItem.price / 100) * cartItem.discount) *
+                              cartItem.quantity
+                          )
+                          .reduce((acc, cur) => acc + cur, 0)
+                          .toFixed(2)
+                      )}
+                    </td>
+                    <td className="text-wrap">
+                      {formatDigits(
+                        transaction.cart
+                          .map((cartItem) => Number(cartItem.quantity))
+                          .reduce((acc, cur) => acc + cur, 0)
+                      )}
+                    </td>
+                    <td className="text-wrap">
+                      {moment(transaction.date).format("LL")}
+                    </td>
+                    <td>
+                      <TransactionModalComponents transaction={transaction} />
+                      &nbsp;
+                      <button
+                        className="btn btn-warning"
+                        onClick={() =>
+                          generatePrintable(products, transaction, users)
+                        }
+                      >
+                        <FontAwesomeIcon icon={faShare} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
               : () => null
             : () => null}
         </tbody>
         <Pagination
-          getChunkedDataset={getChunkedFilteredTransactions}
-          getDataset={getFilteredTransactions}
+          getChunkedDataset={chunkedFilteredTransactions}
+          getDataset={filteredTransactions}
           itemsPerPage={itemsPerPage}
           page={page}
           setItemsPerPage={setItemsPerPage}

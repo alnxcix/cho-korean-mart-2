@@ -24,14 +24,14 @@ const Pagination = (props) => {
     <caption className="mb-5">
       <div class="form-inline ">
         <span className="mr-auto">
-          {getDataset().length > 0
-            ? getChunkedDataset()[page] !== undefined
+          {getDataset.length > 0
+            ? getChunkedDataset[page] !== undefined
               ? `Showing ${formatDigits(
                   itemsPerPage * page + 1
                 )} - ${formatDigits(
-                  itemsPerPage * page + getChunkedDataset()[page].length
-                )} of ${formatDigits(getDataset().length)} ${
-                  getDataset().length > 1 ? "entries" : "entry"
+                  itemsPerPage * page + getChunkedDataset[page].length
+                )} of ${formatDigits(getDataset.length)} ${
+                  getDataset.length > 1 ? "entries" : "entry"
                 }.`
               : () => null
             : () => null}
@@ -74,8 +74,8 @@ const Pagination = (props) => {
             </button>
           )}
           <button className="btn btn-dark shadow-none">{page + 1}</button>
-          {page + 1 === getChunkedDataset().length ||
-          getChunkedDataset()[page] === undefined ? (
+          {page + 1 === getChunkedDataset.length ||
+          getChunkedDataset[page] === undefined ? (
             () => null
           ) : (
             <button
@@ -85,11 +85,11 @@ const Pagination = (props) => {
               {page + 2}
             </button>
           )}
-          {page + 1 === getChunkedDataset().length ||
-          getChunkedDataset()[page] === undefined ? (
+          {page + 1 === getChunkedDataset.length ||
+          getChunkedDataset[page] === undefined ? (
             () => null
-          ) : page + 2 === getChunkedDataset().length ||
-            getChunkedDataset()[page] === undefined ? (
+          ) : page + 2 === getChunkedDataset.length ||
+            getChunkedDataset[page] === undefined ? (
             () => null
           ) : (
             <button
@@ -102,8 +102,8 @@ const Pagination = (props) => {
           <button
             className="btn btn-outline-dark shadow-none"
             disabled={
-              page + 1 === getChunkedDataset().length ||
-              getChunkedDataset()[page] === undefined
+              page + 1 === getChunkedDataset.length ||
+              getChunkedDataset[page] === undefined
             }
             onClick={() => setPage(page + 1)}
           >
@@ -112,10 +112,10 @@ const Pagination = (props) => {
           <button
             className="btn btn-outline-dark shadow-none"
             disabled={
-              page + 1 === getChunkedDataset().length ||
-              getChunkedDataset()[page] === undefined
+              page + 1 === getChunkedDataset.length ||
+              getChunkedDataset[page] === undefined
             }
-            onClick={() => setPage(getChunkedDataset().length - 1)}
+            onClick={() => setPage(getChunkedDataset.length - 1)}
           >
             <FontAwesomeIcon icon={faAngleDoubleRight} />
           </button>

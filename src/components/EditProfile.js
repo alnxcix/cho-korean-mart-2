@@ -120,7 +120,6 @@ const EditProfile = (props) => {
                         onChange={(e) => {
                           setPassword(e.target.value);
                         }}
-                        maxlength="20"
                         placeholder="New Password"
                         type={passState}
                         value={password}

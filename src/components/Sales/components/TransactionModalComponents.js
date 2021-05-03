@@ -9,6 +9,7 @@ const TransactionModalComponents = (props) => {
   const [products, setProducts] = useState([]);
   const [transaction, setTransaction] = useState(props.transaction);
   const [users, setUsers] = useState([]);
+  const [modifiedCart, setModifiedCart] = useState([]);
   const getModifiedCart = () =>
     transaction.cart.map((cartItem) => {
       let unitPrice = (cartItem.price / (100 + transaction.vatRate)) * 100;
@@ -41,7 +42,11 @@ const TransactionModalComponents = (props) => {
         total: (unitPrice + vat - discount) * cartItem.quantity,
       };
     });
-  useEffect(() => setTransaction(props.transaction), [props.transaction]);
+  useEffect(() => {
+    setTransaction(props.transaction);
+    setModifiedCart(getModifiedCart());
+  }, [props.transaction]);
+  // useEffect(() => , [props.transaction]);
   useEffect(() => {
     window
       .require("electron")
@@ -120,22 +125,27 @@ const TransactionModalComponents = (props) => {
                     <th scope="col">Total</th>
                   </tr>
                 </thead>
-                {getModifiedCart().map((cartItem) => (
+                {modifiedCart.map((cartItem) => (
                   <tr>
-                    <td className="text-wrap">{cartItem.name}</td>
-                    <td className="text-wrap">
+                    <td tag={cartItem._id} className="text-wrap">
+                      {cartItem.name}
+                    </td>
+                    <td tag={`${cartItem._id} quantity`} className="text-wrap">
                       {formatDigits(cartItem.quantity)}
                     </td>
-                    <td className="text-wrap">
+                    <td
+                      tag={`${cartItem._id} unit price`}
+                      className="text-wrap"
+                    >
                       ₱ {formatDigits(cartItem.unitPrice.toFixed(2))}
                     </td>
-                    <td className="text-wrap">
+                    <td tag={`${cartItem._id} vat`} className="text-wrap">
                       ₱ {formatDigits(cartItem.vat.toFixed(2))}
                     </td>
-                    <td className="text-wrap">
+                    <td tag={`${cartItem._id} disc`} className="text-wrap">
                       ₱ {formatDigits(cartItem.discount.toFixed(2))}
                     </td>
-                    <td className="text-wrap">
+                    <td tag={`${cartItem._id} total`} className="text-wrap">
                       ₱ {formatDigits(cartItem.total.toFixed(2))}
                     </td>
                   </tr>
@@ -152,7 +162,7 @@ const TransactionModalComponents = (props) => {
                   <td>
                     ₱{" "}
                     {formatDigits(
-                      getModifiedCart()
+                      modifiedCart
                         .map(
                           (cartItem) => cartItem.unitPrice * cartItem.quantity
                         )
@@ -168,7 +178,7 @@ const TransactionModalComponents = (props) => {
                   <td>
                     ₱{" "}
                     {formatDigits(
-                      getModifiedCart()
+                      modifiedCart
                         .map((cartItem) => cartItem.vat * cartItem.quantity)
                         .reduce((acc, cur) => acc + cur, 0)
                         .toFixed(2)
@@ -182,7 +192,7 @@ const TransactionModalComponents = (props) => {
                   <td>
                     ₱{" "}
                     {formatDigits(
-                      getModifiedCart()
+                      modifiedCart
                         .map(
                           (cartItem) => cartItem.discount * cartItem.quantity
                         )
@@ -198,7 +208,7 @@ const TransactionModalComponents = (props) => {
                   <td>
                     ₱{" "}
                     {formatDigits(
-                      getModifiedCart()
+                      modifiedCart
                         .map(
                           (cartItem) =>
                             (cartItem.unitPrice +
@@ -226,7 +236,7 @@ const TransactionModalComponents = (props) => {
                     {formatDigits(
                       (
                         transaction.cash -
-                        getModifiedCart()
+                        modifiedCart
                           .map(
                             (cartItem) =>
                               (cartItem.unitPrice +
