@@ -11,6 +11,7 @@ const EditUser = (props) => {
   const [verifyUser, setVerification] = useState("");
   const [password, setPassword] = useState("");
   const [passState, setPassState] = useState("password");
+  const [passIsSame, setPassIsSame] = useState(false);
   const getPasswordValidity = () =>
     password.match(/[a-z]+/) &&
     password.match(/[0-9]+/) &&
@@ -235,7 +236,11 @@ const EditUser = (props) => {
                   <input
                     className="form-control"
                     type="password"
-                    onChange={(e) => setVerification(e.target.value)}
+                    onChange={(e) => {
+                      setVerification(e.target.value);
+                      setPassIsSame(samePass(verifyUser, activeUser.password));
+                      console.log(samePass(verifyUser, activeUser.password));
+                    }}
                     value={verifyUser}
                   />
                 </div>
@@ -259,7 +264,7 @@ const EditUser = (props) => {
                 <button
                   className="btn btn-success"
                   disabled={
-                    !samePass(verifyUser, activeUser.password) ||
+                    !passIsSame ||
                     (password.length > 0 && !getPasswordValidity())
                   }
                   type="submit"

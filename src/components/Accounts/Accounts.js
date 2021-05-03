@@ -19,6 +19,8 @@ const Accounts = (props) => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [chunkedFilteredUsers, setChunkedFilteredUsers] = useState([]);
   const getChunkedFilteredUsers = () =>
     _.chunk(getFilteredUsers(), itemsPerPage);
   const getFilteredUsers = () =>
@@ -38,17 +40,41 @@ const Accounts = (props) => {
         .require("electron")
         .remote.getGlobal("users")
         .readAll()
-        .then((users) => setUsers(users)),
+        .then((users) => {
+          setUsers(users);
+        }),
+    // .then(() => {
+    //   setTimeout(() => {
+    //     setItemsPerPage(5);
+    //     setItemsPerPage(10);
+    //   }, 500);
+    // }),
+    // }
     []
   );
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [rowsPerPage, setRowsPerPage] = useState(10);
-  // test
-  // const [rowsPerPage, setRowsPerPage] = useState(1);
-  // const indexOfLastRow = currentPage * rowsPerPage;
-  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  // const currentRows = getFilteredUsers().slice(indexOfFirstRow, indexOfLastRow);
-  // const chgPage = (pageNum) => setCurrentPage(pageNum);
+  useEffect(() => {
+    setFilteredUsers(getFilteredUsers());
+    setChunkedFilteredUsers(getChunkedFilteredUsers());
+  }, [
+    role,
+    propertyToBeSorted,
+    sortOrder,
+    itemsPerPage,
+    page,
+    searchString,
+    users,
+  ]);
+
+  // useEffect(() => {
+  //   const mamamo = setTimeout(() => {
+  //     setPage(1);
+  //     setPage(0);
+  //     console.log(`HAHAHAHAHHA mema sorry di ko alam pano dapat`);
+  //   }, 500);
+  //   setFilteredTransactions(getFilteredTransactions());
+  //   setChunkedFilteredTransactions(getChunkedFilteredTransactions());
+  // }, [searchString]);
+
   return (
     <div className="p-3">
       <div
@@ -164,7 +190,6 @@ const Accounts = (props) => {
             className="form-control"
             onChange={(e) => {
               setSearchString(e.target.value);
-              // setCurrentPage(1);
               setPage(0);
             }}
             placeholder="Search"
@@ -187,9 +212,9 @@ const Accounts = (props) => {
           </tr>
         </thead>
         <tbody>
-          {getFilteredUsers().length > 0
-            ? getChunkedFilteredUsers()[page] !== undefined
-              ? getChunkedFilteredUsers()[page].map((user, index) => (
+          {filteredUsers.length > 0
+            ? chunkedFilteredUsers[page] !== undefined
+              ? chunkedFilteredUsers[page].map((user, index) => (
                   <tr>
                     <td className="text-center text-wrap">
                       {formatDigits(index + 1)}
@@ -217,23 +242,14 @@ const Accounts = (props) => {
             : () => null}
         </tbody>
         <Pagination
-          getChunkedDataset={getChunkedFilteredUsers}
-          getDataset={getFilteredUsers}
+          getChunkedDataset={chunkedFilteredUsers}
+          getDataset={filteredUsers}
           itemsPerPage={itemsPerPage}
           page={page}
           setItemsPerPage={setItemsPerPage}
           setPage={setPage}
         />
       </table>
-      {/* <Pagination
-        currentRows={currentRows}
-        rowsPerPage={rowsPerPage}
-        totalRows={getFilteredUsers().length}
-        chgPage={chgPage}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        setRowsPerPage={setRowsPerPage}
-      /> */}
     </div>
   );
 };

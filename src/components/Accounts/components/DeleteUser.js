@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 const DeleteUser = (props) => {
   let { setUsers, user, activeUser } = props;
   const [verifyUser, setVerification] = useState("");
+  const [passIsSame, setPassIsSame] = useState(false);
   const samePass = (pass, hash) => bcrypt.compareSync(pass, hash);
   return (
     <>
@@ -54,7 +55,10 @@ const DeleteUser = (props) => {
               <input
                 className="form-control"
                 type="password"
-                onChange={(e) => setVerification(e.target.value)}
+                onChange={(e) => {
+                  setVerification(e.target.value);
+                  setPassIsSame(samePass(e.target.value, activeUser.password));
+                }}
                 value={verifyUser}
                 placeholder="Password"
               />
@@ -70,7 +74,7 @@ const DeleteUser = (props) => {
               <button
                 className="btn btn-danger"
                 data-dismiss="modal"
-                disabled={!samePass(verifyUser, activeUser.password)}
+                disabled={!passIsSame}
                 type="submit"
                 onClick={() => {
                   window
