@@ -15,6 +15,9 @@ const InventoryComponent = (props) => {
   const [searchString, setSearchString] = useState("");
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [chunkedFilteredProducts, setChunkedFilteredProducts] = useState([]);
+  const [searchStrIsID, setSearchStrIsID] = useState([]);
   const addToCart = (product) => {
     $("#posAlert1").slideUp();
     $("#posAlert2").slideUp();
@@ -36,73 +39,97 @@ const InventoryComponent = (props) => {
       { by: "_id" }
     );
   const productMatchingIdSearchString = () =>
-    getFilteredProducts().find((product) => product._id == searchString);
+    filteredProducts.find((product) => product._id == searchString);
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (filteredProducts.length === 0) {
+  //     $("#posAlert3").slideDown();
+  //     // setSearchString(e);
+  //   } else if (
+  //     productMatchingIdSearchString() !== undefined &&
+  //     [productMatchingIdSearchString()].length === 1
+  //   ) {
+  //     if (productMatchingIdSearchString().stockQuantity > 0) {
+  //       productExistsInCart(productMatchingIdSearchString())
+  //         ? updateItemQuantity(
+  //             productMatchingIdSearchString(),
+  //             cartItems.find(
+  //               (cartItem) =>
+  //                 cartItem.product._id === productMatchingIdSearchString()._id
+  //             ).quantity + 1
+  //           )
+  //         : addToCart(productMatchingIdSearchString());
+  //       setSearchString("");
+  //     } else $("#posAlert4").slideDown();
+  //   } else {
+  //     if (filteredProducts[0].stockQuantity > 0) {
+  //       productExistsInCart(filteredProducts[0])
+  //         ? updateItemQuantity(
+  //             filteredProducts[0],
+  //             cartItems.find(
+  //               (cartItem) => cartItem.product._id === filteredProducts[0]._id
+  //             ).quantity + 1
+  //           )
+  //         : addToCart(filteredProducts[0]);
+  //       setSearchString("");
+  //     } else $("#posAlert4").slideDown();
+  //   }
+  // };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (getFilteredProducts().length === 0) {
+    // productMatchingIdSearchString();
+    console.log(productMatchingIdSearchString());
+    console.log(searchStrIsID);
+    if (filteredProducts.length === 0) {
       $("#posAlert3").slideDown();
       // setSearchString(e);
-    } else if (
-      productMatchingIdSearchString() !== undefined &&
-      [productMatchingIdSearchString()].length === 1
-    ) {
-      if (productMatchingIdSearchString().stockQuantity > 0) {
-        productExistsInCart(productMatchingIdSearchString())
+    } else if (searchStrIsID !== undefined && [searchStrIsID].length === 1) {
+      if (searchStrIsID.stockQuantity > 0) {
+        productExistsInCart(searchStrIsID)
           ? updateItemQuantity(
-              productMatchingIdSearchString(),
+              searchStrIsID,
               cartItems.find(
-                (cartItem) =>
-                  cartItem.product._id === productMatchingIdSearchString()._id
+                (cartItem) => cartItem.product._id === searchStrIsID._id
               ).quantity + 1
             )
-          : addToCart(productMatchingIdSearchString());
+          : addToCart(searchStrIsID);
         setSearchString("");
       } else $("#posAlert4").slideDown();
     } else {
-      if (getFilteredProducts()[0].stockQuantity > 0) {
-        productExistsInCart(getFilteredProducts()[0])
+      if (filteredProducts[0].stockQuantity > 0) {
+        productExistsInCart(filteredProducts[0])
           ? updateItemQuantity(
-              getFilteredProducts()[0],
+              filteredProducts[0],
               cartItems.find(
-                (cartItem) =>
-                  cartItem.product._id === getFilteredProducts()[0]._id
+                (cartItem) => cartItem.product._id === filteredProducts[0]._id
               ).quantity + 1
             )
-          : addToCart(getFilteredProducts()[0]);
+          : addToCart(filteredProducts[0]);
         setSearchString("");
       } else $("#posAlert4").slideDown();
     }
   };
   const productExistsInCart = (product) =>
     cartItems.some((cartItem) => cartItem.product._id === product._id);
-  useEffect(
-    () =>
-      window
-        .require("electron")
-        .remote.getGlobal("products")
-        .readAll()
-        .then((products) => setProducts(products)),
-    []
-  );
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [rowsPerPage, setRowsPerPage] = useState(10);
-  //test
-  // const [rowsPerPage, setRowsPerPage] = useState(1);
-  // const indexOfLastRow = currentPage * rowsPerPage;
-  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  // const currentRows = getFilteredProducts().slice(
-  //   indexOfFirstRow,
-  //   indexOfLastRow
-  // );
-  // const chgPage = (pageNum) => setCurrentPage(pageNum);
+  useEffect(() => {
+    window
+      .require("electron")
+      .remote.getGlobal("products")
+      .readAll()
+      .then((products) => setProducts(products))
+      .then(() => {
+        setItemsPerPage(5);
+        setItemsPerPage(10);
+      });
+  }, []);
+  useEffect(() => {
+    setFilteredProducts(getFilteredProducts());
+    setChunkedFilteredProducts(getChunkedFilteredProducts());
+  }, [category, itemsPerPage, page, searchString]);
+  useEffect(() => {
+    setSearchStrIsID(productMatchingIdSearchString());
+  }, [searchString]);
 
-  //test
-  // const formatter = (c, places) => {
-  //   let z = places - (c + "").length;
-  //   let string = "";
-  //   for (let i = 0; i < z; i++) string += "0";
-  //   return string + c;
-  // };
   return (
     <div
       className="overflow-auto p-3"
@@ -213,9 +240,9 @@ const InventoryComponent = (props) => {
           </tr>
         </thead>
         <tbody>
-          {getFilteredProducts().length > 0
-            ? getChunkedFilteredProducts()[page] !== undefined
-              ? getChunkedFilteredProducts()[page].map((product) => (
+          {filteredProducts.length > 0
+            ? chunkedFilteredProducts[page] !== undefined
+              ? chunkedFilteredProducts[page].map((product) => (
                   <tr>
                     <td className="text-wrap">{product._id}</td>
                     <td>
@@ -269,23 +296,14 @@ const InventoryComponent = (props) => {
             : () => null}
         </tbody>
         <Pagination
-          getChunkedDataset={getChunkedFilteredProducts}
-          getDataset={getFilteredProducts}
+          getChunkedDataset={chunkedFilteredProducts}
+          getDataset={filteredProducts}
           itemsPerPage={itemsPerPage}
           page={page}
           setItemsPerPage={setItemsPerPage}
           setPage={setPage}
         />
       </table>
-      {/* <Pagination
-        currentRows={currentRows}
-        rowsPerPage={rowsPerPage}
-        totalRows={getFilteredProducts().length}
-        chgPage={chgPage}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        setRowsPerPage={setRowsPerPage}
-      /> */}
     </div>
   );
 };

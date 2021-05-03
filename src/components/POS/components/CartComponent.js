@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import $ from "jquery";
 import CartItem from "./CartItem";
 import EditVatModalComponents from "./EditVatModalComponents";
@@ -8,6 +8,8 @@ import { formatDigits } from "../../../utils/formatDigits";
 const CartComponent = (props) => {
   let { activeUser, cartItems, setCartItems, updateItemQuantity } = props;
   const [vatRate, setVatRate] = useState(12);
+  const [grandTotal, setGrandTotal] = useState(0);
+
   const getGrandTotal = () =>
     cartItems.length === 0
       ? 0
@@ -23,6 +25,9 @@ const CartComponent = (props) => {
     setCartItems(
       cartItems.filter((cartItem) => cartItem.product._id !== product._id)
     );
+  useEffect(() => {
+    setGrandTotal(getGrandTotal());
+  }, [cartItems, vatRate]);
   return (
     <>
       <form
@@ -72,7 +77,7 @@ const CartComponent = (props) => {
               <span className="text-muted">
                 ₱{" "}
                 {formatDigits(
-                  ((getGrandTotal() / (100 + vatRate)) * 100).toFixed(2)
+                  ((grandTotal / (100 + vatRate)) * 100).toFixed(2)
                 )}
               </span>
             </h6>
@@ -85,10 +90,7 @@ const CartComponent = (props) => {
               <span className="text-muted">
                 ₱{" "}
                 {formatDigits(
-                  (
-                    getGrandTotal() -
-                    (getGrandTotal() / (100 + vatRate)) * 100
-                  ).toFixed(2)
+                  (grandTotal - (grandTotal / (100 + vatRate)) * 100).toFixed(2)
                 )}
               </span>
             </h6>
@@ -96,7 +98,7 @@ const CartComponent = (props) => {
             <h5>
               Grand Total:{" "}
               <span className="text-muted">
-                ₱ {formatDigits(getGrandTotal().toFixed(2))}
+                ₱ {formatDigits(grandTotal.toFixed(2))}
               </span>
             </h5>
             <hr />
@@ -113,7 +115,7 @@ const CartComponent = (props) => {
       <PaymentModalComponents
         activeUser={activeUser}
         cartItems={cartItems}
-        getGrandTotal={getGrandTotal}
+        grandTotal={grandTotal}
         setCartItems={setCartItems}
         vatRate={vatRate}
       />

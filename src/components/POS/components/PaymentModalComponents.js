@@ -4,24 +4,13 @@ import { formatDigits } from "../../../utils/formatDigits";
 import { generatePrintable } from "../../../utils/generatePrintable";
 
 const PaymentModalComponents = (props) => {
-  let { activeUser, cartItems, setCartItems, vatRate } = props;
+  let { activeUser, cartItems, setCartItems, vatRate, grandTotal } = props;
   const [cash, setCash] = useState("");
   const [products, setProducts] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [users, setUsers] = useState([]);
-  useEffect(() => {
-    window
-      .require("electron")
-      .remote.getGlobal("products")
-      .readAll()
-      .then((products) => setProducts(products));
-    getTransactions();
-    window
-      .require("electron")
-      .remote.getGlobal("users")
-      .readAll()
-      .then((users) => setUsers(users));
-  }, []);
+  // const [grandTotal, setGrandTotal] = useState(0);
+
   const getTransactions = () => {
     window
       .require("electron")
@@ -90,8 +79,8 @@ const PaymentModalComponents = (props) => {
           cartItem.quantity
       )
       .reduce((acc, cur) => acc + cur, 0);
-  const getGrandTotal = () =>
-    getSubTotal() + getTotalVat() - getTotalDiscount();
+  // const getGrandTotal = () =>
+  //   getSubTotal() + getTotalVat() - getTotalDiscount();
   const onCheckout = (e, willExport) => {
     e.preventDefault();
     window
@@ -131,6 +120,21 @@ const PaymentModalComponents = (props) => {
         console.log(e);
       });
   };
+
+  useEffect(() => {
+    window
+      .require("electron")
+      .remote.getGlobal("products")
+      .readAll()
+      .then((products) => setProducts(products));
+    getTransactions();
+    window
+      .require("electron")
+      .remote.getGlobal("users")
+      .readAll()
+      .then((users) => setUsers(users));
+    // .then(() => setGrandTotal(getGrandTotal()));
+  }, []);
   return (
     <div
       className="fade modal"
@@ -201,7 +205,8 @@ const PaymentModalComponents = (props) => {
                     <input
                       className="form-control"
                       disabled
-                      value={formatDigits(getGrandTotal().toFixed(2))}
+                      // value={formatDigits(getGrandTotal().toFixed(2))}
+                      value={formatDigits(grandTotal.toFixed(2))}
                     />
                   </div>
                 </div>
@@ -235,9 +240,9 @@ const PaymentModalComponents = (props) => {
                       className="form-control"
                       disabled
                       value={
-                        cash < getGrandTotal()
+                        cash < grandTotal
                           ? "Insufficient Cash"
-                          : formatDigits((cash - getGrandTotal()).toFixed(2))
+                          : formatDigits((cash - grandTotal).toFixed(2))
                       }
                     />
                   </div>
@@ -254,14 +259,14 @@ const PaymentModalComponents = (props) => {
               </button>
               <button
                 className="btn btn-dark"
-                disabled={cash < getGrandTotal()}
+                disabled={cash < grandTotal}
                 type="submit"
               >
                 Checkout only
               </button>
               <button
                 className="btn btn-success"
-                disabled={cash < getGrandTotal()}
+                disabled={cash < grandTotal}
                 onClick={(e) => onCheckout(e, true)}
                 type="button"
               >

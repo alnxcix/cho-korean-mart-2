@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 const DeleteProduct = (props) => {
   let { product, setProducts, activeUser } = props;
   const [verifyUser, setVerification] = useState("");
+  const [passIsSame, setPassIsSame] = useState(false);
   const samePass = (pass, hash) => bcrypt.compareSync(pass, hash);
   return (
     <>
@@ -63,7 +64,10 @@ const DeleteProduct = (props) => {
                 className="form-control"
                 type="password"
                 placeholder="Password"
-                onChange={(e) => setVerification(e.target.value)}
+                onChange={(e) => {
+                  setVerification(e.target.value);
+                  setPassIsSame(samePass(e.target.value, activeUser.password));
+                }}
                 value={verifyUser}
               />
             </div>
@@ -78,10 +82,7 @@ const DeleteProduct = (props) => {
               <button
                 className="btn btn-danger"
                 data-dismiss="modal"
-                disabled={
-                  !samePass(verifyUser, activeUser.password) ||
-                  product.stockQuantity > 0
-                }
+                disabled={!passIsSame || product.stockQuantity > 0}
                 onClick={() => {
                   window
                     .require("electron")

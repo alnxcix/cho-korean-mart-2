@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
@@ -18,6 +18,8 @@ const Products = (props) => {
   const [criticalItemsOnly, setCriticalItemsOnly] = useState(false);
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [chunkedFilteredProducts, setChunkedFilteredProducts] = useState([]);
   const getChunkedFilteredProducts = () =>
     _.chunk(getFilteredProducts(), itemsPerPage);
   const getFilteredProducts = () =>
@@ -37,17 +39,20 @@ const Products = (props) => {
         ),
       { by: propertyToBeSorted, order: sortOrder }
     );
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [rowsPerPage, setRowsPerPage] = useState(10);
-  //test
-  // const [rowsPerPage, setRowsPerPage] = useState(1);
-  // const indexOfLastRow = currentPage * rowsPerPage;
-  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  // const currentRows = getFilteredProducts().slice(
-  //   indexOfFirstRow,
-  //   indexOfLastRow
-  // );
-  // const chgPage = (pageNum) => setCurrentPage(pageNum);
+  useEffect(() => {
+    setFilteredProducts(getFilteredProducts());
+    setChunkedFilteredProducts(getChunkedFilteredProducts());
+  }, [
+    category,
+    propertyToBeSorted,
+    sortOrder,
+    itemsPerPage,
+    criticalItemsOnly,
+    page,
+    searchString,
+    products,
+  ]);
+
   return (
     <>
       <div className="form-row">
@@ -116,7 +121,10 @@ const Products = (props) => {
           type="checkbox"
           className="custom-control-input btn"
           id="criticalLevelSwitch"
-          onChange={() => setCriticalItemsOnly(!criticalItemsOnly)}
+          onChange={() => {
+            setCriticalItemsOnly(!criticalItemsOnly);
+            setPage(0);
+          }}
           checked={criticalItemsOnly}
         />
         <label
@@ -148,9 +156,9 @@ const Products = (props) => {
           </tr>
         </thead>
         <tbody>
-          {getFilteredProducts().length > 0
-            ? getChunkedFilteredProducts()[page] !== undefined
-              ? getChunkedFilteredProducts()[page].map((product, index) => (
+          {filteredProducts.length > 0
+            ? chunkedFilteredProducts[page] !== undefined
+              ? chunkedFilteredProducts[page].map((product, index) => (
                   <tr>
                     <td className="text-center text-wrap">
                       {" "}
@@ -205,8 +213,8 @@ const Products = (props) => {
             : () => null}
         </tbody>
         <Pagination
-          getChunkedDataset={getChunkedFilteredProducts}
-          getDataset={getFilteredProducts}
+          getChunkedDataset={chunkedFilteredProducts}
+          getDataset={filteredProducts}
           itemsPerPage={itemsPerPage}
           page={page}
           setItemsPerPage={setItemsPerPage}

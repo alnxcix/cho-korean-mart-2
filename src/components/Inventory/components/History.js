@@ -17,28 +17,21 @@ const History = (props) => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [startDate, setStartDate] = useState(moment().startOf("d").toDate());
   const [users, setUsers] = useState([]);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  //test
-  // const [rowsPerPage, setRowsPerPage] = useState(1);
-  // const indexOfLastRow = currentPage * rowsPerPage;
-  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const [
+    filteredStockHistoryEntries,
+    setFilteredStockHistoryEntries,
+  ] = useState([]);
+  const [
+    chunkedFilteredStockHistoryEntries,
+    setChunkedFilteredStockHistoryEntries,
+  ] = useState([]);
   const getChunkedFilteredStockHistoryEntries = () =>
     _.chunk(getFilteredStockHistoryEntries(), itemsPerPage);
   const getFilteredStockHistoryEntries = () =>
     sortArray(
       stockHistoryEntries
-        .map((stockHistoryEntry) => {
-          return {
-            ...stockHistoryEntry,
-            product: products.find(
-              (product) => product._id === stockHistoryEntry.productId
-            ),
-            user: users.find((user) => user._id === stockHistoryEntry.userId),
-          };
-        })
         .filter(
           (stockHistoryEntry) =>
             JSON.stringify(Object.values(stockHistoryEntry))
@@ -48,7 +41,16 @@ const History = (props) => {
               moment(startDate),
               moment(endDate)
             )
-        ),
+        )
+        .map((stockHistoryEntry) => {
+          return {
+            ...stockHistoryEntry,
+            product: products.find(
+              (product) => product._id === stockHistoryEntry.productId
+            ),
+            user: users.find((user) => user._id === stockHistoryEntry.userId),
+          };
+        }),
       { by: propertyToBeSorted, order: sortOrder }
     );
   const setDates = (start, end) => {
@@ -67,11 +69,20 @@ const History = (props) => {
       .readAll()
       .then((users) => setUsers(users));
   }, []);
-  // const currentRows = getFilteredStockHistoryEntries().slice(
-  //   indexOfFirstRow,
-  //   indexOfLastRow
-  // );
-  // const chgPage = (pageNum) => setCurrentPage(pageNum);
+  useEffect(() => {
+    setFilteredStockHistoryEntries(getFilteredStockHistoryEntries());
+    setChunkedFilteredStockHistoryEntries(
+      getChunkedFilteredStockHistoryEntries()
+    );
+  }, [
+    endDate,
+    startDate,
+    propertyToBeSorted,
+    sortOrder,
+    itemsPerPage,
+    page,
+    searchString,
+  ]);
   return (
     <>
       <div className="form-row">
@@ -137,9 +148,9 @@ const History = (props) => {
           </tr>
         </thead>
         <tbody>
-          {getFilteredStockHistoryEntries().length > 0
-            ? getChunkedFilteredStockHistoryEntries()[page] !== undefined
-              ? getChunkedFilteredStockHistoryEntries()[page].map(
+          {filteredStockHistoryEntries.length > 0
+            ? chunkedFilteredStockHistoryEntries[page] !== undefined
+              ? chunkedFilteredStockHistoryEntries[page].map(
                   (stockHistoryEntry, index) => (
                     <tr>
                       <td className="text-center text-wrap">
@@ -175,8 +186,8 @@ const History = (props) => {
             : () => null}
         </tbody>
         <Pagination
-          getChunkedDataset={getChunkedFilteredStockHistoryEntries}
-          getDataset={getFilteredStockHistoryEntries}
+          getChunkedDataset={chunkedFilteredStockHistoryEntries}
+          getDataset={filteredStockHistoryEntries}
           itemsPerPage={itemsPerPage}
           page={page}
           setItemsPerPage={setItemsPerPage}
