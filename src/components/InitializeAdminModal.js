@@ -29,6 +29,7 @@ const InitializeAdminModal = () => {
     //password.match(/[~<>?!@#$%^&*()]+/) &&
     password.length >= 8 &&
     password.length <= 20;
+  const getIDValidity = () => _id.match(/^[a-zA-Z0-9_.]+$/); //alphanum only
   const handleSubmit = (e) => {
     e.preventDefault();
     window
@@ -104,12 +105,23 @@ const InitializeAdminModal = () => {
                 <div className="col">
                   <input
                     className="form-control"
+                    style={{
+                      backgroundColor:
+                        _id.length === 0 || getIDValidity()
+                          ? null
+                          : "#ffb3b3",
+                    }}
                     maxLength="20"
                     onChange={(e) => set_id(e.target.value)}
                     placeholder="Username / ID"
                     required
                     value={_id}
                   />
+                   <small className="text-muted">
+                      Username must only consist of alphanumeric characters &
+                      not have special characters other than the underscore and
+                      the period ( _. ).
+                    </small>
                 </div>
               </div>
               <div className="form-group row">
@@ -186,7 +198,7 @@ const InitializeAdminModal = () => {
               <button
                 className="btn btn-success"
                 type="submit"
-                disabled={!getPasswordValidity()}
+                disabled={!getPasswordValidity() || !getIDValidity()}
               >
                 Save
               </button>
