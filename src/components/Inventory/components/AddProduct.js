@@ -176,6 +176,7 @@ const AddProduct = (props) => {
                       <option value={"Snacks"}>Snacks</option>
                       <option value={"Sweets"}>Sweets</option>
                       <option value={"Beverages"}>Beverages</option>
+                      <option value={"Coffee & Tea"}>Coffee & Tea</option>
                       <option value={"Beauty & Health"}>Beauty & Health</option>
                       <option value={"Living"}>Living</option>
                       <option value={"Others"}>Others</option>
