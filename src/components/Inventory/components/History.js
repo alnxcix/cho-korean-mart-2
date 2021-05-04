@@ -82,6 +82,8 @@ const History = (props) => {
     itemsPerPage,
     page,
     searchString,
+    products,
+    users,
   ]);
   return (
     <>
