@@ -11,7 +11,6 @@ const AddUser = (props) => {
   const [imgSrc, setImgSrc] = useState(logo);
   const [lastName, setLastName] = useState("");
   const [passState, setPassState] = useState("password");
-  // const [validPassword, setValidPassword] = useState(true);
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const clear = () => {
@@ -28,16 +27,18 @@ const AddUser = (props) => {
     password.match(/[a-z]+/) &&
     password.match(/[0-9]+/) &&
     password.match(/[A-Z]+/) &&
+    // password.match(/^[a-zA-Z0-9]+$/) &&
     //password.match(/[~<>?!@#$%^&*()]+/) &&
     password.length >= 8 &&
     password.length <= 20;
+  const getIDValidity = () => _id.match(/^[a-zA-Z0-9_.]+$/); //alphanum only
   const handleSubmit = (e) => {
     e.preventDefault();
     window
       .require("electron")
       .remote.getGlobal("users")
       .create({
-        _id: _id.trim(),
+        _id: _id,
         firstName: firstName.trim(),
         imgSrc: imgSrc,
         lastName: lastName.trim(),
@@ -67,13 +68,6 @@ const AddUser = (props) => {
     if (e[0]) reader.readAsDataURL(e[0]);
   };
   useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
-
-  // const test = (pass) => {
-  //   const hash = bcrypt.hashSync(pass, bcrypt.genSaltSync());
-  //   console.log(pass);
-  //   console.log(hash);
-  //   console.log(bcrypt.compareSync(pass, hash));
-  // };
   const hashedPassword = (pass) => bcrypt.hashSync(pass, bcrypt.genSaltSync());
   return (
     <>
@@ -118,7 +112,6 @@ const AddUser = (props) => {
                     <input
                       className="form-control"
                       onChange={(e) => setFirstName(e.target.value)}
-                      // onClick={() => test("password")}
                       maxLength="100"
                       placeholder="First Name"
                       required
@@ -144,12 +137,23 @@ const AddUser = (props) => {
                   <div className="col">
                     <input
                       className="form-control"
+                      style={{
+                        backgroundColor:
+                          _id.length === 0 || getIDValidity()
+                            ? null
+                            : "#ffb3b3",
+                      }}
                       onChange={(e) => set_id(e.target.value)}
                       placeholder="Username / ID"
                       maxLength="20"
                       required
                       value={_id}
                     />
+                    <small className="text-muted">
+                      Username must only consist of alphanumeric characters &
+                      not have special characters other than the underscore and
+                      the period ( _. ).
+                    </small>
                   </div>
                 </div>
                 <div className="form-group row">
@@ -253,7 +257,7 @@ const AddUser = (props) => {
                 <button
                   className="btn btn-success"
                   type="submit"
-                  disabled={!getPasswordValidity()}
+                  disabled={!getPasswordValidity() || !getIDValidity()}
                 >
                   Save
                 </button>

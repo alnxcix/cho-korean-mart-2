@@ -47,7 +47,7 @@ const AddProduct = (props) => {
             .remote.getGlobal("stockHistoryEntries")
             .create({
               date: Date.now(),
-              productId: _id.trim(),
+              productId: _id,
               inOut: "in",
               quantity: Number(stockQuantity),
               userId: activeUser._id,
@@ -80,6 +80,7 @@ const AddProduct = (props) => {
     };
     if (e[0]) reader.readAsDataURL(e[0]);
   };
+  const getIDValidity = () => _id.match(/^[a-zA-Z0-9_.]+$/); //alphanum only
   useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
   return (
     <>
@@ -124,11 +125,22 @@ const AddProduct = (props) => {
                     <input
                       className="form-control"
                       maxLength="20"
+                      style={{
+                        backgroundColor:
+                          _id.length === 0 || getIDValidity()
+                            ? null
+                            : "#ffb3b3",
+                      }}
                       onChange={(e) => set_id(e.target.value)}
                       placeholder="ID"
                       required
                       value={_id}
                     />
+                    <small className="text-muted">
+                      Product ID must only consist of alphanumeric characters &
+                      not have special characters other than the underscore and
+                      the period ( _. ).
+                    </small>
                   </div>
                 </div>
                 <div className="form-group row">
@@ -295,7 +307,11 @@ const AddProduct = (props) => {
                 >
                   Cancel
                 </button>
-                <button className="btn btn-success" type="submit">
+                <button
+                  className="btn btn-success"
+                  type="submit"
+                  disabled={!getIDValidity()}
+                >
                   Save
                 </button>
               </div>
