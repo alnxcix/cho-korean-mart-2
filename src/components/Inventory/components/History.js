@@ -30,6 +30,7 @@ const History = (props) => {
   const getChunkedFilteredStockHistoryEntries = () =>
     _.chunk(getFilteredStockHistoryEntries(), itemsPerPage);
   const getFilteredStockHistoryEntries = () =>
+    // { let x =
     sortArray(
       stockHistoryEntries
         .filter(
@@ -45,14 +46,21 @@ const History = (props) => {
         .map((stockHistoryEntry) => {
           return {
             ...stockHistoryEntry,
-            product: products.find(
-              (product) => product._id === stockHistoryEntry.productId
-            ),
-            user: users.find((user) => user._id === stockHistoryEntry.userId),
+            productName: products
+              .filter((product) => product._id === stockHistoryEntry.productId)
+              .map((product) => product.name)[0],
+            userFullName: users
+              .filter((user) => user._id === stockHistoryEntry.userId)
+              .map((user) => `${user.firstName} ${user.lastName}`)[0],
           };
         }),
       { by: propertyToBeSorted, order: sortOrder }
+      // { by: "productName", order: sortOrder }
     );
+  //   x.map((a) => console.log(a));
+  //   return x;
+  // };
+
   const setDates = (start, end) => {
     setStartDate(start);
     setEndDate(end);
@@ -162,12 +170,12 @@ const History = (props) => {
                         {moment(stockHistoryEntry.date).format("LL")}
                       </td>
                       <td className="text-wrap">
-                        {stockHistoryEntry.product === undefined ? (
+                        {stockHistoryEntry.productName === undefined ? (
                           <em>
                             Deleted Product ({stockHistoryEntry.productId})
                           </em>
                         ) : (
-                          stockHistoryEntry.product.name
+                          stockHistoryEntry.productName
                         )}
                       </td>
                       <td className="text-wrap">
@@ -175,10 +183,10 @@ const History = (props) => {
                         {formatDigits(stockHistoryEntry.quantity)}
                       </td>
                       <td className="text-wrap">
-                        {stockHistoryEntry.user === undefined ? (
+                        {stockHistoryEntry.userFullName === undefined ? (
                           <em>Deleted User ({stockHistoryEntry.userId})</em>
                         ) : (
-                          `${stockHistoryEntry.user.firstName} ${stockHistoryEntry.user.lastName}`
+                          stockHistoryEntry.userFullName
                         )}
                       </td>
                     </tr>
