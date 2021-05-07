@@ -35,6 +35,10 @@ class ProductStore {
           price: data.price,
           stockQuantity: data.stockQuantity,
           criticalLevel: data.criticalLevel,
+          //pwd sc vat
+          isPWDItem: data.isPWDItem,
+          isSCItem: data.isSCItem,
+          isWithVat: data.isWithVat,
         },
       }
     );

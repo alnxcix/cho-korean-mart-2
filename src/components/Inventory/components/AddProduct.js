@@ -13,6 +13,10 @@ const AddProduct = (props) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [stockQuantity, setStockQuantity] = useState("");
+  //pwd sc vat
+  const [isPWDItem, setIsPWDItem] = useState(false);
+  const [isSCItem, setIsSCItem] = useState(false);
+  const [isWithVat, setIsWithVat] = useState(false);
   const clear = () => {
     set_id("");
     setCategory("");
@@ -24,6 +28,10 @@ const AddProduct = (props) => {
     setStockQuantity("");
     $("#imageInput4").next("label").html("Choose image");
     $("#imageInput4").val(null);
+    //pwd sc vat
+    setIsPWDItem(false);
+    setIsSCItem(false);
+    setIsWithVat(false);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,6 +47,10 @@ const AddProduct = (props) => {
         name: name.trim(),
         price: Number(price),
         stockQuantity: Number(stockQuantity),
+        //pwd sc vat
+        isPWDItem: isPWDItem,
+        isSCItem: isSCItem,
+        isWithVat: isWithVat,
       })
       .then(() => {
         if (stockQuantity > 0) {
@@ -158,15 +170,6 @@ const AddProduct = (props) => {
                 </div>
                 <div className="form-group row">
                   <label className="col-3 col-form-label">Category</label>
-                  {/* <div className="col">
-                    <input
-                      className="form-control"
-                      onChange={(e) => setCategory(e.target.value)}
-                      placeholder="Category"
-                      required
-                      value={category}
-                    />
-                  </div> */}
                   <div className="col">
                     <select
                       className="custom-select"
@@ -222,7 +225,14 @@ const AddProduct = (props) => {
                     <div className="input-group">
                       <input
                         className="form-control"
-                        onChange={(e) => setDiscount(e.target.value)}
+                        onChange={(e) => {
+                          setDiscount(e.target.value);
+                          //pwd sc
+                          if (e.target.value >= 5) {
+                            setIsPWDItem(false);
+                            setIsSCItem(false);
+                          }
+                        }}
                         placeholder="Discount"
                         required
                         type="number"
@@ -266,6 +276,67 @@ const AddProduct = (props) => {
                     />
                   </div>
                 </div>
+                {/* row 8: toggle row  */}
+                <div className="form-group row mx-2">
+                  {/* pwd sc  */}
+                  <div className="col-4 custom-control custom-switch ">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input btn"
+                      id="pwdItemAdd"
+                      disabled={discount >= 5}
+                      onChange={() => setIsPWDItem(!isPWDItem)}
+                      checked={isPWDItem}
+                    />
+                    <label
+                      className="custom-control-label btn p-0"
+                      for="pwdItemAdd"
+                      title={`${isSCItem ? "disable" : "enable"} this to ${
+                        isSCItem ? "remove the" : "grant"
+                      } 5% special discount to PWD for this item`}
+                    >
+                      PWD Item
+                    </label>
+                  </div>
+                  <div className="col-4 custom-control custom-switch ">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input btn"
+                      id="scItemAdd"
+                      disabled={discount >= 5}
+                      onChange={() => setIsSCItem(!isSCItem)}
+                      checked={isSCItem}
+                    />
+                    <label
+                      className="custom-control-label btn p-0"
+                      for="scItemAdd"
+                      title={`${isSCItem ? "disable" : "enable"} this to ${
+                        isSCItem ? "remove the" : "grant"
+                      } 5% special discount to Senior Citizens for this item`}
+                    >
+                      SC Item
+                    </label>
+                  </div>
+                  {/* vat  */}
+                  <div className="col-4 custom-control custom-switch ">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input btn"
+                      id="withVatAdd"
+                      onChange={() => setIsWithVat(!isWithVat)}
+                      checked={isWithVat}
+                    />
+                    <label
+                      className="custom-control-label btn p-0"
+                      for="withVatAdd"
+                      title={`${isWithVat ? "disable" : "enable"} this to ${
+                        isWithVat ? "apply" : "remove"
+                      } the VAT for this item`}
+                    >
+                      Without VAT
+                    </label>
+                  </div>
+                </div>
                 <div className="form-group row">
                   <label className="col-form-label col-3">Image</label>
                   <div className="col custom-file mx-3">
@@ -282,7 +353,6 @@ const AddProduct = (props) => {
                   </div>
                 </div>
                 <picture>
-                  {/* <source srcset={imgSrc} type="image/jpeg+png" /> */}
                   <img
                     alt=""
                     src={imgSrc}

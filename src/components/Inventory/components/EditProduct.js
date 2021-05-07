@@ -3,7 +3,6 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import bsCustomFileInput from "bs-custom-file-input";
 import $ from "jquery";
-import logo from "../../../assets/ChoKoreanMart.jpg";
 
 const EditProduct = (props) => {
   let { activeUser, setProducts, setStockHistoryEntries } = props;
@@ -45,10 +44,10 @@ const EditProduct = (props) => {
       .remote.getGlobal("products")
       .update({
         ...product,
-        price: Number(product.price),
-        discount: Number(product.discount),
-        stockQuantity: Number(product.stockQuantity),
-        criticalLevel: Number(product.criticalLevel),
+        // price: Number(product.price),
+        // discount: Number(product.discount),
+        // stockQuantity: Number(product.stockQuantity),
+        // criticalLevel: Number(product.criticalLevel),
       })
       .then(() => $("#productAlert3").slideDown())
       .catch(() => $("#productAlert4").slideDown());
@@ -74,6 +73,7 @@ const EditProduct = (props) => {
   };
   useEffect(() => setProduct(props.product), [props.product]);
   useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
+
   return (
     <>
       <button
@@ -127,7 +127,7 @@ const EditProduct = (props) => {
                     <input
                       className="form-control"
                       onChange={(e) =>
-                        setProduct({ ...product, name: e.target.value})
+                        setProduct({ ...product, name: e.target.value })
                       }
                       placeholder="Product Name"
                       required
@@ -137,17 +137,6 @@ const EditProduct = (props) => {
                 </div>
                 <div className="form-group row">
                   <label className="col-3 col-form-label">Category</label>
-                  {/* <div className="col">
-                    <input
-                      className="form-control"
-                      onChange={(e) =>
-                        setProduct({ ...product, category: e.target.value })
-                      }
-                      placeholder="Category"
-                      required
-                      value={product.category}
-                    />
-                  </div> */}
                   <div className="col">
                     <select
                       className="custom-select"
@@ -203,16 +192,23 @@ const EditProduct = (props) => {
                     <div className="input-group">
                       <input
                         className="form-control"
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setProduct({
                             ...product,
-                            discount: e.target.value,
-                          })
-                        }
+                            discount: Number(e.target.value),
+                            isPWDItem:
+                              e.target.value >= 5 ? false : product.isPWDItem,
+                            isSCItem:
+                              e.target.value >= 5 ? false : product.isSCItem,
+                          });
+                          //pwd sc
+                          // disableSpecialDiscount(e.target.value);
+                        }}
                         min="0"
                         max="100"
                         placeholder="Discount"
                         required
+                        step="0.01"
                         type="number"
                         value={product.discount}
                       />
@@ -230,7 +226,7 @@ const EditProduct = (props) => {
                       onChange={(e) =>
                         setProduct({
                           ...product,
-                          stockQuantity: e.target.value,
+                          stockQuantity: Number(e.target.value),
                         })
                       }
                       placeholder="Stock Quantity"
@@ -249,7 +245,7 @@ const EditProduct = (props) => {
                       onChange={(e) =>
                         setProduct({
                           ...product,
-                          criticalLevel: e.target.value,
+                          criticalLevel: Number(e.target.value),
                         })
                       }
                       required
@@ -257,6 +253,88 @@ const EditProduct = (props) => {
                       min="1"
                       value={product.criticalLevel}
                     />
+                  </div>
+                </div>
+                {/* row 8: toggle row  */}
+                <div className="form-group row mx-2">
+                  {/* pwd sc  */}
+                  <div className="col-4 custom-control custom-switch ">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input btn"
+                      id={"pwdItemEdit" + product._id}
+                      disabled={product.discount >= 5}
+                      onChange={() =>
+                        setProduct({
+                          ...product,
+                          isPWDItem: !product.isPWDItem,
+                        })
+                      }
+                      checked={product.isPWDItem}
+                    />
+                    <label
+                      className="custom-control-label btn p-0"
+                      for={"pwdItemEdit" + product._id}
+                      title={`${
+                        product.isSCItem ? "disable" : "enable"
+                      } this to ${
+                        product.isSCItem ? "remove the" : "grant"
+                      } 5% special discount to PWD for this item`}
+                    >
+                      PWD Item
+                    </label>
+                  </div>
+                  <div className="col-4 custom-control custom-switch ">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input btn"
+                      id={"isSCItem" + product._id}
+                      disabled={product.discount >= 5}
+                      onChange={() =>
+                        setProduct({
+                          ...product,
+                          isSCItem: !product.isSCItem,
+                        })
+                      }
+                      checked={product.isSCItem}
+                    />
+                    <label
+                      className="custom-control-label btn p-0"
+                      for={"isSCItem" + product._id}
+                      title={`${
+                        product.isSCItem ? "disable" : "enable"
+                      } this to ${
+                        product.isSCItem ? "remove the" : "grant"
+                      } 5% special discount to Senior Citizens for this item`}
+                    >
+                      SC Item
+                    </label>
+                  </div>
+                  {/* vat  */}
+                  <div className="col-4 custom-control custom-switch ">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input btn"
+                      id={"isWithVat" + product._id}
+                      onChange={() =>
+                        setProduct({
+                          ...product,
+                          isWithVat: !product.isWithVat,
+                        })
+                      }
+                      checked={product.isWithVat}
+                    />
+                    <label
+                      className="custom-control-label btn p-0"
+                      for={"isWithVat" + product._id}
+                      title={`${
+                        product.isWithVat ? "disable" : "enable"
+                      } this to ${
+                        product.isWithVat ? "apply" : "remove"
+                      } the VAT for this item`}
+                    >
+                      Without VAT
+                    </label>
                   </div>
                 </div>
                 <div className="form-group row">
@@ -275,7 +353,6 @@ const EditProduct = (props) => {
                   </div>
                 </div>
                 <picture>
-                  {/* <source srcset={product.imgSrc} type="image/jpeg+png" /> */}
                   <img
                     alt=""
                     src={product.imgSrc}
