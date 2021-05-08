@@ -4,7 +4,15 @@ import { formatDigits } from "../../../utils/formatDigits";
 import { generatePrintable } from "../../../utils/generatePrintable";
 
 const PaymentModalComponents = (props) => {
-  let { activeUser, cartItems, setCartItems, vatRate, grandTotal } = props;
+  let {
+    activeUser,
+    cartItems,
+    setCartItems,
+    vatRate,
+    subTotal,
+    discount,
+    vat,
+  } = props;
   const [cash, setCash] = useState("");
   const [products, setProducts] = useState([]);
   const [transactions, setTransactions] = useState([]);
@@ -54,33 +62,32 @@ const PaymentModalComponents = (props) => {
       5
     )}`;
   };
-  const getSubTotal = () =>
-    cartItems
-      .map(
-        (cartItem) =>
-          (cartItem.product.price / (100 + vatRate)) * 100 * cartItem.quantity
-      )
-      .reduce((acc, cur) => acc + cur, 0);
-  const getTotalVat = () =>
-    cartItems
-      .map(
-        (cartItem) =>
-          (cartItem.product.price -
-            (cartItem.product.price / (100 + vatRate)) * 100) *
-          cartItem.quantity
-      )
-      .reduce((acc, cur) => acc + cur, 0);
-  const getTotalDiscount = () =>
-    cartItems
-      .map(
-        (cartItem) =>
-          (cartItem.product.price / 100) *
-          cartItem.product.discount *
-          cartItem.quantity
-      )
-      .reduce((acc, cur) => acc + cur, 0);
-  // const getGrandTotal = () =>
-  //   getSubTotal() + getTotalVat() - getTotalDiscount();
+  // const getSubTotal = () =>
+  //   cartItems
+  //     .map(
+  //       (cartItem) =>
+  //         (cartItem.product.price / (100 + vatRate)) * 100 * cartItem.quantity
+  //     )
+  //     .reduce((acc, cur) => acc + cur, 0);
+  // const getTotalVat = () =>
+  //   cartItems
+  //     .map(
+  //       (cartItem) =>
+  //         (cartItem.product.price -
+  //           (cartItem.product.price / (100 + vatRate)) * 100) *
+  //         cartItem.quantity
+  //     )
+  //     .reduce((acc, cur) => acc + cur, 0);
+  // const getTotalDiscount = () =>
+  //   cartItems
+  //     .map(
+  //       (cartItem) =>
+  //         (cartItem.product.price / 100) *
+  //         cartItem.product.discount *
+  //         cartItem.quantity
+  //     )
+  //     .reduce((acc, cur) => acc + cur, 0);
+  const getGrandTotal = () => subTotal - discount + vat;
   const onCheckout = (e, willExport) => {
     e.preventDefault();
     window
@@ -162,7 +169,7 @@ const PaymentModalComponents = (props) => {
                     <input
                       className="form-control"
                       disabled
-                      value={formatDigits(getSubTotal().toFixed(2))}
+                      value={formatDigits(subTotal.toFixed(2))}
                     />
                   </div>
                 </div>
@@ -177,7 +184,7 @@ const PaymentModalComponents = (props) => {
                     <input
                       className="form-control"
                       disabled
-                      value={formatDigits(getTotalVat().toFixed(2))}
+                      value={formatDigits(vat.toFixed(2))}
                     />
                   </div>
                 </div>
@@ -192,7 +199,7 @@ const PaymentModalComponents = (props) => {
                     <input
                       className="form-control"
                       disabled
-                      value={formatDigits(getTotalDiscount().toFixed(2))}
+                      value={formatDigits(discount.toFixed(2))}
                     />
                   </div>
                 </div>
@@ -206,7 +213,7 @@ const PaymentModalComponents = (props) => {
                       className="form-control"
                       disabled
                       // value={formatDigits(getGrandTotal().toFixed(2))}
-                      value={formatDigits(grandTotal.toFixed(2))}
+                      value={formatDigits(getGrandTotal().toFixed(2))}
                     />
                   </div>
                 </div>
@@ -240,9 +247,9 @@ const PaymentModalComponents = (props) => {
                       className="form-control"
                       disabled
                       value={
-                        cash < grandTotal
+                        cash < getGrandTotal()
                           ? "Insufficient Cash"
-                          : formatDigits((cash - grandTotal).toFixed(2))
+                          : formatDigits((cash - getGrandTotal()).toFixed(2))
                       }
                     />
                   </div>
@@ -259,14 +266,14 @@ const PaymentModalComponents = (props) => {
               </button>
               <button
                 className="btn btn-dark"
-                disabled={cash < grandTotal}
+                disabled={cash < getGrandTotal()}
                 type="submit"
               >
                 Checkout only
               </button>
               <button
                 className="btn btn-success"
-                disabled={cash < grandTotal}
+                disabled={cash < getGrandTotal()}
                 onClick={(e) => onCheckout(e, true)}
                 type="button"
               >

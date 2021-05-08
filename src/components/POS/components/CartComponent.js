@@ -30,12 +30,14 @@ const CartComponent = (props) => {
     cartItems.length === 0
       ? 0
       : cartItems
-          .map((cartItem) =>
-            ((cartItem.product.isPWDItem && PWDtoggle) ||
-              (cartItem.product.isSCItem && SCtoggle)) &&
-            cartItem.product.discount < 5
-              ? cartItem.product.price * 0.05
-              : (cartItem.product.price * cartItem.product.discount) / 100
+          .map(
+            (cartItem) =>
+              (cartItem.product.price / (100 + vatRate)) *
+              ((cartItem.product.isPWDItem && PWDtoggle) ||
+              (cartItem.product.isSCItem && SCtoggle)
+                ? 5
+                : cartItem.product.discount) *
+              cartItem.quantity
           )
           .reduce((acc, cur) => acc + cur);
   const getGrandTotalVAT = () =>
@@ -99,6 +101,9 @@ const CartComponent = (props) => {
               cartItem={cartItem}
               removeFromCart={removeFromCart}
               updateItemQuantity={updateItemQuantity}
+              PWDtoggle={PWDtoggle}
+              SCtoggle={SCtoggle}
+              vatRate={vatRate}
             />
           ))}
         </div>
@@ -157,7 +162,7 @@ const CartComponent = (props) => {
             <h6>
               Subtotal:{" "}
               <span className="text-muted">
-                ₱ {formatDigits((subTotal - grandTotalDiscount).toFixed(2))}
+                ₱ {formatDigits(subTotal.toFixed(2))}
               </span>
             </h6>
             <h6>
@@ -168,6 +173,12 @@ const CartComponent = (props) => {
               {`VAT (${vatRate})%: `}
               <span className="text-muted">
                 ₱ {formatDigits(grandTotalVAT.toFixed(2))}
+              </span>
+            </h6>
+            <h6>
+              Discount:{" "}
+              <span className="text-muted">
+                ₱ {formatDigits(grandTotalDiscount.toFixed(2))}
               </span>
             </h6>
             <hr />
@@ -194,7 +205,9 @@ const CartComponent = (props) => {
       <PaymentModalComponents
         activeUser={activeUser}
         cartItems={cartItems}
-        grandTotal={subTotal}
+        subTotal={subTotal}
+        discount={grandTotalDiscount}
+        vat={grandTotalVAT}
         setCartItems={setCartItems}
         vatRate={vatRate}
       />

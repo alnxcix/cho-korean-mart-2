@@ -3,7 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatDigits } from "../../../utils/formatDigits";
 
 const CartItem = (props) => {
-  let { cartItem, updateItemQuantity, removeFromCart } = props;
+  let {
+    cartItem,
+    updateItemQuantity,
+    removeFromCart,
+    PWDtoggle,
+    SCtoggle,
+    vatRate,
+  } = props;
   return (
     <div className="bg-light card mb-3 rounded-lg">
       <div className="card-body">
@@ -18,7 +25,12 @@ const CartItem = (props) => {
           </picture>
           <div className="media-body" style={{ minWidth: 0 }}>
             <div className="align-items-center d-flex">
-              {cartItem.product.discount > 0 ? (
+              {(cartItem.product.isPWDItem && PWDtoggle) ||
+              (cartItem.product.isSCItem && SCtoggle) ? (
+                <span className="badge badge-warning badge-pill mr-2 mb-1">
+                  5% special discount
+                </span>
+              ) : cartItem.product.discount > 0 ? (
                 <span className="badge badge-warning badge-pill mr-2 mb-1">
                   {cartItem.product.discount}% off
                 </span>
@@ -55,10 +67,24 @@ const CartItem = (props) => {
             </div>
             <small className="form-text text-muted">{`₱ ${formatDigits(
               (
-                (cartItem.product.price -
-                  (cartItem.product.price / 100) * cartItem.product.discount) *
+                ((cartItem.product.isWithoutVat
+                  ? cartItem.product.price
+                  : (cartItem.product.price / (100 + vatRate)) * 100) -
+                  (cartItem.product.price / (100 + vatRate)) *
+                    ((cartItem.product.isPWDItem && PWDtoggle) ||
+                    (cartItem.product.isSCItem && SCtoggle)
+                      ? 5
+                      : cartItem.product.discount) +
+                  (cartItem.product.isWithoutVat
+                    ? 0
+                    : cartItem.product.price -
+                      (cartItem.product.price / (100 + vatRate)) * 100)) *
                 cartItem.quantity
-              ).toFixed(2)
+              )
+                /* (cartItem.product.price -
+                  (cartItem.product.price / 100) * cartItem.product.discount) *
+                cartItem.quantity */
+                .toFixed(2)
             )}`}</small>
           </div>
         </div>
