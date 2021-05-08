@@ -85,44 +85,6 @@ const CartComponent = (props) => {
               )
             </small>
           </h1>
-          {/* pwd  */}
-          <div className="col-2 custom-control custom-switch mr-3">
-            <input
-              type="checkbox"
-              className="custom-control-input btn"
-              id="togglePWD"
-              onChange={() => setPWDtoggle(!PWDtoggle)}
-              checked={PWDtoggle}
-            />
-            <label
-              className="custom-control-label btn p-0"
-              for="togglePWD"
-              title={`${PWDtoggle ? "disable" : "enable"} this to ${
-                PWDtoggle ? "remove" : "apply"
-              } the special discount for PWD`}
-            >
-              <strong>PWD</strong>
-            </label>
-          </div>
-          {/* sc  */}
-          <div className="col-2 custom-control custom-switch mx-1">
-            <input
-              type="checkbox"
-              className="custom-control-input btn"
-              id="toggleSC"
-              onChange={() => setSCtoggle(!SCtoggle)}
-              checked={SCtoggle}
-            />
-            <label
-              className="custom-control-label btn p-0"
-              for="toggleSC"
-              title={`${SCtoggle ? "disable" : "enable"} this to ${
-                SCtoggle ? "remove" : "apply"
-              } the special discount for Senior Citizen`}
-            >
-              <strong>SC</strong>
-            </label>
-          </div>
           <button
             className="btn btn-dark btn-lg ml-3 rounded-pill"
             onClick={() => setCartItems([])}
@@ -142,6 +104,56 @@ const CartComponent = (props) => {
         </div>
         <div className="border-success card mt-auto rounded-lg">
           <div className="card-body">
+            {/* pwd  */}
+            <h6 className="row pl-3">
+              Special Discount:
+              <div className="col-2 custom-control custom-switch ml-3">
+                <input
+                  type="checkbox"
+                  className="custom-control-input btn"
+                  id="togglePWD"
+                  disable={SCtoggle}
+                  onChange={() => {
+                    setPWDtoggle(!PWDtoggle);
+                    setSCtoggle(false);
+                  }}
+                  checked={PWDtoggle}
+                />
+                <label
+                  className="custom-control-label btn p-0"
+                  for="togglePWD"
+                  title={`${PWDtoggle ? "disable" : "enable"} this to ${
+                    PWDtoggle ? "remove" : "apply"
+                  } the special discount for PWD`}
+                >
+                  <strong>PWD</strong>
+                </label>
+              </div>
+              {/* sc  */}
+              <div className="col-2 custom-control custom-switch ml-3">
+                <input
+                  type="checkbox"
+                  disable={PWDtoggle}
+                  className="custom-control-input btn"
+                  id="toggleSC"
+                  onChange={() => {
+                    setSCtoggle(!SCtoggle);
+                    setPWDtoggle(false);
+                  }}
+                  checked={SCtoggle}
+                />
+                <label
+                  className="custom-control-label btn p-0"
+                  for="toggleSC"
+                  title={`${SCtoggle ? "disable" : "enable"} this to ${
+                    SCtoggle ? "remove" : "apply"
+                  } the special discount for Senior Citizen`}
+                >
+                  <strong>SC</strong>
+                </label>
+              </div>
+            </h6>
+            <hr />
             <h6>
               Subtotal:{" "}
               <span className="text-muted">
