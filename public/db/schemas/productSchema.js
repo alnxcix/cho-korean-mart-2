@@ -10,7 +10,7 @@ const productSchema = {
     //pwd sc vat
     isPWDItem: { type: "boolean" },
     isSCItem: { type: "boolean" },
-    isWithVat: { type: "boolean" },
+    isWithoutVat: { type: "boolean" },
   },
   type: "object",
 };

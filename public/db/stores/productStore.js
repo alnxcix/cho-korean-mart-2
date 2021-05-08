@@ -38,7 +38,7 @@ class ProductStore {
           //pwd sc vat
           isPWDItem: data.isPWDItem,
           isSCItem: data.isSCItem,
-          isWithVat: data.isWithVat,
+          isWithoutVat: data.isWithoutVat,
         },
       }
     );

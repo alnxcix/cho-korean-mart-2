@@ -315,22 +315,22 @@ const EditProduct = (props) => {
                     <input
                       type="checkbox"
                       className="custom-control-input btn"
-                      id={"isWithVat" + product._id}
+                      id={"isWithoutVat" + product._id}
                       onChange={() =>
                         setProduct({
                           ...product,
-                          isWithVat: !product.isWithVat,
+                          isWithoutVat: !product.isWithoutVat,
                         })
                       }
-                      checked={product.isWithVat}
+                      checked={product.isWithoutVat}
                     />
                     <label
                       className="custom-control-label btn p-0"
-                      for={"isWithVat" + product._id}
+                      for={"isWithoutVat" + product._id}
                       title={`${
-                        product.isWithVat ? "disable" : "enable"
+                        product.isWithoutVat ? "disable" : "enable"
                       } this to ${
-                        product.isWithVat ? "apply" : "remove"
+                        product.isWithoutVat ? "apply" : "remove"
                       } the VAT for this item`}
                     >
                       Without VAT

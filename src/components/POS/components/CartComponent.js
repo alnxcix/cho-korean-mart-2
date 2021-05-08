@@ -8,26 +8,58 @@ import { formatDigits } from "../../../utils/formatDigits";
 const CartComponent = (props) => {
   let { activeUser, cartItems, setCartItems, updateItemQuantity } = props;
   const [vatRate, setVatRate] = useState(12);
-  const [grandTotal, setGrandTotal] = useState(0);
+  const [subTotal, setSubTotal] = useState(0);
+  const [grandTotalVAT, setGrandTotalVAT] = useState(0);
+  const [grandTotalDiscount, setGrandTotalDiscount] = useState(0);
+  const [PWDtoggle, setPWDtoggle] = useState(false);
+  const [SCtoggle, setSCtoggle] = useState(false);
 
-  const getGrandTotal = () =>
+  const getSubTotal = () =>
     cartItems.length === 0
       ? 0
       : cartItems
           .map(
             (cartItem) =>
-              (cartItem.product.price -
-                (cartItem.product.price / 100) * cartItem.product.discount) *
+              (cartItem.product.isWithoutVat
+                ? cartItem.product.price
+                : (cartItem.product.price / (100 + vatRate)) * 100) *
               cartItem.quantity
           )
           .reduce((acc, cur) => acc + cur);
+  const getGrandTotalDiscount = () =>
+    cartItems.length === 0
+      ? 0
+      : cartItems
+          .map((cartItem) =>
+            ((cartItem.product.isPWDItem && PWDtoggle) ||
+              (cartItem.product.isSCItem && SCtoggle)) &&
+            cartItem.product.discount < 5
+              ? cartItem.product.price * 0.05
+              : (cartItem.product.price * cartItem.product.discount) / 100
+          )
+          .reduce((acc, cur) => acc + cur);
+  const getGrandTotalVAT = () =>
+    cartItems.length === 0
+      ? 0
+      : cartItems
+          .map((cartItem) =>
+            cartItem.product.isWithoutVat
+              ? 0
+              : (cartItem.product.price -
+                  (cartItem.product.price / (100 + vatRate)) * 100) *
+                cartItem.quantity
+          )
+          .reduce((acc, cur) => acc + cur);
+
   const removeFromCart = (product) =>
     setCartItems(
       cartItems.filter((cartItem) => cartItem.product._id !== product._id)
     );
   useEffect(() => {
-    setGrandTotal(getGrandTotal());
-  }, [cartItems, vatRate]);
+    setSubTotal(getSubTotal());
+    setGrandTotalVAT(getGrandTotalVAT());
+    setGrandTotalDiscount(getGrandTotalDiscount());
+  }, [cartItems, vatRate, PWDtoggle, SCtoggle]);
   return (
     <>
       <form
@@ -53,6 +85,44 @@ const CartComponent = (props) => {
               )
             </small>
           </h1>
+          {/* pwd  */}
+          <div className="col-2 custom-control custom-switch mr-3">
+            <input
+              type="checkbox"
+              className="custom-control-input btn"
+              id="togglePWD"
+              onChange={() => setPWDtoggle(!PWDtoggle)}
+              checked={PWDtoggle}
+            />
+            <label
+              className="custom-control-label btn p-0"
+              for="togglePWD"
+              title={`${PWDtoggle ? "disable" : "enable"} this to ${
+                PWDtoggle ? "remove" : "apply"
+              } the special discount for PWD`}
+            >
+              <strong>PWD</strong>
+            </label>
+          </div>
+          {/* sc  */}
+          <div className="col-2 custom-control custom-switch mx-1">
+            <input
+              type="checkbox"
+              className="custom-control-input btn"
+              id="toggleSC"
+              onChange={() => setSCtoggle(!SCtoggle)}
+              checked={SCtoggle}
+            />
+            <label
+              className="custom-control-label btn p-0"
+              for="toggleSC"
+              title={`${SCtoggle ? "disable" : "enable"} this to ${
+                SCtoggle ? "remove" : "apply"
+              } the special discount for Senior Citizen`}
+            >
+              <strong>SC</strong>
+            </label>
+          </div>
           <button
             className="btn btn-dark btn-lg ml-3 rounded-pill"
             onClick={() => setCartItems([])}
@@ -75,10 +145,7 @@ const CartComponent = (props) => {
             <h6>
               Subtotal:{" "}
               <span className="text-muted">
-                ₱{" "}
-                {formatDigits(
-                  ((grandTotal / (100 + vatRate)) * 100).toFixed(2)
-                )}
+                ₱ {formatDigits((subTotal - grandTotalDiscount).toFixed(2))}
               </span>
             </h6>
             <h6>
@@ -88,17 +155,17 @@ const CartComponent = (props) => {
               />
               {`VAT (${vatRate})%: `}
               <span className="text-muted">
-                ₱{" "}
-                {formatDigits(
-                  (grandTotal - (grandTotal / (100 + vatRate)) * 100).toFixed(2)
-                )}
+                ₱ {formatDigits(grandTotalVAT.toFixed(2))}
               </span>
             </h6>
             <hr />
             <h5>
               Grand Total:{" "}
               <span className="text-muted">
-                ₱ {formatDigits(grandTotal.toFixed(2))}
+                ₱{" "}
+                {formatDigits(
+                  (subTotal - grandTotalDiscount + grandTotalVAT).toFixed(2)
+                )}
               </span>
             </h5>
             <hr />
@@ -115,7 +182,7 @@ const CartComponent = (props) => {
       <PaymentModalComponents
         activeUser={activeUser}
         cartItems={cartItems}
-        grandTotal={grandTotal}
+        grandTotal={subTotal}
         setCartItems={setCartItems}
         vatRate={vatRate}
       />

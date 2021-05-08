@@ -16,7 +16,7 @@ const AddProduct = (props) => {
   //pwd sc vat
   const [isPWDItem, setIsPWDItem] = useState(false);
   const [isSCItem, setIsSCItem] = useState(false);
-  const [isWithVat, setIsWithVat] = useState(false);
+  const [isWithoutVat, setIsWithoutVat] = useState(false);
   const clear = () => {
     set_id("");
     setCategory("");
@@ -31,7 +31,7 @@ const AddProduct = (props) => {
     //pwd sc vat
     setIsPWDItem(false);
     setIsSCItem(false);
-    setIsWithVat(false);
+    setIsWithoutVat(false);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -50,7 +50,7 @@ const AddProduct = (props) => {
         //pwd sc vat
         isPWDItem: isPWDItem,
         isSCItem: isSCItem,
-        isWithVat: isWithVat,
+        isWithoutVat: isWithoutVat,
       })
       .then(() => {
         if (stockQuantity > 0) {
@@ -322,15 +322,15 @@ const AddProduct = (props) => {
                     <input
                       type="checkbox"
                       className="custom-control-input btn"
-                      id="withVatAdd"
-                      onChange={() => setIsWithVat(!isWithVat)}
-                      checked={isWithVat}
+                      id="withoutVatAdd"
+                      onChange={() => setIsWithoutVat(!isWithoutVat)}
+                      checked={isWithoutVat}
                     />
                     <label
                       className="custom-control-label btn p-0"
-                      for="withVatAdd"
-                      title={`${isWithVat ? "disable" : "enable"} this to ${
-                        isWithVat ? "apply" : "remove"
+                      for="withoutVatAdd"
+                      title={`${isWithoutVat ? "disable" : "enable"} this to ${
+                        isWithoutVat ? "apply" : "remove"
                       } the VAT for this item`}
                     >
                       Without VAT
