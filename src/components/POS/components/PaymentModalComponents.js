@@ -12,6 +12,7 @@ const PaymentModalComponents = (props) => {
     subTotal,
     discount,
     vat,
+    specialDiscount,
   } = props;
   const [cash, setCash] = useState("");
   const [products, setProducts] = useState([]);
@@ -99,7 +100,13 @@ const PaymentModalComponents = (props) => {
         cart: cartItems.map((cartItem) => {
           return {
             _id: cartItem.product._id,
-            discount: cartItem.product.discount,
+
+            discount:
+              (specialDiscount == "pwd" && cartItem.product.isPWDItem) ||
+              (specialDiscount == "sc" && cartItem.product.isSCItem)
+                ? 5
+                : cartItem.product.discount,
+            vat: cartItem.product.isWithoutVat ? 0 : vatRate,
             price: cartItem.product.price,
             quantity: cartItem.quantity,
           };
@@ -107,6 +114,11 @@ const PaymentModalComponents = (props) => {
         cash: Number(cash),
         userId: activeUser._id,
         vatRate: vatRate,
+
+        specialDiscount: specialDiscount,
+        subTotal: subTotal,
+        totalDiscount: discount,
+        totalVAT: vat,
       })
       .then((transaction) => {
         $("#posAlert1").slideDown();

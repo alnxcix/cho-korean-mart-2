@@ -32,6 +32,11 @@ class TransactionStore {
           cash: data.cash,
           date: data.date,
           userId: data.userId,
+          //pwd sc
+          specialDiscount: data.specialDiscount,
+          subTotal: data.subTotal,
+          totalDiscount: data.totalDiscount,
+          totalVAT: data.totalVAT,
         },
       }
     );

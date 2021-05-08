@@ -32,11 +32,13 @@ const CartComponent = (props) => {
       : cartItems
           .map(
             (cartItem) =>
-              (cartItem.product.price / (100 + vatRate)) *
+              (cartItem.product.isWithoutVat
+                ? cartItem.product.price
+                : (cartItem.product.price / (100 + vatRate)) * 100) *
               ((cartItem.product.isPWDItem && PWDtoggle) ||
               (cartItem.product.isSCItem && SCtoggle)
-                ? 5
-                : cartItem.product.discount) *
+                ? 0.05
+                : cartItem.product.discount / 100) *
               cartItem.quantity
           )
           .reduce((acc, cur) => acc + cur);
@@ -210,6 +212,7 @@ const CartComponent = (props) => {
         vat={grandTotalVAT}
         setCartItems={setCartItems}
         vatRate={vatRate}
+        specialDiscount={PWDtoggle ? "pwd" : SCtoggle ? "sc" : "none"}
       />
     </>
   );

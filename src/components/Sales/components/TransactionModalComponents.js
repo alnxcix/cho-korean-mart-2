@@ -12,34 +12,15 @@ const TransactionModalComponents = (props) => {
   const [modifiedCart, setModifiedCart] = useState([]);
   const getModifiedCart = () =>
     transaction.cart.map((cartItem) => {
-      let unitPrice = (cartItem.price / (100 + transaction.vatRate)) * 100;
-      let vat =
-        unitPrice *
-        (transaction.applySpecialDiscount && cartItem.discount === 0
-          ? 0
-          : 0.12);
-      let discount =
-        ((unitPrice + vat) / 100) *
-        (cartItem.discount === 0 && transaction.applySpecialDiscount
-          ? 20
-          : cartItem.discount);
+      let unitPrice = (cartItem.price / (100 + cartItem.vat)) * 100;
+      let vat = cartItem.price - unitPrice;
+      let discount = (unitPrice * cartItem.discount) / 100;
       return {
         ...cartItem,
-        name:
-          products.length > 0 ? (
-            products.find((product) => product._id === cartItem._id) ===
-            undefined ? (
-              <em>Deleted Product ({cartItem._id})</em>
-            ) : (
-              products.find((product) => product._id === cartItem._id).name
-            )
-          ) : (
-            () => null
-          ),
         unitPrice: unitPrice,
         vat: vat,
         discount: discount,
-        total: (unitPrice + vat - discount) * cartItem.quantity,
+        total: (unitPrice - discount + vat) * cartItem.quantity,
       };
     });
   useEffect(() => {
@@ -128,7 +109,16 @@ const TransactionModalComponents = (props) => {
                 {modifiedCart.map((cartItem) => (
                   <tr>
                     <td tag={cartItem._id} className="text-wrap">
-                      {cartItem.name}
+                      {/* {cartItem.name} */}
+                      {products.find((p) => p._id === cartItem._id) ===
+                      undefined ? (
+                        <>
+                          <em>Deleted Product </em>({cartItem._id})
+                        </>
+                      ) : (
+                        products.find((p) => p._id === cartItem._id).name +
+                        ` (${cartItem._id})`
+                      )}
                     </td>
                     <td tag={`${cartItem._id} quantity`} className="text-wrap">
                       {formatDigits(cartItem.quantity)}
@@ -150,8 +140,14 @@ const TransactionModalComponents = (props) => {
                     </td>
                   </tr>
                 ))}
-                {transaction.applySpecialDiscount ? (
-                  <caption>Special discount is applied.</caption>
+                {transaction.specialDiscount != "none" ? (
+                  <caption>
+                    <div className="badge badge-warning p-2">
+                      {" "}
+                      {transaction.specialDiscount.toUpperCase()} special
+                      discount is applied.
+                    </div>
+                  </caption>
                 ) : (
                   () => null
                 )}
@@ -159,46 +155,20 @@ const TransactionModalComponents = (props) => {
                   <td colSpan={5}>
                     <span className="float-right">Subtotal</span>
                   </td>
-                  <td>
-                    ₱{" "}
-                    {formatDigits(
-                      modifiedCart
-                        .map(
-                          (cartItem) => cartItem.unitPrice * cartItem.quantity
-                        )
-                        .reduce((acc, cur) => acc + cur, 0)
-                        .toFixed(2)
-                    )}
-                  </td>
+                  <td>₱ {formatDigits(transaction.subTotal.toFixed(2))}</td>
                 </tr>
                 <tr>
                   <td colSpan={5}>
                     <span className="float-right">Total VAT</span>
                   </td>
-                  <td>
-                    ₱{" "}
-                    {formatDigits(
-                      modifiedCart
-                        .map((cartItem) => cartItem.vat * cartItem.quantity)
-                        .reduce((acc, cur) => acc + cur, 0)
-                        .toFixed(2)
-                    )}
-                  </td>
+                  <td>₱ {formatDigits(transaction.totalVAT.toFixed(2))}</td>
                 </tr>
                 <tr>
                   <td colSpan={5}>
                     <span className="float-right">Total Discount</span>
                   </td>
                   <td>
-                    ₱{" "}
-                    {formatDigits(
-                      modifiedCart
-                        .map(
-                          (cartItem) => cartItem.discount * cartItem.quantity
-                        )
-                        .reduce((acc, cur) => acc + cur, 0)
-                        .toFixed(2)
-                    )}
+                    ₱ {formatDigits(transaction.totalDiscount.toFixed(2))}
                   </td>
                 </tr>
                 <tr>
@@ -208,16 +178,11 @@ const TransactionModalComponents = (props) => {
                   <td>
                     ₱{" "}
                     {formatDigits(
-                      modifiedCart
-                        .map(
-                          (cartItem) =>
-                            (cartItem.unitPrice +
-                              cartItem.vat -
-                              cartItem.discount) *
-                            cartItem.quantity
-                        )
-                        .reduce((acc, cur) => acc + cur, 0)
-                        .toFixed(2)
+                      (
+                        transaction.subTotal -
+                        transaction.totalDiscount +
+                        transaction.totalVAT
+                      ).toFixed(2)
                     )}
                   </td>
                 </tr>
@@ -236,15 +201,9 @@ const TransactionModalComponents = (props) => {
                     {formatDigits(
                       (
                         transaction.cash -
-                        modifiedCart
-                          .map(
-                            (cartItem) =>
-                              (cartItem.unitPrice +
-                                cartItem.vat -
-                                cartItem.discount) *
-                              cartItem.quantity
-                          )
-                          .reduce((acc, cur) => acc + cur, 0)
+                        (transaction.subTotal -
+                          transaction.totalDiscount +
+                          transaction.totalVAT)
                       ).toFixed(2)
                     )}
                   </td>

@@ -69,12 +69,11 @@ const CartItem = (props) => {
               (
                 ((cartItem.product.isWithoutVat
                   ? cartItem.product.price
-                  : (cartItem.product.price / (100 + vatRate)) * 100) -
-                  (cartItem.product.price / (100 + vatRate)) *
-                    ((cartItem.product.isPWDItem && PWDtoggle) ||
-                    (cartItem.product.isSCItem && SCtoggle)
-                      ? 5
-                      : cartItem.product.discount) +
+                  : (cartItem.product.price / (100 + vatRate)) * 100) *
+                  ((cartItem.product.isPWDItem && PWDtoggle) ||
+                  (cartItem.product.isSCItem && SCtoggle)
+                    ? 1 - 0.05
+                    : 1 - cartItem.product.discount / 100) +
                   (cartItem.product.isWithoutVat
                     ? 0
                     : cartItem.product.price -
