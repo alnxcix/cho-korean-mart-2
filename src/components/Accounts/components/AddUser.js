@@ -31,7 +31,7 @@ const AddUser = (props) => {
     //password.match(/[~<>?!@#$%^&*()]+/) &&
     password.length >= 8 &&
     password.length <= 20;
-  const getIDValidity = () => _id.match(/^[a-zA-Z0-9_.]+$/); //alphanum only
+  const getIDValidity = () => _id.match(/^[a-zA-Z0-9_]+$/); //alphanum only
   const handleSubmit = (e) => {
     e.preventDefault();
     window
@@ -151,8 +151,7 @@ const AddUser = (props) => {
                     />
                     <small className="text-muted">
                       Username must only consist of alphanumeric characters &
-                      not have special characters other than the underscore and
-                      the period ( _. ).
+                      not have special characters other than the underscore ( _ ).
                     </small>
                   </div>
                 </div>
