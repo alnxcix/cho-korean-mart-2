@@ -100,10 +100,10 @@ const PaymentModalComponents = (props) => {
         cart: cartItems.map((cartItem) => {
           return {
             _id: cartItem.product._id,
-
             discount:
-              (specialDiscount == "pwd" && cartItem.product.isPWDItem) ||
-              (specialDiscount == "sc" && cartItem.product.isSCItem)
+              ((specialDiscount == "pwd" && cartItem.product.isPWDItem) ||
+                (specialDiscount == "sc" && cartItem.product.isSCItem)) &&
+              cartItem.product.discount < 5
                 ? 5
                 : cartItem.product.discount,
             vat: cartItem.product.isWithoutVat ? 0 : vatRate,

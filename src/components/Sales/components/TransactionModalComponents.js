@@ -12,9 +12,16 @@ const TransactionModalComponents = (props) => {
   const [modifiedCart, setModifiedCart] = useState([]);
   const getModifiedCart = () =>
     transaction.cart.map((cartItem) => {
-      let unitPrice = (cartItem.price / (100 + cartItem.vat)) * 100;
-      let vat = (unitPrice * cartItem.vat) / 100;
       let discount = (cartItem.price * cartItem.discount) / 100;
+      let unitPrice =
+        ((cartItem.price * (1 - cartItem.discount / 100)) /
+          (100 + cartItem.vat)) *
+          100 +
+        discount;
+      let vat =
+        ((cartItem.price * (1 - cartItem.discount / 100)) /
+          (100 + cartItem.vat)) *
+        cartItem.vat;
       return {
         ...cartItem,
         unitPrice: unitPrice,

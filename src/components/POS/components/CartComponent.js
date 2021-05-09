@@ -22,8 +22,20 @@ const CartComponent = (props) => {
             (cartItem) =>
               (cartItem.product.isWithoutVat
                 ? cartItem.product.price
-                : (cartItem.product.price / (100 + vatRate)) * 100) *
-              cartItem.quantity
+                : ((cartItem.product.price *
+                    (((cartItem.product.isPWDItem && PWDtoggle) ||
+                      (cartItem.product.isSCItem && SCtoggle)) &&
+                    cartItem.product.discount < 5
+                      ? 1 - 0.05
+                      : 1 - cartItem.product.discount / 100)) /
+                    (100 + vatRate)) *
+                    100 +
+                  cartItem.product.price *
+                    (((cartItem.product.isPWDItem && PWDtoggle) ||
+                      (cartItem.product.isSCItem && SCtoggle)) &&
+                    cartItem.product.discount < 5
+                      ? 0.05
+                      : cartItem.product.discount / 100)) * cartItem.quantity
           )
           .reduce((acc, cur) => acc + cur);
   const getGrandTotalDiscount = () =>
@@ -48,8 +60,14 @@ const CartComponent = (props) => {
           .map((cartItem) =>
             cartItem.product.isWithoutVat
               ? 0
-              : (cartItem.product.price -
-                  (cartItem.product.price / (100 + vatRate)) * 100) *
+              : ((cartItem.product.price *
+                  (((cartItem.product.isPWDItem && PWDtoggle) ||
+                    (cartItem.product.isSCItem && SCtoggle)) &&
+                  cartItem.product.discount < 5
+                    ? 1 - 0.05
+                    : 1 - cartItem.product.discount / 100)) /
+                  (100 + vatRate)) *
+                vatRate *
                 cartItem.quantity
           )
           .reduce((acc, cur) => acc + cur);
@@ -167,6 +185,12 @@ const CartComponent = (props) => {
               </span>
             </h6>
             <h6>
+              Discount:{" "}
+              <span className="text-muted">
+                ₱ {formatDigits(grandTotalDiscount.toFixed(2))}
+              </span>
+            </h6>
+            <h6>
               <EditVatModalComponents
                 vatRate={vatRate}
                 setVatRate={setVatRate}
@@ -174,12 +198,6 @@ const CartComponent = (props) => {
               {`VAT (${vatRate})%: `}
               <span className="text-muted">
                 ₱ {formatDigits(grandTotalVAT.toFixed(2))}
-              </span>
-            </h6>
-            <h6>
-              Discount:{" "}
-              <span className="text-muted">
-                ₱ {formatDigits(grandTotalDiscount.toFixed(2))}
               </span>
             </h6>
             <hr />

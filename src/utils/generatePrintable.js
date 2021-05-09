@@ -20,11 +20,11 @@ export const generatePrintable = (products, transaction, users) => {
       )
     )
     .reduce((acc, cur) => acc + cur, 0);
-  const getTotalDisc = transaction.cart
-    .map((cartItem) =>
-      Number((cartItem.price * cartItem.quantity * cartItem.discount) / 100)
-    )
-    .reduce((acc, cur) => acc + cur, 0);
+  // const getTotalDisc = transaction.cart
+  //   .map((cartItem) =>
+  //     Number((cartItem.price * cartItem.quantity * cartItem.discount) / 100)
+  //   )
+  //   .reduce((acc, cur) => acc + cur, 0);
   let doc = new jsPDF("portrait", "px", "a4", "false");
   // doc.text(30, 60, "logo here");
   doc.addImage(logo, "JPG", 30, 15, 100, 100);
@@ -69,7 +69,12 @@ export const generatePrintable = (products, transaction, users) => {
         : products.find((product) => product._id === cartItem._id).name,
     Quantity: cartItem.quantity,
     UnitPrice: `Php ${formatDigits(
-      cartItem.price.toFixed(2)
+      (
+        ((cartItem.price * (1 - cartItem.discount / 100)) /
+          (100 + cartItem.vat)) *
+          100 +
+        (cartItem.price * cartItem.discount) / 100
+      ).toFixed(2)
       // ((cartItem.price / (100 + transaction.vatRate)) * 100).toFixed(2)
     )}`,
     VAT: `${cartItem.vat}%`,
@@ -97,18 +102,18 @@ export const generatePrintable = (products, transaction, users) => {
       [
         "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", //bakdshfghwbsd
         "Subtotal: ",
-        `Php ${formatDigits(
-          ((getTotal / (100 + transaction.vatRate)) * 100).toFixed(2)
-        )}`,
+        `Php ${formatDigits(transaction.subTotal.toFixed(2))}`,
       ],
       [
         "",
         `Total VAT (${transaction.vatRate}%): `,
-        `Php ${formatDigits(
-          (getTotal - (getTotal / (100 + transaction.vatRate)) * 100).toFixed(2)
-        )}`,
+        `Php ${formatDigits(transaction.totalVAT.toFixed(2))}`,
       ],
-      ["", `Total Discount: `, `Php ${formatDigits(getTotalDisc.toFixed(2))}`],
+      [
+        "",
+        `Total Discount: `,
+        `Php ${formatDigits(transaction.totalDiscount.toFixed(2))}`,
+      ],
       ["", `Grand Total: `, `Php ${formatDigits(getTotal.toFixed(2))}`],
       ["", `Cash: `, `Php ${formatDigits(transaction.cash.toFixed(2))}`],
       [
