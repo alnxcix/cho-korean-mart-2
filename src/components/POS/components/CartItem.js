@@ -25,8 +25,9 @@ const CartItem = (props) => {
           </picture>
           <div className="media-body" style={{ minWidth: 0 }}>
             <div className="align-items-center d-flex">
-              {(cartItem.product.isPWDItem && PWDtoggle) ||
-              (cartItem.product.isSCItem && SCtoggle) ? (
+              {((cartItem.product.isPWDItem && PWDtoggle) ||
+                (cartItem.product.isSCItem && SCtoggle)) &&
+              cartItem.product.discount < 5 ? (
                 <span className="badge badge-warning badge-pill mr-2 mb-1">
                   5% special discount
                 </span>
@@ -66,24 +67,9 @@ const CartItem = (props) => {
               />
             </div>
             <small className="form-text text-muted">{`₱ ${formatDigits(
-              (
-                ((cartItem.product.isWithoutVat
-                  ? cartItem.product.price
-                  : (cartItem.product.price / (100 + vatRate)) * 100) *
-                  ((cartItem.product.isPWDItem && PWDtoggle) ||
-                  (cartItem.product.isSCItem && SCtoggle)
-                    ? 1 - 0.05
-                    : 1 - cartItem.product.discount / 100) +
-                  (cartItem.product.isWithoutVat
-                    ? 0
-                    : cartItem.product.price -
-                      (cartItem.product.price / (100 + vatRate)) * 100)) *
-                cartItem.quantity
-              )
-                /* (cartItem.product.price -
-                  (cartItem.product.price / 100) * cartItem.product.discount) *
-                cartItem.quantity */
-                .toFixed(2)
+              (cartItem.product.price -
+                (cartItem.product.price / 100) * cartItem.product.discount) *
+                cartItem.quantity.toFixed(2)
             )}`}</small>
           </div>
         </div>

@@ -32,11 +32,10 @@ const CartComponent = (props) => {
       : cartItems
           .map(
             (cartItem) =>
-              (cartItem.product.isWithoutVat
-                ? cartItem.product.price
-                : (cartItem.product.price / (100 + vatRate)) * 100) *
-              ((cartItem.product.isPWDItem && PWDtoggle) ||
-              (cartItem.product.isSCItem && SCtoggle)
+              cartItem.product.price *
+              (((cartItem.product.isPWDItem && PWDtoggle) ||
+                (cartItem.product.isSCItem && SCtoggle)) &&
+              cartItem.product.discount < 5
                 ? 0.05
                 : cartItem.product.discount / 100) *
               cartItem.quantity
@@ -189,7 +188,7 @@ const CartComponent = (props) => {
               <span className="text-muted">
                 ₱{" "}
                 {formatDigits(
-                  (subTotal - grandTotalDiscount + grandTotalVAT).toFixed(2)
+                  (subTotal + grandTotalVAT - grandTotalDiscount).toFixed(2)
                 )}
               </span>
             </h5>

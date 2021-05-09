@@ -196,10 +196,10 @@ const EditProduct = (props) => {
                           setProduct({
                             ...product,
                             discount: Number(e.target.value),
-                            isPWDItem:
-                              e.target.value >= 5 ? false : product.isPWDItem,
-                            isSCItem:
-                              e.target.value >= 5 ? false : product.isSCItem,
+                            // isPWDItem:
+                            //   e.target.value >= 5 ? false : product.isPWDItem,
+                            // isSCItem:
+                            //   e.target.value >= 5 ? false : product.isSCItem,
                           });
                           //pwd sc
                           // disableSpecialDiscount(e.target.value);
@@ -263,7 +263,7 @@ const EditProduct = (props) => {
                       type="checkbox"
                       className="custom-control-input btn"
                       id={"pwdItemEdit" + product._id}
-                      disabled={product.discount >= 5}
+                      // disabled={product.discount >= 5}
                       onChange={() =>
                         setProduct({
                           ...product,
@@ -289,7 +289,7 @@ const EditProduct = (props) => {
                       type="checkbox"
                       className="custom-control-input btn"
                       id={"isSCItem" + product._id}
-                      disabled={product.discount >= 5}
+                      // disabled={product.discount >= 5}
                       onChange={() =>
                         setProduct({
                           ...product,

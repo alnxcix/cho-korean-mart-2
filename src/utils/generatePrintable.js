@@ -69,9 +69,10 @@ export const generatePrintable = (products, transaction, users) => {
         : products.find((product) => product._id === cartItem._id).name,
     Quantity: cartItem.quantity,
     UnitPrice: `Php ${formatDigits(
-      ((cartItem.price / (100 + transaction.vatRate)) * 100).toFixed(2)
+      cartItem.price.toFixed(2)
+      // ((cartItem.price / (100 + transaction.vatRate)) * 100).toFixed(2)
     )}`,
-    VAT: `${transaction.vatRate}%`,
+    VAT: `${cartItem.vat}%`,
     Discount: `${cartItem.discount}%`,
     Total: `Php ${formatDigits(
       (

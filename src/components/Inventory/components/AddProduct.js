@@ -228,10 +228,10 @@ const AddProduct = (props) => {
                         onChange={(e) => {
                           setDiscount(e.target.value);
                           //pwd sc
-                          if (e.target.value >= 5) {
-                            setIsPWDItem(false);
-                            setIsSCItem(false);
-                          }
+                          // if (e.target.value >= 5) {
+                          //   setIsPWDItem(false);
+                          //   setIsSCItem(false);
+                          // }
                         }}
                         placeholder="Discount"
                         required
@@ -284,7 +284,7 @@ const AddProduct = (props) => {
                       type="checkbox"
                       className="custom-control-input btn"
                       id="pwdItemAdd"
-                      disabled={discount >= 5}
+                      // disabled={discount >= 5}
                       onChange={() => setIsPWDItem(!isPWDItem)}
                       checked={isPWDItem}
                     />
@@ -303,7 +303,7 @@ const AddProduct = (props) => {
                       type="checkbox"
                       className="custom-control-input btn"
                       id="scItemAdd"
-                      disabled={discount >= 5}
+                      // disabled={discount >= 5}
                       onChange={() => setIsSCItem(!isSCItem)}
                       checked={isSCItem}
                     />
