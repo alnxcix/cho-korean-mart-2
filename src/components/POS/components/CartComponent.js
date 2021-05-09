@@ -23,17 +23,13 @@ const CartComponent = (props) => {
               (cartItem.product.isWithoutVat
                 ? cartItem.product.price
                 : ((cartItem.product.price *
-                    (((cartItem.product.isPWDItem && PWDtoggle) ||
-                      (cartItem.product.isSCItem && SCtoggle)) &&
-                    cartItem.product.discount < 5
+                    (applySpDisc(cartItem.product)
                       ? 1 - 0.05
                       : 1 - cartItem.product.discount / 100)) /
                     (100 + vatRate)) *
                     100 +
                   cartItem.product.price *
-                    (((cartItem.product.isPWDItem && PWDtoggle) ||
-                      (cartItem.product.isSCItem && SCtoggle)) &&
-                    cartItem.product.discount < 5
+                    (applySpDisc(cartItem.product)
                       ? 0.05
                       : cartItem.product.discount / 100)) * cartItem.quantity
           )
@@ -45,9 +41,7 @@ const CartComponent = (props) => {
           .map(
             (cartItem) =>
               cartItem.product.price *
-              (((cartItem.product.isPWDItem && PWDtoggle) ||
-                (cartItem.product.isSCItem && SCtoggle)) &&
-              cartItem.product.discount < 5
+              (applySpDisc(cartItem.product)
                 ? 0.05
                 : cartItem.product.discount / 100) *
               cartItem.quantity
@@ -61,9 +55,7 @@ const CartComponent = (props) => {
             cartItem.product.isWithoutVat
               ? 0
               : ((cartItem.product.price *
-                  (((cartItem.product.isPWDItem && PWDtoggle) ||
-                    (cartItem.product.isSCItem && SCtoggle)) &&
-                  cartItem.product.discount < 5
+                  (applySpDisc(cartItem.product)
                     ? 1 - 0.05
                     : 1 - cartItem.product.discount / 100)) /
                   (100 + vatRate)) *
@@ -71,7 +63,9 @@ const CartComponent = (props) => {
                 cartItem.quantity
           )
           .reduce((acc, cur) => acc + cur);
-
+  const applySpDisc = (item) =>
+    ((item.isPWDItem && PWDtoggle) || (item.isSCItem && SCtoggle)) &&
+    item.discount < 5;
   const removeFromCart = (product) =>
     setCartItems(
       cartItems.filter((cartItem) => cartItem.product._id !== product._id)
@@ -120,9 +114,7 @@ const CartComponent = (props) => {
               cartItem={cartItem}
               removeFromCart={removeFromCart}
               updateItemQuantity={updateItemQuantity}
-              PWDtoggle={PWDtoggle}
-              SCtoggle={SCtoggle}
-              vatRate={vatRate}
+              applySpDisc={applySpDisc}
             />
           ))}
         </div>
