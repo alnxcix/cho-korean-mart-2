@@ -151,11 +151,13 @@ const EditProduct = (props) => {
                       <option value={"Vegetables"}>Vegetables</option>
                       <option value={"Frozen Goods"}>Frozen Goods</option>
                       <option value={"Canned Goods"}>Canned Goods</option>
+                      <option value={"Instant Foods"}>Instant Foods</option>
                       <option value={"Fresh Foods"}>Fresh Foods</option>
                       <option value={"Condiments"}>Condiments</option>
                       <option value={"Snacks"}>Snacks</option>
                       <option value={"Sweets"}>Sweets</option>
                       <option value={"Beverages"}>Beverages</option>
+                      <option value={"Coffee & Tea"}>Coffee & Tea</option>
                       <option value={"Beauty & Health"}>Beauty & Health</option>
                       <option value={"Living"}>Living</option>
                       <option value={"Others"}>Others</option>
