@@ -102,18 +102,16 @@ const SalesReport = () => {
   useEffect(() => {
     setFilteredTransactions(getFilteredTransactions());
     setChunkedFilteredTransactions(getChunkedFilteredTransactions());
-  }, [startDate, endDate, itemsPerPage, page]);
-
+  }, [itemsPerPage, page]);
   useEffect(() => {
-    const mamamo = setTimeout(() => {
+    const refresh = setTimeout(() => {
       setPage(1);
       setPage(0);
-      console.log(`HAHAHAHAHHA mema sorry di ko alam pano dapat`);
-    }, 500);
+      // console.log(`HAHAHAHAHHA mema sorry di ko alam pano dapat`);
+    }, 10);
     setFilteredTransactions(getFilteredTransactions());
     setChunkedFilteredTransactions(getChunkedFilteredTransactions());
-  }, [searchString]);
-
+  }, [startDate, endDate, searchString]);
   useEffect(() => {
     window
       .require("electron")

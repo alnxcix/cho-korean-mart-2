@@ -123,5 +123,19 @@ export const generatePrintable = (products, transaction, users) => {
       ],
     ],
   });
+  doc.autoTable({
+    theme: "striped",
+    body: [
+      [
+        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", //bakdshfghwbsd
+
+        transaction.specialDiscount != "none"
+          ? `${
+              transaction.specialDiscount == "pwd" ? "PWD" : "SC"
+            } Special Discount Appiled.`
+          : "",
+      ],
+    ],
+  });
   doc.save(`Transaction ${transaction._id}.pdf`);
 };
