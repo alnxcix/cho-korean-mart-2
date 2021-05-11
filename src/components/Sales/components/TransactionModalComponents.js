@@ -123,8 +123,7 @@ const TransactionModalComponents = (props) => {
                           <em>Deleted Product </em>({cartItem._id})
                         </>
                       ) : (
-                        products.find((p) => p._id === cartItem._id).name +
-                        ` (${cartItem._id})`
+                        products.find((p) => p._id === cartItem._id).name
                       )}
                     </td>
                     <td tag={`${cartItem._id} quantity`} className="text-wrap">
