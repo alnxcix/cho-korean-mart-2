@@ -30,16 +30,12 @@ const SalesReport = () => {
     setEndDate(end);
   };
   const [filteredTransactions, setFilteredTransactions] = useState([]);
-  const [
-    chunkedFilteredTransactions,
-    setChunkedFilteredTransactions,
-  ] = useState([]);
+  const [chunkedFilteredTransactions, setChunkedFilteredTransactions] =
+    useState([]);
 
   const getChunkedFilteredTransactions = () =>
-    // console.log(`getChunkedFilteredTransactions`);
     _.chunk(filteredTransactions, itemsPerPage);
   const getFilteredTransactions = () =>
-    // console.log(`getFilteredTransactions `);
     sortArray(
       transactions
         .filter(
@@ -78,27 +74,6 @@ const SalesReport = () => {
       : 0
     ).toFixed(2);
 
-  // useEffect(() => {
-  //   setFilteredTransactions(getFilteredTransactions("mamammo"));
-  //   setChunkedFilteredTransactions(getChunkedFilteredTransactions("mamammo"));
-  //   console.log(`startDate`);
-  // }, [startDate]);
-  // useEffect(() => {
-  //   setFilteredTransactions(getFilteredTransactions("mamammo"));
-  //   setChunkedFilteredTransactions(getChunkedFilteredTransactions("mamammo"));
-  //   console.log(`endDate`);
-  // }, [endDate]);
-  // useEffect(() => {
-  //   setFilteredTransactions(getFilteredTransactions("mamammo"));
-  //   setChunkedFilteredTransactions(getChunkedFilteredTransactions("mamammo"));
-  //   console.log(`itemsPerPage`);
-  // }, [itemsPerPage]);
-  // useEffect(() => {
-  //   setFilteredTransactions(getFilteredTransactions("mamammo"));
-  //   setChunkedFilteredTransactions(getChunkedFilteredTransactions("mamammo"));
-  //   console.log(`page`);
-  // }, [page]);
-
   useEffect(() => {
     setFilteredTransactions(getFilteredTransactions());
     setChunkedFilteredTransactions(getChunkedFilteredTransactions());
@@ -107,7 +82,6 @@ const SalesReport = () => {
     const refresh = setTimeout(() => {
       setPage(1);
       setPage(0);
-      // console.log(`HAHAHAHAHHA mema sorry di ko alam pano dapat`);
     }, 10);
     setFilteredTransactions(getFilteredTransactions());
     setChunkedFilteredTransactions(getChunkedFilteredTransactions());
@@ -205,9 +179,6 @@ const SalesReport = () => {
             value={`₱ ${formatDigits(getFilteredTransactionsTotalIncome())}`}
           />
         </div>
-        {/* <button className="btn btn-dark">
-          <FontAwesomeIcon icon={faShare} /> Export
-        </button> */}
       </div>
       <hr />
       <table className="table table-bordered" style={{ tableLayout: "fixed" }}>

@@ -16,10 +16,6 @@ const Pagination = (props) => {
     setItemsPerPage,
     setPage,
   } = props;
-  // const pageNums = [];
-  // for (let i = 1; i <= Math.ceil(totalRows / rowsPerPage); i++) {
-  //   pageNums.push(i);
-  // }
   return (
     <caption className="mb-5">
       <div class="form-inline ">

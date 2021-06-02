@@ -27,11 +27,9 @@ const AddUser = (props) => {
     password.match(/[a-z]+/) &&
     password.match(/[0-9]+/) &&
     password.match(/[A-Z]+/) &&
-    // password.match(/^[a-zA-Z0-9]+$/) &&
-    //password.match(/[~<>?!@#$%^&*()]+/) &&
     password.length >= 8 &&
     password.length <= 20;
-  const getIDValidity = () => _id.match(/^[a-zA-Z0-9_]+$/); //alphanum only
+  const getIDValidity = () => _id.match(/^[a-zA-Z0-9_]+$/);
   const handleSubmit = (e) => {
     e.preventDefault();
     window
@@ -151,7 +149,8 @@ const AddUser = (props) => {
                     />
                     <small className="text-muted">
                       Username must only consist of alphanumeric characters &
-                      not have special characters other than the underscore ( _ ).
+                      not have special characters other than the underscore ( _
+                      ).
                     </small>
                   </div>
                 </div>
@@ -209,10 +208,6 @@ const AddUser = (props) => {
                     </select>
                   </div>
                 </div>
-                {/* <div className="custom-file">
-                  <input type="file" className="custom-file-input" />
-                  <label className="custom-file-label">Choose file</label>
-                </div> */}
                 <div className="form-group row">
                   <label className="col-form-label col-3">Image</label>
                   <div className="col custom-file mx-3">

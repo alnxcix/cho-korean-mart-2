@@ -44,10 +44,6 @@ const EditProduct = (props) => {
       .remote.getGlobal("products")
       .update({
         ...product,
-        // price: Number(product.price),
-        // discount: Number(product.discount),
-        // stockQuantity: Number(product.stockQuantity),
-        // criticalLevel: Number(product.criticalLevel),
       })
       .then(() => $("#productAlert3").slideDown())
       .catch(() => $("#productAlert4").slideDown());
@@ -198,13 +194,7 @@ const EditProduct = (props) => {
                           setProduct({
                             ...product,
                             discount: Number(e.target.value),
-                            // isPWDItem:
-                            //   e.target.value >= 5 ? false : product.isPWDItem,
-                            // isSCItem:
-                            //   e.target.value >= 5 ? false : product.isSCItem,
                           });
-                          //pwd sc
-                          // disableSpecialDiscount(e.target.value);
                         }}
                         min="0"
                         max="100"
@@ -265,7 +255,6 @@ const EditProduct = (props) => {
                       type="checkbox"
                       className="custom-control-input btn"
                       id={"pwdItemEdit" + product._id}
-                      // disabled={product.discount >= 5}
                       onChange={() =>
                         setProduct({
                           ...product,
@@ -291,7 +280,6 @@ const EditProduct = (props) => {
                       type="checkbox"
                       className="custom-control-input btn"
                       id={"isSCItem" + product._id}
-                      // disabled={product.discount >= 5}
                       onChange={() =>
                         setProduct({
                           ...product,

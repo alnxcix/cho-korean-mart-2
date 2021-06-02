@@ -16,7 +16,6 @@ const EditUser = (props) => {
     password.match(/[a-z]+/) &&
     password.match(/[0-9]+/) &&
     password.match(/[A-Z]+/) &&
-    //password.match(/[~<>?!@#$%^&*()]+/) &&
     password.length >= 8 &&
     password.length <= 20;
   const reset = () => {
@@ -24,7 +23,6 @@ const EditUser = (props) => {
     setPassState("password");
     setPassword("");
     setVerification("");
-    // setValidPassword(true);
     $("#imageInput3").next("label").html("Choose image");
     $("#imageInput3").val(null);
   };
@@ -218,7 +216,6 @@ const EditUser = (props) => {
                   </div>
                 </div>
                 <picture>
-                  {/* <source srcset={user.imgSrc} type="image/jpeg+png" /> */}
                   <img
                     alt=""
                     src={user.imgSrc}
@@ -239,7 +236,6 @@ const EditUser = (props) => {
                     onChange={(e) => {
                       setVerification(e.target.value);
                       setPassIsSame(samePass(verifyUser, activeUser.password));
-                      console.log(samePass(verifyUser, activeUser.password));
                     }}
                     value={verifyUser}
                   />

@@ -92,7 +92,7 @@ const AddProduct = (props) => {
     };
     if (e[0]) reader.readAsDataURL(e[0]);
   };
-  const getIDValidity = () => _id.match(/^[a-zA-Z0-9_]+$/); //alphanum only
+  const getIDValidity = () => _id.match(/^[a-zA-Z0-9_]+$/);
   useEffect(() => $(document).ready(() => bsCustomFileInput.init()), []);
   return (
     <>
@@ -150,7 +150,8 @@ const AddProduct = (props) => {
                     />
                     <small className="text-muted">
                       Product ID must only consist of alphanumeric characters &
-                      not have special characters other than the underscore ( _ ).
+                      not have special characters other than the underscore ( _
+                      ).
                     </small>
                   </div>
                 </div>
@@ -226,11 +227,6 @@ const AddProduct = (props) => {
                         className="form-control"
                         onChange={(e) => {
                           setDiscount(e.target.value);
-                          //pwd sc
-                          // if (e.target.value >= 5) {
-                          //   setIsPWDItem(false);
-                          //   setIsSCItem(false);
-                          // }
                         }}
                         placeholder="Discount"
                         required
@@ -283,7 +279,6 @@ const AddProduct = (props) => {
                       type="checkbox"
                       className="custom-control-input btn"
                       id="pwdItemAdd"
-                      // disabled={discount >= 5}
                       onChange={() => setIsPWDItem(!isPWDItem)}
                       checked={isPWDItem}
                     />
@@ -302,7 +297,6 @@ const AddProduct = (props) => {
                       type="checkbox"
                       className="custom-control-input btn"
                       id="scItemAdd"
-                      // disabled={discount >= 5}
                       onChange={() => setIsSCItem(!isSCItem)}
                       checked={isSCItem}
                     />

@@ -28,7 +28,6 @@ const ChartComponent = () => {
                     backgroundColor: Array(8).fill("rgba(153, 0, 0, 0.5)"),
                     borderColor: Array(8).fill("rgba(0, 0, 0, 1)"),
                     borderWidth: 0.5,
-                    // data: [22, 4, 7, 44, 20, 35, 9],
                     data: [6, 5, 4, 3, 2, 1, 0].map((el) =>
                       transactions
                         .filter((transaction) =>

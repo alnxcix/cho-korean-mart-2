@@ -13,7 +13,6 @@ const EditProfile = (props) => {
     password.match(/[a-z]+/) &&
     password.match(/[0-9]+/) &&
     password.match(/[A-Z]+/) &&
-    //password.match(/[~<>?!@#$%^&*()]+/) &&
     password.length >= 8 &&
     password.length <= 20;
   const reset = () => {

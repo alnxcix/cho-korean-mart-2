@@ -34,7 +34,6 @@ const TransactionModalComponents = (props) => {
     setTransaction(props.transaction);
     setModifiedCart(getModifiedCart());
   }, [props.transaction]);
-  // useEffect(() => , [props.transaction]);
   useEffect(() => {
     window
       .require("electron")

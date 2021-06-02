@@ -5,7 +5,7 @@ import sortArray from "sort-array";
 import _ from "lodash";
 import $ from "jquery";
 import logo from "../../../assets/ChoKoreanMart.jpg";
-import Pagination from "../../Pagination"; //https://www.youtube.com/watch?v=IYCa1F-OWmk
+import Pagination from "../../Pagination";
 import { formatDigits } from "../../../utils/formatDigits";
 
 const InventoryComponent = (props) => {
@@ -40,49 +40,10 @@ const InventoryComponent = (props) => {
     );
   const productMatchingIdSearchString = () =>
     filteredProducts.find((product) => product._id == searchString);
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (filteredProducts.length === 0) {
-  //     $("#posAlert3").slideDown();
-  //     // setSearchString(e);
-  //   } else if (
-  //     productMatchingIdSearchString() !== undefined &&
-  //     [productMatchingIdSearchString()].length === 1
-  //   ) {
-  //     if (productMatchingIdSearchString().stockQuantity > 0) {
-  //       productExistsInCart(productMatchingIdSearchString())
-  //         ? updateItemQuantity(
-  //             productMatchingIdSearchString(),
-  //             cartItems.find(
-  //               (cartItem) =>
-  //                 cartItem.product._id === productMatchingIdSearchString()._id
-  //             ).quantity + 1
-  //           )
-  //         : addToCart(productMatchingIdSearchString());
-  //       setSearchString("");
-  //     } else $("#posAlert4").slideDown();
-  //   } else {
-  //     if (filteredProducts[0].stockQuantity > 0) {
-  //       productExistsInCart(filteredProducts[0])
-  //         ? updateItemQuantity(
-  //             filteredProducts[0],
-  //             cartItems.find(
-  //               (cartItem) => cartItem.product._id === filteredProducts[0]._id
-  //             ).quantity + 1
-  //           )
-  //         : addToCart(filteredProducts[0]);
-  //       setSearchString("");
-  //     } else $("#posAlert4").slideDown();
-  //   }
-  // };
   const handleSubmit = (e) => {
     e.preventDefault();
-    // productMatchingIdSearchString();
-    console.log(productMatchingIdSearchString());
-    console.log(searchStrIsID);
     if (filteredProducts.length === 0) {
       $("#posAlert3").slideDown();
-      // setSearchString(e);
     } else if (searchStrIsID !== undefined && [searchStrIsID].length === 1) {
       if (searchStrIsID.stockQuantity > 0) {
         productExistsInCart(searchStrIsID)
@@ -175,14 +136,6 @@ const InventoryComponent = (props) => {
           <span>&times;</span>
         </button>
       </div>
-      {/* <h1 className="mb-4">
-        {Number(
-          `${new Date().getFullYear()}${formatter(
-            new Date().getMonth() + 1,
-            2
-          )}${formatter(new Date().getDate(), 2)}00000`
-        ) + 10}
-      </h1> */}
       <h1 className="mb-4">P.O.S.</h1>
       <hr />
       <form onSubmit={(e) => handleSubmit(e)}>

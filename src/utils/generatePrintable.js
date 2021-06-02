@@ -20,13 +20,7 @@ export const generatePrintable = (products, transaction, users) => {
       )
     )
     .reduce((acc, cur) => acc + cur, 0);
-  // const getTotalDisc = transaction.cart
-  //   .map((cartItem) =>
-  //     Number((cartItem.price * cartItem.quantity * cartItem.discount) / 100)
-  //   )
-  //   .reduce((acc, cur) => acc + cur, 0);
   let doc = new jsPDF("portrait", "px", "a4", "false");
-  // doc.text(30, 60, "logo here");
   doc.addImage(logo, "JPG", 30, 15, 100, 100);
   doc.setFontSize(11);
   doc.setFont("Helvetica", "bold");
@@ -75,7 +69,6 @@ export const generatePrintable = (products, transaction, users) => {
           100 +
         (cartItem.price * cartItem.discount) / 100
       ).toFixed(2)
-      // ((cartItem.price / (100 + transaction.vatRate)) * 100).toFixed(2)
     )}`,
     VAT: `${cartItem.vat}%`,
     Discount: `${cartItem.discount}%`,
@@ -91,16 +84,11 @@ export const generatePrintable = (products, transaction, users) => {
     theme: "striped",
     headStyles: { fillColor: "#900" },
   });
-  // doc.autoTable(columns, rows, {
-  //   // startY: 205,
-  //   theme: "striped",
-  //   headStyles: { fillColor: "#900" },
-  // });
   doc.autoTable({
     theme: "striped",
     body: [
       [
-        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", //bakdshfghwbsd
+        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t",
         "Subtotal: ",
         `Php ${formatDigits(transaction.subTotal.toFixed(2))}`,
       ],
@@ -127,7 +115,7 @@ export const generatePrintable = (products, transaction, users) => {
     theme: "striped",
     body: [
       [
-        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", //bakdshfghwbsd
+        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t",
 
         transaction.specialDiscount != "none"
           ? `${

@@ -6,7 +6,7 @@ import sortArray from "sort-array";
 import DeleteProduct from "./DeleteProduct";
 import EditProduct from "./EditProduct";
 import logo from "../../../assets/ChoKoreanMart.jpg";
-import Pagination from "../../Pagination"; //https://www.youtube.com/watch?v=IYCa1F-OWmk
+import Pagination from "../../Pagination";
 import { formatDigits } from "../../../utils/formatDigits";
 
 const Products = (props) => {

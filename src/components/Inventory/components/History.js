@@ -5,7 +5,7 @@ import _ from "lodash";
 import moment from "moment";
 import sortArray from "sort-array";
 import DateRangePickerComponent from "../../DateRangePickerComponent";
-import Pagination from "../../Pagination"; //https://www.youtube.com/watch?v=IYCa1F-OWmk
+import Pagination from "../../Pagination";
 import { formatDigits } from "../../../utils/formatDigits";
 
 const History = (props) => {
@@ -19,10 +19,8 @@ const History = (props) => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [
-    filteredStockHistoryEntries,
-    setFilteredStockHistoryEntries,
-  ] = useState([]);
+  const [filteredStockHistoryEntries, setFilteredStockHistoryEntries] =
+    useState([]);
   const [
     chunkedFilteredStockHistoryEntries,
     setChunkedFilteredStockHistoryEntries,
@@ -30,7 +28,6 @@ const History = (props) => {
   const getChunkedFilteredStockHistoryEntries = () =>
     _.chunk(getFilteredStockHistoryEntries(), itemsPerPage);
   const getFilteredStockHistoryEntries = () =>
-    // { let x =
     sortArray(
       stockHistoryEntries
         .filter(
@@ -55,11 +52,7 @@ const History = (props) => {
           };
         }),
       { by: propertyToBeSorted, order: sortOrder }
-      // { by: "productName", order: sortOrder }
     );
-  //   x.map((a) => console.log(a));
-  //   return x;
-  // };
 
   const setDates = (start, end) => {
     setStartDate(start);

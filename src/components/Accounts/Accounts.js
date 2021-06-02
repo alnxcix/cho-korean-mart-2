@@ -43,13 +43,6 @@ const Accounts = (props) => {
         .then((users) => {
           setUsers(users);
         }),
-    // .then(() => {
-    //   setTimeout(() => {
-    //     setItemsPerPage(5);
-    //     setItemsPerPage(10);
-    //   }, 500);
-    // }),
-    // }
     []
   );
   useEffect(() => {
@@ -64,17 +57,6 @@ const Accounts = (props) => {
     searchString,
     users,
   ]);
-
-  // useEffect(() => {
-  //   const mamamo = setTimeout(() => {
-  //     setPage(1);
-  //     setPage(0);
-  //     console.log(`HAHAHAHAHHA mema sorry di ko alam pano dapat`);
-  //   }, 500);
-  //   setFilteredTransactions(getFilteredTransactions());
-  //   setChunkedFilteredTransactions(getChunkedFilteredTransactions());
-  // }, [searchString]);
-
   return (
     <div className="p-3">
       <div

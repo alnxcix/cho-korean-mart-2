@@ -11,7 +11,6 @@ const InitializeAdminModal = () => {
   const [lastName, setLastName] = useState("");
   const [passState, setPassState] = useState("password");
   const [password, setPassword] = useState("");
-  // const [validPassword, setValidPassword] = useState(true);
   const clear = () => {
     set_id("");
     setFirstName("");
@@ -26,10 +25,9 @@ const InitializeAdminModal = () => {
     password.match(/[a-z]+/) &&
     password.match(/[0-9]+/) &&
     password.match(/[A-Z]+/) &&
-    //password.match(/[~<>?!@#$%^&*()]+/) &&
     password.length >= 8 &&
     password.length <= 20;
-  const getIDValidity = () => _id.match(/^[a-zA-Z0-9_]+$/); //alphanum only
+  const getIDValidity = () => _id.match(/^[a-zA-Z0-9_]+$/);
   const handleSubmit = (e) => {
     e.preventDefault();
     window
@@ -107,9 +105,7 @@ const InitializeAdminModal = () => {
                     className="form-control"
                     style={{
                       backgroundColor:
-                        _id.length === 0 || getIDValidity()
-                          ? null
-                          : "#ffb3b3",
+                        _id.length === 0 || getIDValidity() ? null : "#ffb3b3",
                     }}
                     maxLength="20"
                     onChange={(e) => set_id(e.target.value)}
@@ -117,10 +113,10 @@ const InitializeAdminModal = () => {
                     required
                     value={_id}
                   />
-                   <small className="text-muted">
-                      Username must only consist of alphanumeric characters &
-                      not have special characters other than the underscore ( _ ).
-                    </small>
+                  <small className="text-muted">
+                    Username must only consist of alphanumeric characters & not
+                    have special characters other than the underscore ( _ ).
+                  </small>
                 </div>
               </div>
               <div className="form-group row">

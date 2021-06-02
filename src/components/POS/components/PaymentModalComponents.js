@@ -18,7 +18,6 @@ const PaymentModalComponents = (props) => {
   const [products, setProducts] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [users, setUsers] = useState([]);
-  // const [grandTotal, setGrandTotal] = useState(0);
 
   const getTransactions = () => {
     window
@@ -63,31 +62,6 @@ const PaymentModalComponents = (props) => {
       5
     )}`;
   };
-  // const getSubTotal = () =>
-  //   cartItems
-  //     .map(
-  //       (cartItem) =>
-  //         (cartItem.product.price / (100 + vatRate)) * 100 * cartItem.quantity
-  //     )
-  //     .reduce((acc, cur) => acc + cur, 0);
-  // const getTotalVat = () =>
-  //   cartItems
-  //     .map(
-  //       (cartItem) =>
-  //         (cartItem.product.price -
-  //           (cartItem.product.price / (100 + vatRate)) * 100) *
-  //         cartItem.quantity
-  //     )
-  //     .reduce((acc, cur) => acc + cur, 0);
-  // const getTotalDiscount = () =>
-  //   cartItems
-  //     .map(
-  //       (cartItem) =>
-  //         (cartItem.product.price / 100) *
-  //         cartItem.product.discount *
-  //         cartItem.quantity
-  //     )
-  //     .reduce((acc, cur) => acc + cur, 0);
   const getGrandTotal = () => subTotal - discount + vat;
   const onCheckout = (e, willExport) => {
     e.preventDefault();
@@ -136,7 +110,6 @@ const PaymentModalComponents = (props) => {
       })
       .catch((e) => {
         $("#posAlert2").slideDown();
-        console.log(e);
       });
   };
 
@@ -152,7 +125,6 @@ const PaymentModalComponents = (props) => {
       .remote.getGlobal("users")
       .readAll()
       .then((users) => setUsers(users));
-    // .then(() => setGrandTotal(getGrandTotal()));
   }, []);
   return (
     <div
@@ -224,7 +196,6 @@ const PaymentModalComponents = (props) => {
                     <input
                       className="form-control"
                       disabled
-                      // value={formatDigits(getGrandTotal().toFixed(2))}
                       value={formatDigits(getGrandTotal().toFixed(2))}
                     />
                   </div>

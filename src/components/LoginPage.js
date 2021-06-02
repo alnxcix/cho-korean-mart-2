@@ -17,7 +17,6 @@ const LoginPage = (props) => {
     password4NewPass.match(/[a-z]+/) &&
     password4NewPass.match(/[0-9]+/) &&
     password4NewPass.match(/[A-Z]+/) &&
-    //password4NewPass.match(/[~<>?!@#$%^&*()]+/) &&
     password4NewPass.length >= 8 &&
     password4NewPass.length <= 20;
   const handleSubmit = (e) => {
@@ -36,14 +35,6 @@ const LoginPage = (props) => {
         else $("#loginPageAlert2").slideDown();
       })
       .catch(() => $("#loginPageAlert2").slideDown());
-    // .auth(_id, hashedPassword(password))
-    // .then((user) => {
-    //   user === null
-    //     ? $("#loginPageAlert2").slideDown()
-    //     : user.newPass
-    //     ? $("#modalNewPass").modal("show")
-    //     : setActiveUser(user);
-    // });
   };
 
   const getUser = () => user.filter((user) => user._id == _id);
